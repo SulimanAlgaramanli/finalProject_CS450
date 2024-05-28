@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>صفحة إدارة المشاريع</title>
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body>
+    <!-- كامل الصفحة -->
+    <div class="container">
+      <div class="main-content">
+        <header>
+          <div class="search-container">
+            <input
+              type="search"
+              placeholder="إبحث هنا..."
+              class="search-input"
+            />
+            <span class="search-icon">&#128269;</span>
+          </div>
+          <div class="user-notifications-Settings">
+            <img src="img/Settings.png" alt="Settings" class="settings-icon" />
+            <span class="notification-icon">🔔</span>
+            <img src="img/user.png" alt="User" class="user-icon" />
+          </div>
+        </header>
+        <main>
+          <section class="projects-section">
+            <div class="project-card new-project" onclick="openNewPage('newProject.html')">
+              <button class="circle" style="color: black">+</button>
+              <h3>إنشاء مشروع جديد</h3>
+            </div>
+
+            <div class="project-card in-progress" onclick="openNewPage()">
+              <h3>
+                حالة المشروع:<br />
+                مستمر <span class="progress-mark">🟢</span>
+              </h3>
+            </div>
+            <div class="project-card stopped">
+              <h3>
+                حالة المشروع:<br />
+                متوقف <span class="stop-mark">⛔</span>
+              </h3>
+            </div>
+            <div class="project-card completed">
+              <h3>
+                حالة المشروع:<br />
+                منجز <span class="check-mark">✓</span>
+              </h3>
+            </div>
+          </section>
+        </main>
+        <footer>
+          <p>&copy; 2024 منصة لإدارة المكتب الهندسي</p>
+        </footer>
+      </div>
+
+      <aside class="sidebar">
+        <nav>
+          <ul>
+            <li><a href="index.html">الصفحة الرئيسية</a></li>
+            <li><a href="project.html">المشاريع</a></li>
+            <li><a href="#">القسم المالي</a></li>
+            <li><a href="#">الزبائن</a></li>
+            <li><a href="#">المهندسين</a></li>
+            <li><a href="#">الفنيين</a></li>
+            <li><a href="#">الصلاحيات</a></li>
+            <li><a href="#">التقارير</a></li>
+          </ul>
+        </nav>
+      </aside>
+    </div>
+
+    <script>
+      function openNewPage() {
+        window.open("newProject.html", "_blank");
+      }
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>

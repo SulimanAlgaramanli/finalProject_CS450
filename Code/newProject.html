@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>مشروع جديد</title>
+    <link rel="stylesheet" href="css/css_newproject.css" />
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body>
+    <!-- كامل الصفحة -->
+    <div class="container">
+      <aside class="sidebar">
+        <nav>
+          <ul>
+            <li><a href="index.html">الصفحة الرئيسية</a></li>
+            <li><a href="project.html">المشاريع</a></li>
+            <li><a href="#">القسم المالي</a></li>
+            <li><a href="#">الزبائن</a></li>
+            <li><a href="#">المهندسين</a></li>
+            <li><a href="#">الفنيين</a></li>
+            <li><a href="#">الصلاحيات</a></li>
+            <li><a href="#">التقارير</a></li>
+          </ul>
+        </nav>
+      </aside>
+      <div class="main-content">
+        <header>
+          <div class="search-container">
+            <input
+              type="search"
+              placeholder="إبحث هنا..."
+              class="search-input"
+            />
+            <span class="search-icon">&#128269;</span>
+          </div>
+          <div class="user-notifications-Settings">
+            <img src="img/Settings.png" alt="Settings" class="settings-icon" />
+            <span class="notification-icon">🔔</span>
+            <img src="img/user.png" alt="User" class="user-icon" />
+          </div>
+        </header>
+        <main>
+          <form>
+            <label>رقم المشروع:</label>
+            <input type="text" placeholder="رقم المشروع" />
+
+            <label>رقم العقد:</label>
+            <input type="text" placeholder="رقم العقد" />
+
+            <label>اسم المالك:</label>
+            <input type="text" placeholder="اسم المالك" />
+
+            <label>نوع العقار:</label>
+            <select id="typeProject" name="typeProject">
+              <option value="villa">فيلا</option>
+              <option value="building">عماره</option>
+              <option value="market">سوق</option>
+              <option value="hotel">فندق</option>
+              <option value="hospital">مستشفى</option>
+              <option value="school">مدرسة</option>
+            </select>
+
+            <label>مساحة الأرض:</label>
+            <input type="number" placeholder="متر²" /><span
+              style="font-size: 16px; font-weight: bold"
+            >
+              متر²</span
+            >
+
+            <label>مساحة المسقوف:</label>
+            <input type="number" placeholder="متر²" /><span
+              style="font-size: 16px; font-weight: bold"
+            >
+              متر²</span
+            >
+
+            <label>موقع الأرض:</label>
+            <input type="text" placeholder="وصف لموقع الأرض" />
+            <input type="text" placeholder="رابط للموقع على الخريطة" />
+
+            <label>خرائط التصميم:</label>
+            <input type="file" />
+
+            <label>وصف للعقار:</label>
+            <textarea placeholder="ضع وصف للعقار"></textarea>
+
+            <label>تاريخ توقيع العقد:</label>
+            <input type="date" />
+
+            <label>تاريخ استلام الموقع للعمل:</label>
+            <input type="date" />
+
+            <label>تاريخ البدأ المتوقع:</label>
+            <input type="date" />
+
+            <label>تاريخ الانتهاء المتوقع:</label>
+            <input type="date" />
+
+            <label>حالة المشروع:</label>
+            <select id="status" name="status">
+              <option value="in-progress">مستمر</option>
+              <option value="stopped">متوقف</option>
+              <option value="completed">منجز</option>
+            </select>
+
+            <label>نسبة الإنجاز:</label>
+            <input type="number" placeholder="نسبة" id="percent" /><span
+              style="font-size: 18px; font-weight: bold"
+            >
+              %
+            </span>
+
+            <label>المبلغ المتوقع صرفه:</label>
+            <input type="number" placeholder="المبلغ المتوقع صرفه" /><span
+              style="font-size: 16px; font-weight: bold"
+            >
+              د.ل</span
+            >
+
+            <label>إجمالي الدفعات اللتي تم إستلامها من الزبون:</label>
+            <input type="number" placeholder="مبلغ مالي" /><span
+              style="font-size: 16px; font-weight: bold"
+            >
+              د.ل</span
+            >
+
+            <label>ما تم صرفه:</label>
+            <input type="number" placeholder="مبلغ مالي" /><span
+              style="font-size: 16px; font-weight: bold"
+            >
+              د.ل</span
+            >
+
+            <label>المبلغ المتبقي:</label>
+            <input type="number" placeholder="مبلغ مالي" /><span
+              style="font-size: 16px; font-weight: bold"
+            >
+              د.ل</span
+            >
+
+            <label>المهندس المشرف:</label>
+            <input type="text" placeholder="م. مشرف" />
+
+            <label>المهندس المتعاون 1:</label>
+            <input type="text" placeholder="م." />
+
+            <label>المهندس المتعاون 2:</label>
+            <input type="text" placeholder="م." />
+
+            <label>المهندس المتعاون 3:</label>
+            <input type="text" placeholder="م." />
+
+            <div class="button-container">
+              <button type="button" class="save-btn">Save</button>
+              <button type="button" class="cancel-btn">Cancel</button>
+            </div>
+          </form>
+        </main>
+
+        <footer>
+          <p>&copy; 2024 منصة لإدارة المكتب الهندسي</p>
+        </footer>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
