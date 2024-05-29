@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>الصفحة الرئيسية</title>
-    <link rel="stylesheet" href="css/main.css" />
+    <title>المشاريع المتوقفة</title>
+    <link rel="stylesheet" href="../../css/main.css" />
   </head>
   <body>
     <!-- كامل الصفحة -->
@@ -27,9 +27,20 @@
         </header>
 
         <main>
-          <div >
-              <img src="img/Home/1.jpg"  id="img-home"/>
-          </div>
+          <section class="projects-section">
+            <div class="project-card stopped" onclick="openNewPage('')">
+              <h3>
+                المشروع الأول<br />
+                نوع: فندق
+              </h3>
+            </div>
+            <div class="project-card stopped" onclick="openNewPage('')">
+              <h3>
+                المشروع الثاني<br />
+                نوع: مدرسة
+              </h3>
+            </div>
+          </section>
         </main>
         <footer>
           <p>&copy; 2024 منصة لإدارة المكتب الهندسي</p>
@@ -41,32 +52,19 @@
           <ul>
             <li><a href="index.html">الصفحة الرئيسية</a></li>
             <li><a href="project.html">المشاريع</a></li>
-            <li><a href="#">القسم المالي</a></li>
-            <li><a href="#">الزبائن</a></li>
-            <li><a href="#">المهندسين</a></li>
-            <li><a href="#">الفنيين</a></li>
-            <li><a href="#">الصلاحيات</a></li>
-            <li><a href="#">التقارير</a></li>
+            <li><a href="financialDepartment.html">القسم المالي</a></li>
+            <li><a href="customers.html">الزبائن</a></li>
+            <li><a href="engineers.html">المهندسين</a></li>
+            <li><a href="technicians.html">الفنيين</a></li>
+            <li><a href="../market.html">الورش / المعارض</a></li>
+            <li><a href="administrator.html">الصلاحيات</a></li>
+            <li><a href="reports.html">التقارير</a></li>
+            <li><a href="../agreements.html">العقود</a></li>
           </ul>
         </nav>
       </aside>
     </div>
 
-    <script src="script.js">
-          // script.js
-      let slideIndex = 0;
-      showSlides();
-
-      function showSlides() {
-        let slides = document.getElementsByClassName("mySlides");
-        for (let i = 0; i < slides.length; i++) {
-          slides[i].style.display = "none";
-        }
-        slideIndex++;
-        if (slideIndex > slides.length) {slideIndex = 1}
-        slides[slideIndex - 1].style.display = "block";
-        setTimeout(showSlides, 5000); // Change image every 5 seconds
-      }
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>

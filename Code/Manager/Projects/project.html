@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>صفحة إدارة المشاريع</title>
-    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="../../css/main.css" />
   </head>
   <body>
     <!-- كامل الصفحة -->
@@ -20,31 +20,47 @@
             <span class="search-icon">&#128269;</span>
           </div>
           <div class="user-notifications-Settings">
-            <img src="img/Settings.png" alt="Settings" class="settings-icon" />
+            <img
+              src="../../img/Settings.png"
+              alt="Settings"
+              class="settings-icon"
+            />
             <span class="notification-icon">🔔</span>
-            <img src="img/user.png" alt="User" class="user-icon" />
+            <img src="../../img/user.png" alt="User" class="user-icon" />
           </div>
         </header>
         <main>
           <section class="projects-section">
-            <div class="project-card new-project" onclick="openNewPage('newProject.html')">
+            <div
+              class="project-card new-project"
+              onclick="openNewPage('newProject.html')"
+            >
               <button class="circle" style="color: black">+</button>
               <h3>إنشاء مشروع جديد</h3>
             </div>
 
-            <div class="project-card in-progress" onclick="openNewPage()">
+            <div
+              class="project-card in-progress"
+              onclick="openNewPage('continuousProject.html')"
+            >
               <h3>
                 حالة المشروع:<br />
                 مستمر <span class="progress-mark">🟢</span>
               </h3>
             </div>
-            <div class="project-card stopped">
+            <div
+              class="project-card stopped"
+              onclick="openNewPage('stoppedProject.html')"
+            >
               <h3>
                 حالة المشروع:<br />
                 متوقف <span class="stop-mark">⛔</span>
               </h3>
             </div>
-            <div class="project-card completed">
+            <div
+              class="project-card completed"
+              onclick="openNewPage('completedProject.html')"
+            >
               <h3>
                 حالة المشروع:<br />
                 منجز <span class="check-mark">✓</span>
@@ -60,22 +76,24 @@
       <aside class="sidebar">
         <nav>
           <ul>
-            <li><a href="index.html">الصفحة الرئيسية</a></li>
+            <li><a href="../index.html">الصفحة الرئيسية</a></li>
             <li><a href="project.html">المشاريع</a></li>
-            <li><a href="#">القسم المالي</a></li>
-            <li><a href="#">الزبائن</a></li>
-            <li><a href="#">المهندسين</a></li>
-            <li><a href="#">الفنيين</a></li>
-            <li><a href="#">الصلاحيات</a></li>
-            <li><a href="#">التقارير</a></li>
+            <li><a href="../financialDepartment.html">القسم المالي</a></li>
+            <li><a href="../customers.html">الزبائن</a></li>
+            <li><a href="../engineers.html">المهندسين</a></li>
+            <li><a href="../technicians.html">الفنيين</a></li>
+            <li><a href="../market.html">الورش / المعارض</a></li>
+            <li><a href="../administrator.html">الصلاحيات</a></li>
+            <li><a href="../reports.html">التقارير</a></li>
+            <li><a href="../agreements.html">العقود</a></li>
           </ul>
         </nav>
       </aside>
     </div>
 
     <script>
-      function openNewPage() {
-        window.open("newProject.html", "_blank");
+      function openNewPage(url) {
+        window.location.href = url;
       }
     </script>
     <script src="script.js"></script>

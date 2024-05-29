@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>مشروع جديد</title>
-    <link rel="stylesheet" href="css/css_newproject.css" />
-    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="../../css/css_newproject.css" />
+    <link rel="stylesheet" href="../../css/main.css" />
   </head>
   <body>
     <!-- كامل الصفحة -->
@@ -13,19 +13,23 @@
       <aside class="sidebar">
         <nav>
           <ul>
-            <li><a href="index.html">الصفحة الرئيسية</a></li>
+            <li><a href="../index.html">الصفحة الرئيسية</a></li>
             <li><a href="project.html">المشاريع</a></li>
-            <li><a href="#">القسم المالي</a></li>
-            <li><a href="#">الزبائن</a></li>
-            <li><a href="#">المهندسين</a></li>
-            <li><a href="#">الفنيين</a></li>
-            <li><a href="#">الصلاحيات</a></li>
-            <li><a href="#">التقارير</a></li>
+            <li><a href="../financialDepartment.html">القسم المالي</a></li>
+            <li><a href="../customers.html">الزبائن</a></li>
+            <li><a href="../engineers.html">المهندسين</a></li>
+            <li><a href="../technicians.html">الفنيين</a></li>
+            <li><a href="../market.html">الورش / المعارض</a></li>
+            <li><a href="../administrator.html">الصلاحيات</a></li>
+            <li><a href="../reports.html">التقارير</a></li>
+            <li><a href="../agreements.html">العقود</a></li>
+
           </ul>
         </nav>
       </aside>
       <div class="main-content">
         <header>
+          <h1>مشروع جديد</h1>
           <div class="search-container">
             <input
               type="search"
@@ -35,9 +39,13 @@
             <span class="search-icon">&#128269;</span>
           </div>
           <div class="user-notifications-Settings">
-            <img src="img/Settings.png" alt="Settings" class="settings-icon" />
+            <img
+              src="../../img/Settings.png"
+              alt="Settings"
+              class="settings-icon"
+            />
             <span class="notification-icon">🔔</span>
-            <img src="img/user.png" alt="User" class="user-icon" />
+            <img src="../../img/user.png" alt="User" class="user-icon" />
           </div>
         </header>
         <main>
@@ -62,11 +70,8 @@
             </select>
 
             <label>مساحة الأرض:</label>
-            <input type="number" placeholder="متر²" /><span
-              style="font-size: 16px; font-weight: bold"
-            >
-              متر²</span
-            >
+            <input type="number" placeholder="متر²" />
+            <span style="font-size: 16px; font-weight: bold">متر²</span>
 
             <label>مساحة المسقوف:</label>
             <input type="number" placeholder="متر²" /><span
