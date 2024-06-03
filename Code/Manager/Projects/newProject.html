@@ -23,7 +23,6 @@
             <li><a href="../administrator.html">الصلاحيات</a></li>
             <li><a href="../reports.html">التقارير</a></li>
             <li><a href="../agreements.html">العقود</a></li>
-
           </ul>
         </nav>
       </aside>
@@ -51,13 +50,37 @@
         <main>
           <form>
             <label>رقم المشروع:</label>
-            <input type="text" placeholder="رقم المشروع" />
-
             <label>رقم العقد:</label>
-            <input type="text" placeholder="رقم العقد" />
-
             <label>اسم المالك:</label>
-            <input type="text" placeholder="اسم المالك" />
+            <br />
+            <label>رقم التعريف الخاص بالمالك:</label>
+            <input type="number" placeholder="رقم المالك" />
+
+            <label>موقع الأرض:</label>
+            <input type="text" placeholder="وصف لموقع الأرض" />
+            <input type="text" placeholder="رابط للموقع على الخريطة" />
+
+            <br />
+
+            <label style="display: inline-block"> داخل المخطط </label>
+            <input type="checkbox" />
+
+            <label>مساحة الأرض:</label>
+            <input type="number" placeholder="متر²" /><span
+              style="font-size: 16px; font-weight: bold"
+            >
+              متر²</span
+            >
+
+            <label>تاريخ استلام الموقع للعمل:</label>
+            <input type="date" />
+
+            <label>تاريخ توقيع العقد:</label>
+            <input type="date" />
+
+            <br /><br /><br /><br />
+            <hr />
+            <br /><br /><br /><br />
 
             <label>نوع العقار:</label>
             <select id="typeProject" name="typeProject">
@@ -69,10 +92,6 @@
               <option value="school">مدرسة</option>
             </select>
 
-            <label>مساحة الأرض:</label>
-            <input type="number" placeholder="متر²" />
-            <span style="font-size: 16px; font-weight: bold">متر²</span>
-
             <label>مساحة المسقوف:</label>
             <input type="number" placeholder="متر²" /><span
               style="font-size: 16px; font-weight: bold"
@@ -80,21 +99,18 @@
               متر²</span
             >
 
-            <label>موقع الأرض:</label>
-            <input type="text" placeholder="وصف لموقع الأرض" />
-            <input type="text" placeholder="رابط للموقع على الخريطة" />
-
-            <label>خرائط التصميم:</label>
+            <label>تصاميم المشروع</label>
             <input type="file" />
+
+            <label>المكتب المصمم:</label>
+            <input type="text" placeholder="إسم المكتب" />
 
             <label>وصف للعقار:</label>
             <textarea placeholder="ضع وصف للعقار"></textarea>
 
-            <label>تاريخ توقيع العقد:</label>
-            <input type="date" />
-
-            <label>تاريخ استلام الموقع للعمل:</label>
-            <input type="date" />
+            <br /><br /><br /><br />
+            <hr />
+            <br /><br /><br /><br />
 
             <label>تاريخ البدأ المتوقع:</label>
             <input type="date" />
@@ -104,7 +120,7 @@
 
             <label>حالة المشروع:</label>
             <select id="status" name="status">
-              <option value="in-progress">مستمر</option>
+              <option value="in-progress">تحت الانجاز</option>
               <option value="stopped">متوقف</option>
               <option value="completed">منجز</option>
             </select>
@@ -116,14 +132,14 @@
               %
             </span>
 
-            <label>المبلغ المتوقع صرفه:</label>
+            <label>التكلفة التقديرية:</label>
             <input type="number" placeholder="المبلغ المتوقع صرفه" /><span
               style="font-size: 16px; font-weight: bold"
             >
               د.ل</span
             >
 
-            <label>إجمالي الدفعات اللتي تم إستلامها من الزبون:</label>
+            <label>إجمالي الدفعات المستلمة من الزبون:</label>
             <input type="number" placeholder="مبلغ مالي" /><span
               style="font-size: 16px; font-weight: bold"
             >
@@ -131,13 +147,6 @@
             >
 
             <label>ما تم صرفه:</label>
-            <input type="number" placeholder="مبلغ مالي" /><span
-              style="font-size: 16px; font-weight: bold"
-            >
-              د.ل</span
-            >
-
-            <label>المبلغ المتبقي:</label>
             <input type="number" placeholder="مبلغ مالي" /><span
               style="font-size: 16px; font-weight: bold"
             >
@@ -155,6 +164,9 @@
 
             <label>المهندس المتعاون 3:</label>
             <input type="text" placeholder="م." />
+            <br /><br /><br /><br />
+            <hr />
+            <br /><br /><br /><br />
 
             <div class="button-container">
               <button type="button" class="save-btn">Save</button>
