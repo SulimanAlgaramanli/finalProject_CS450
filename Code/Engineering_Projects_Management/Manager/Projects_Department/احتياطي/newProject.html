@@ -64,7 +64,7 @@
         </header>
 
         <main>
-          <form id="projectForm" action="insert_project.php" method="POST">
+          <form id="projectForm" action="newProject.php" method="POST">
             <div class="form-container">
               <div class="form-group">
                 <label for="customerID">معرف الزبون:</label>
@@ -122,30 +122,18 @@
                 <hr />
               </div>
               <div class="form-group">
-                <label for="propertyType">نوع العقار:</label>
-                <select
-                  id="typeProject"
-                  name="typeProject"
-                  type="text"
-                  id="propertyType"
-                  name="PropertyType"
-                  required
-                >
-                  <!-- <input
-              type="text"
-              id="propertyType"
-              name="PropertyType"
-              required
-            />-->
-
-                  <option value="villa">فيلا</option>
-                  <option value="building">عمارة</option>
-                  <option value="market">سوق</option>
-                  <option value="hotel">فندق</option>
-                  <option value="hospital">مستشفى</option>
-                  <option value="school">مدرسة</option>
-                  <option value="school">شركة</option>
+                <label for="typeProject">نوع العقار:</label>
+                <select id="typeProject" name="PropertyType" required>
+                  <option value=""></option>
+                  <option value="فيلا">فيلا</option>
+                  <option value="عمارة">عمارة</option>
+                  <option value="سوق">سوق</option>
+                  <option value="فندق">فندق</option>
+                  <option value="مستشفى">مستشفى</option>
+                  <option value="مدرسة">مدرسة</option>
+                  <option value="شركة">شركة</option>
                 </select>
+
                 <br />
                 <label>وصف للعقار:</label>
                 <textarea
@@ -244,27 +232,7 @@
         </footer>
       </div>
     </div>
-    <script>
-      document
-        .getElementById("projectForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-
-          var formData = new FormData(this);
-
-          fetch("insert_project.php", {
-            method: "POST",
-            body: formData,
-          })
-            .then((response) => response.text())
-            .then((data) => {
-              alert(data);
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-            });
-        });
-    </script>
+    <script></script>
     <!-- <script src="script.js"></script> -->
   </body>
 </html>
