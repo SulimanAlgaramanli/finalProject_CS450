@@ -1,0 +1,399 @@
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+  }
+  
+  /* Navbar styles */
+  .navbar {
+    height: 60px; /* ارتفاع شريط القائمة */
+    background-color: #333;
+    color: #ffffff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1000;
+  }
+  
+  .navbar .left-section {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar .username {
+    font-size: 18px; /* حجم الخط لاسم المستخدم */
+    margin: 10px 20px;
+  }
+  
+  .img_user {
+    width: 40px; /* حجم الصورة الشخصية */
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 20px;
+  }
+  
+  .navbar .icons {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .navbar .icon {
+    font-size: 25px;
+    margin-left: 20px;
+    cursor: pointer;
+  }
+  
+  .navbar .search-box {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0px 30px;
+  }
+  
+  .navbar .search-box input[type="text"] {
+    width: 250px;
+    font-size: 16px;
+    border: 2px solid #000000;
+    padding: 10px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+  }
+  
+  .search-icon {
+    font-size: 24px;
+    cursor: pointer;
+    background-color: #ffffff;
+    border: 2px solid #000000;
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+  }
+  
+  #bar {
+    font-size: 30px;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  /* Sidebar styles */
+  .sidebar {
+    width: 250px; /* عرض السايدبار */
+    background-color: #333;
+    color: #ffffff;
+    padding: 5px;
+    padding-top: 60px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    right: 0;
+    transition: width 0.5s, right 0.5s;
+    z-index: 999;
+  }
+  
+  .sidebar.hidden {
+    right: -250px;
+  }
+  
+  .sidebar ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .sidebar nav ul li {
+    margin-bottom: 10px;
+  }
+  
+  .sidebar nav ul li a,
+  .sidebar nav ul li span {
+    color: #ffffff;
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    font-size: 18px; /* حجم الخط للعناصر في السايدبار */
+    cursor: pointer;
+  }
+  
+  .sidebar i {
+    margin-left: 5px;
+  }
+  
+  .sidebar .fa-chevron-down {
+    margin-right: 20px;
+    background-color: #333;
+    color: #ffffff;
+  }
+  
+  .submenu {
+    display: none;
+    background-color: #ffffff;
+    color: #333;
+    position: relative;
+    top: 0;
+    left: 0;
+    padding: 10px;
+    border-radius: 20px;
+  }
+  
+  .submenu a {
+    font-size: 16px; /* حجم الخط للعناصر في القائمة الفرعية */
+    padding: 5px;
+    display: block;
+  }
+  
+  .submenu.show {
+    background-color: #b4b4b4;
+    display: block;
+  }
+  
+  .sidebar nav ul li.active .submenu {
+    display: block;
+  }
+  
+  .sidebar nav ul li a:hover {
+    background-color: #6294a3;
+    border-radius: 5px;
+  }
+  
+  .toggle-btn {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    font-size: 30px;
+    cursor: pointer;
+    color: #333;
+    z-index: 1000;
+  }
+  
+  .collapsed {
+    width: 0;
+    overflow: hidden;
+  }
+  
+  /* Main content styles */
+  .master {
+    background-color: #ffffff;
+    min-height: 100vh;
+    direction: rtl;
+    padding-top: 60px; /* تعديل المسافة بين شريط القائمة والمحتوى الرئيسي */
+  }
+  
+  .header {
+    background-color: #ffffff;
+    padding: 40px;
+    text-align: center;
+  }
+  
+  .container {
+    padding: 40px 20px; /* هذا التعديل لتحسين تنسيق النص في أجهزة الكمبيوتر */
+    min-height: calc(100vh - 60px);
+    direction: rtl;
+    text-align: center;
+    background-color: #ffffff;
+  }
+  
+  .footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    font-size: 10px;
+    bottom: 0;
+    width: 100%;
+    position: fixed;
+  }
+  
+  /* Table styles */
+  .table-container {
+    display: flex;
+    justify-content: right;
+    align-items: flex-start;
+    max-height: 400px;
+    overflow-y: auto;
+    margin: 0 auto;
+  }
+  
+  .table {
+    font-size: 15px;
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #000000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  th,
+  td {
+    border: 1px solid #000000;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  th {
+    position: sticky;
+    top: 0;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #9fb5df;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #ffffff; /* لون الصفوف الزوجية */
+  }
+  
+  tr:nth-child(odd) {
+    background-color: #e3e3e3; /* لون الصفوف الفردية */
+  }
+  
+  tr:hover {
+    background-color: #f4fbff;
+  }
+  
+  td:hover {
+    background-color: #e4f5ff;
+  }
+  
+  table td a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  /* Button styles */
+  .big-buttons-section {
+    display: flex;
+    height: 100px;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0px;
+  }
+  
+  .buttons-section {
+    display: flex;
+    align-items: center;
+  }
+  
+  .action-button-print-button button,
+  .action-button-add-button button,
+  .action-button-edit-button button,
+  .action-button-delete-button button {
+    background-color: #1d6391;
+    color: white;
+    margin: 20px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px; /* حجم الخط للأزرار */
+  }
+  
+  .action-button-add-button button {
+    background-color: #4caf50;
+  }
+  
+  .action-button-edit-button button {
+    background-color: #bb9715;
+  }
+  
+  .action-button-delete-button button {
+    background-color: #c44c15;
+  }
+  
+  i {
+    margin: 10px;
+    font-size: 30px;
+  }
+  
+  /* Content box styles */
+  .content-box {
+    max-width: 100%;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(20, 187, 229, 0.386);
+  }
+  
+  .content-box h2 {
+    font-size: 30px; /* حجم الخط للعناوين في صندوق المحتوى */
+    margin-bottom: 10px;
+  }
+  
+  .content-box p {
+    font-size: 18px; /* حجم الخط للفقرات في صندوق المحتوى */
+    line-height: 1.6;
+  }
+  
+  /* Responsive adjustments */
+  @media screen and (max-width: 768px) {
+    .navbar {
+      flex-direction: column;
+      height: auto;
+      padding: 10px;
+    }
+  
+    .navbar .icons {
+      margin-top: 10px;
+    }
+  
+    .navbar .search-box {
+      padding: 0;
+      margin-top: 10px;
+      justify-content: center;
+    }
+  
+    .navbar .search-box input[type="text"] {
+      width: 100%;
+      border-radius: 50px;
+      text-align: right;
+    }
+  
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+      top: 0;
+      right: 0;
+      padding-top: 60px;
+      transition: none;
+      overflow-y: hidden;
+    }
+  
+    .sidebar.hidden {
+      right: 0;
+    }
+  
+    .toggle-btn {
+      display: block;
+    }
+  
+    .master {
+      padding-top: 100px;
+    }
+  
+    .container {
+      padding: 20px;
+    }
+  
+    .table-container {
+      max-height: none;
+    }
+  
+    .footer {
+      position: relative;
+      width: 100%;
+    }
+  }
+  

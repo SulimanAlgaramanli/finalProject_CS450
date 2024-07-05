@@ -1,18 +1,20 @@
-/* General styles */
 body {
   font-family: Arial, sans-serif;
+  display: flex;
+  min-height: 100vh;
   background-color: #ffffff;
   color: #333;
+  transition: margin-right 0.5s;
+  direction: rtl;
   margin: 0;
   padding: 0;
-  direction: rtl;
 }
 
-/* Navbar styles */
+
 .navbar {
-  height: 60px; /* ارتفاع شريط القائمة */
+  height: 5vh;
   background-color: #333;
-  color: #ffffff;
+  color: rgb(255, 255, 255);
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
@@ -26,16 +28,16 @@ body {
 
 .navbar .left-section {
   display: flex;
-  align-items: center;
 }
 
 .navbar .username {
-  font-size: 18px; /* حجم الخط لاسم المستخدم */
-  margin: 10px 20px;
+  font-size: 25px;
+  margin: 10px;
+  margin-right: 20px;
 }
 
 .img_user {
-  width: 40px; /* حجم الصورة الشخصية */
+  width: 40px;
   height: 40px;
   border-radius: 50%;
   margin-right: 20px;
@@ -51,14 +53,17 @@ body {
   font-size: 25px;
   margin-left: 20px;
   cursor: pointer;
+  padding: 5px;
 }
 
 .navbar .search-box {
-  flex-grow: 1;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
+  flex-grow: 1;
   padding: 0px 30px;
+  padding-right: 8500;
+  padding: 0 50px 0px 850px;
 }
 
 .navbar .search-box input[type="text"] {
@@ -66,35 +71,36 @@ body {
   font-size: 16px;
   border: 2px solid #000000;
   padding: 10px;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+  border-top-left-radius: 0px;
   border-top-right-radius: 50px;
+  border-bottom-left-radius: 0px;
   border-bottom-right-radius: 50px;
 }
 
 .search-icon {
-  font-size: 24px;
+  font-size: 29px;
   cursor: pointer;
   background-color: #ffffff;
   border: 2px solid #000000;
   border-top-left-radius: 50px;
+  border-top-right-radius: 0px;
   border-bottom-left-radius: 50px;
+  border-bottom-right-radius: 0px;
 }
 
 #bar {
+  cursor: pointer;
   font-size: 30px;
   padding: 10px;
-  cursor: pointer;
 }
-
-/* Sidebar styles */
 .sidebar {
-  width: 250px; /* عرض السايدبار */
+  width: 300px;
   background-color: #333;
-  color: #ffffff;
   padding: 5px;
   padding-top: 60px;
+  color: rgb(255, 255, 255);
   height: 100vh;
+  direction: rtl;
   position: fixed;
   top: 0;
   right: 0;
@@ -103,7 +109,7 @@ body {
 }
 
 .sidebar.hidden {
-  right: -250px;
+  right: -300px;
 }
 
 .sidebar ul {
@@ -121,7 +127,7 @@ body {
   text-decoration: none;
   display: block;
   padding: 10px;
-  font-size: 18px; /* حجم الخط للعناصر في السايدبار */
+  font-size: 30px;
   cursor: pointer;
 }
 
@@ -147,7 +153,7 @@ body {
 }
 
 .submenu a {
-  font-size: 16px; /* حجم الخط للعناصر في القائمة الفرعية */
+  font-size: 20px;
   padding: 5px;
   display: block;
 }
@@ -164,6 +170,7 @@ body {
 .sidebar nav ul li a:hover {
   background-color: #6294a3;
   border-radius: 5px;
+  font-size: 35px;
 }
 
 .toggle-btn {
@@ -181,12 +188,16 @@ body {
   overflow: hidden;
 }
 
-/* Main content styles */
+.shap_img {
+  width: 400px;
+  height: 200px;
+  border-radius: 50px;
+}
+
 .master {
-  background-color: #ffffff;
-  min-height: 100vh;
-  direction: rtl;
-  padding-top: 60px; /* تعديل المسافة بين شريط القائمة والمحتوى الرئيسي */
+  background-color: rgb(255, 255, 255);
+  height: 100vh;
+  width: 205.8vh;
 }
 
 .header {
@@ -195,40 +206,65 @@ body {
   text-align: center;
 }
 
-.container {
-  padding: 40px 20px; /* هذا التعديل لتحسين تنسيق النص في أجهزة الكمبيوتر */
-  min-height: calc(100vh - 60px);
+.contener {
+  padding: 40px 50px;
+  height: calc(100vh - 60px);
   direction: rtl;
+  display: block;
   text-align: center;
   background-color: #ffffff;
+  justify-content: center;
+}
+.min-contener {
+  width: 165.8vh;
+  height: 74.9vh;
+  /* background-color: #ffffff; */
+  padding-right: 20px;
+  display: block;
+  justify-content: center;
+  /* background-color: #1d9153; */
 }
 
+.min-contener_ForIndex {
+  width: 165.8vh;
+  height: 74.9vh;
+  display: block;
+  justify-content: center;
+}
 .footer {
+  /* justify-content:center; */
+  /* height: 25px; */
   background-color: #333;
   color: #fff;
   text-align: center;
   font-size: 10px;
-  bottom: 0;
+  bottom: 0px;
   width: 100%;
+  margin: 0px;
   position: fixed;
 }
 
-/* Table styles */
 .table-container {
   display: flex;
   justify-content: right;
   align-items: flex-start;
+  width: 100%;
   max-height: 400px;
   overflow-y: auto;
   margin: 0 auto;
+  direction: ltr;
+  margin-right: 40px;
 }
-
+.table-wrapper {
+  direction: rtl;
+}
 .table {
   font-size: 15px;
   width: 100%;
   border-collapse: collapse;
   border: 1px solid #000000;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  align-items: center;
 }
 
 th,
@@ -246,7 +282,6 @@ th {
   font-weight: bold;
   background-color: #9fb5df;
 }
-
 tr:nth-child(even) {
   background-color: #ffffff; /* لون الصفوف الزوجية */
 }
@@ -258,11 +293,9 @@ tr:nth-child(odd) {
 tr:hover {
   background-color: #f4fbff;
 }
-
 td:hover {
   background-color: #e4f5ff;
 }
-
 table td a {
   display: block;
   width: 100%;
@@ -271,7 +304,6 @@ table td a {
   color: inherit;
 }
 
-/* Button styles */
 .big-buttons-section {
   display: flex;
   height: 100px;
@@ -279,36 +311,62 @@ table td a {
   justify-content: space-between;
   align-items: center;
   margin: 20px 0px;
+  /* background-color: #631d91; */
 }
-
 .buttons-section {
+  flex: 2;
+  /* z-index: 1000;  */
   display: flex;
   align-items: center;
+  /* margin: 20px; */
 }
 
-.action-button-print-button button,
-.action-button-add-button button,
-.action-button-edit-button button,
-.action-button-delete-button button {
+.action-button-print-button button {
+  /* z-index: 1000;  */
   background-color: #1d6391;
   color: white;
-  margin: 20px;
+  margin: 20px 180px;
   padding: 10px 20px;
   border: none;
   cursor: pointer;
-  font-size: 16px; /* حجم الخط للأزرار */
+  font-size: 26px;
+}
+.buttons-section {
+  margin-left: 160px;
 }
 
 .action-button-add-button button {
+  /* z-index: 1000;  */
   background-color: #4caf50;
+  color: white;
+  margin: 20px;
+  margin-right: 120px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 26px;
 }
 
 .action-button-edit-button button {
+  /* z-index: 1000;  */
   background-color: #bb9715;
+  color: white;
+  margin: 20px 20px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 26px;
 }
 
 .action-button-delete-button button {
+  /* z-index: 1000;  */
   background-color: #c44c15;
+  color: white;
+  margin: 20px 20px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 26px;
 }
 
 i {
@@ -316,25 +374,108 @@ i {
   font-size: 30px;
 }
 
-/* Content box styles */
+button {
+  justify-content: right;
+  align-items: center;
+  text-align: center;
+
+  width: 150px;
+  font-size: 30px;
+  margin-bottom: 70px;
+  padding: 15px;
+  border: 2px solid #000000;
+  border-radius: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
+  cursor: pointer;
+}
+
 .content-box {
-  max-width: 100%;
+  width: 100%;
+  max-width: 650px;
+  max-height: 400px;
   margin: 50px auto;
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(20, 187, 229, 0.386);
 }
-
 .content-box h2 {
-  font-size: 30px; /* حجم الخط للعناوين في صندوق المحتوى */
+  font-size: 35px;
   margin-bottom: 10px;
 }
-
 .content-box p {
-  font-size: 18px; /* حجم الخط للفقرات في صندوق المحتوى */
+  font-size: 20px;
   line-height: 1.6;
 }
+
+.video-container video {
+  width: 100%;
+  border-radius: 50px;
+  max-height: 290px;
+  object-fit: cover;
+  margin: 0px;
+  box-shadow: 0 0 10px rgba(20, 187, 229, 0.386);
+  text-align: center;
+}
+
+.image-slider {
+  position: relative;
+  max-width: 800px;
+  max-height: 450px;
+  margin: auto;
+}
+.image-slider img {
+  width: 100%;
+  display: none;
+  border-radius: 50px;
+  max-height: 290px;
+  object-fit: cover;
+  margin: 0px;
+  box-shadow: 0 0 10px rgba(20, 187, 229, 0.386);
+}
+.image-slider img.active {
+  display: block;
+}
+
+.home_container {
+  display: flex;
+  padding: 20px;
+}
+
+.box1 {
+  flex: 1.5;
+  padding: 20px;
+  margin-right: 10px;
+  padding: 5px;
+}
+
+.box2 {
+  flex: 1;
+  padding: 5px;
+}
+
+form {
+  display: flex;
+  padding: 20px;
+  margin-right: 60px;
+}
+.box_fillter1 {
+  margin-right: 30px;
+}
+.box_fillter2 {
+  margin-right: 30px;
+}
+.box_fillter3 {
+  margin-right: 30px;
+}
+.fillter_label {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 5px;
+  border-radius: 20px;
+}
+
+
 
 /* Responsive adjustments */
 @media screen and (max-width: 600px) {

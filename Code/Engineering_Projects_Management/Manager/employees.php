@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>الزبائن</title>
+    <title>الموظفين</title>
     <link rel="icon" href="../icons/engineer.png" type="image/x-icon" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="../Css/main.css" />
@@ -73,7 +73,7 @@
             </aside>
         </div>
         <div class="min-contener">
-            <h1>بيانات الزبائن</h1>
+            <h1>بيانات الموظفين</h1>
             <div style="margin-right: 160px;">
                 <form method="GET" action="">
                     <div class="box_fillter1">
@@ -89,7 +89,7 @@
                     </div>
                     <div class="box_fillter2">
                         <div class="search-container">
-                            <input type="text" name="search_name" id="search_name" class="filtter_input_search" placeholder="ابحث عن اسم الزبون" />
+                            <input type="text" name="search_name" id="search_name" class="filtter_input_search" placeholder="ابحث عن اسم الموظف" />
                             <button type="submit" class="filtter_icon_search">&#128269;</button>
                         </div>
                     </div>
@@ -99,15 +99,17 @@
                         <table id="table_projects">
                             <thead>
                                 <tr>
-                                    <th>رقم الزبون</th>
-                                    <th>اسم الزبون</th>
+                                    <th>رقم الموظف</th>
+                                    <th>اسم الموظف</th>
+                                    <th>نوع الموظف</th>
                                     <th>الايميل</th>
                                     <th>الهاتف</th>
                                     <th>تاريخ الانضمام</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <?php
+                            <tbody>    
+                            
+                            <?php
                                 // تعيين معلومات الاتصال بقاعدة البيانات
                                 $servername = "localhost";
                                 $username = "root";
@@ -122,29 +124,27 @@
                                     die("فشل الاتصال: " . $conn->connect_error);
                                 }
 
-
-                                
-
                                 // استلام قيم الفلاتر من طلب GET
                                 $filter_year = isset($_GET['year']) ? $_GET['year'] : '';
                                 $search_name = isset($_GET['search_name']) ? $_GET['search_name'] : '';
 
-                                // بناء استعلام SQL مع الفلاتر
-                                $sql = "SELECT CustomerId, CustomerName, email, CustomerPhone, joinDate
-                                        FROM Customers";
+                                $sql = "SELECT e.employeeId, e.employeeName, ut.Type, e.email, e.employeePhone, e.joinDate
+                                        FROM employees e
+                                        JOIN userType ut ON e.userType = ut.id";
 
                                 // إضافة الفلاتر إذا كانت موجودة
                                 $conditions = array();
 
                                 if (!empty($filter_year)) {
-                                    $conditions[] = "YEAR(joinDate) = '$filter_year'";
+                                    $conditions[] = "YEAR(e.joinDate) = '$filter_year'";
                                 }
 
                                 if (!empty($search_name)) {
-                                    $conditions[] = "CustomerName LIKE '%$search_name%'";
+                                    $conditions[] = "e.employeeName LIKE '%$search_name%'";
                                 }
 
-                                if (count($conditions) > 0) {
+                                // إضافة WHERE إذا كان هناك شروط
+                                if (!empty($conditions)) {
                                     $sql .= " WHERE " . implode(' AND ', $conditions);
                                 }
 
@@ -157,24 +157,20 @@
                                     if ($result->num_rows > 0) {
                                         while ($row = $result->fetch_assoc()) {
                                             echo "<tr>";
-                                            echo "<td>" . $row["CustomerId"] . "</td>";
-                                            echo "<td>" . $row["CustomerName"] . "</td>";
+                                            echo "<td>" . $row["employeeId"] . "</td>";
+                                            echo "<td>" . $row["employeeName"] . "</td>";
+                                            echo "<td>" . $row["Type"] . "</td>";
                                             echo "<td>" . $row["email"] . "</td>";
-                                            echo "<td>" . $row["CustomerPhone"] . "</td>";
+                                            echo "<td>" . $row["employeePhone"] . "</td>";
                                             echo "<td>" . $row["joinDate"] . "</td>";
                                             echo "</tr>";
                                         }
                                     } else {
-                                        echo "<tr><td colspan='5'>لا توجد بيانات</td></tr>";
+                                        echo "<tr><td colspan='6'>لا توجد بيانات</td></tr>";
                                     }
                                 }
-
-
-
-
-
                                 $conn->close();
-                                ?>
+                            ?>
                             </tbody>
                         </table>
                     </div>
@@ -187,13 +183,13 @@
                 </div>
                 <div class="buttons-section">
                     <div class="action-button">
-                        <div class="action-button-add-button">
-                            <form action="SingUp_For_Customers.php" method="get">
-                                <button type="submit" class="projects_button" id="addProjectBtn">
-                                    <i class="fas fa-plus"></i> إضافة
+                        <div class="action-button-add-button" >
+                            <form action="SingUp_For_employees.php" method="get">
+                                <button  type="submit" class="projects_button" id="addProjectBtn">
+                                    <i class="fas fa-plus"></i> إضافة 
                                 </button>
                             </form>
-                        </div>
+                        </div>  
                     </div>
                     <div class="action-button">
                         <div class="action-button-edit-button">

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل الدخول</title>
+    <title>تسجيل حساب زبون جديد</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -61,20 +61,26 @@
 </head>
 <body>
     <div class="container">
-        <h2>تسجيل الدخول</h2>
+        <h2>تسجيل حساب زبون جديد</h2>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+            <label for="name">الاسم</label>
+            <input type="text" id="name" name="name" required>
+            
             <label for="email">البريد الإلكتروني</label>
             <input type="email" id="email" name="email" required>
             
             <label for="password">كلمة المرور</label>
             <input type="password" id="password" name="password" required>
             
-            <button type="submit">تسجيل الدخول</button>
+            <label for="phone">رقم الهاتف</label>
+            <input type="text" id="phone" name="phone" required>
+            
+            <button type="submit">تسجيل الحساب</button>
         </form>
     </div>
     
     <?php
-    // الكود PHP للتحقق من بيانات تسجيل الدخول والتحقق منها
+    // الكود PHP لمعالجة بيانات النموذج وإدخالها إلى قاعدة البيانات
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $servername = "localhost";
         $username = "root";
@@ -90,23 +96,21 @@
         }
         
         // الحصول على البيانات من النموذج
+        $name = $_POST['name'];
         $email = $_POST['email'];
-        $password = $_POST['password'];
+        $phone = $_POST['phone'];
+        // $password = $_POST['password']; 
+        $password = password_hash($_POST['password'], PASSWORD_DEFAULT); 
         
-        // استعلام للتحقق من وجود المستخدم في قاعدة البيانات
-        $sql = "SELECT * FROM Customers WHERE email='$email'";
-        $result = $conn->query($sql);
         
-        if ($result->num_rows == 1) {
-            $row = $result->fetch_assoc();
-            if (password_verify($password, $row['password'])) {
-                echo "<p>تم تسجيل الدخول بنجاح</p>";
-                header("Location: dashboard.php");
-            } else {
-                echo "كلمة المرور غير صحيحة";
-            }
+        // إدخال البيانات إلى قاعدة البيانات
+        $sql = "INSERT INTO Customers (CustomerName, email, password, CustomerPhone, userType, joinDate) 
+                VALUES ('$name', '$email', '$password', '$phone', 2, NOW())";
+        
+        if ($conn->query($sql) === TRUE) {
+            echo "<p>تم تسجيل الحساب بنجاح</p>";
         } else {
-            echo "البريد الإلكتروني غير مسجل";
+            echo "خطأ في تسجيل الحساب: " . $conn->error;
         }
         
         // إغلاق الاتصال بقاعدة البيانات

@@ -1,324 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>مشروع جديد</title>
-    <link rel="stylesheet" href="../../css/test.css" />
-    <link rel="icon" href="../../icons/engineer (1).png" type="image/x-icon" />
-  </head>
-  <body>
-    <style>
-      body,
-      html {
-        direction: rtl;
-        text-align: right;
-      }
-
-      select,
-      option,
-      input,
-      textarea,
-      label {
-        direction: rtl;
-        text-align: right;
-      }
-    </style>
-    <div class="container">
-      <aside class="sidebar">
-        <nav>
-          <ul>
-            <li><a href="../index.html">الصفحة الرئيسية</a></li>
-            <li><a href="project.html">المشاريع</a></li>
-            <li><a href="../financialDepartment.html">القسم المالي</a></li>
-            <li><a href="../customers.html">الزبائن</a></li>
-            <li><a href="../engineers.html">المهندسين</a></li>
-            <li><a href="../technicians.html">الفنيين</a></li>
-            <li><a href="../market.html">الورش / المعارض</a></li>
-            <li><a href="../administrator.html">الصلاحيات</a></li>
-            <li><a href="../reports.html">التقارير</a></li>
-            <li><a href="../agreements.html">العقود</a></li>
-          </ul>
-        </nav>
-      </aside>
-      <div class="main-content">
-        <header>
-          <h1>مشروع جديد</h1>
-          <div class="search-container">
-            <input
-              type="search"
-              placeholder="إبحث هنا..."
-              class="search-input"
-            />
-            <span class="search-icon">&#128269;</span>
-          </div>
-          <div class="user-notifications-Settings">
-            <img
-              src="../../img/Settings.png"
-              alt="Settings"
-              class="settings-icon"
-            />
-            <span class="notification-icon">🔔</span>
-            <img src="../../img/user.png" alt="User" class="user-icon" />
-          </div>
-        </header>
-
-        <main>
-          <form id="projectForm" action="insert_project.php" method="POST">
-            <div class="form-container">
-              <div class="form-group">
-                <label for="customerID">معرف الزبون:</label>
-                <input
-                  type="number"
-                  id="customerID"
-                  name="CustomerID"
-                  required
-                /><br />
-
-                <label for="supervisingEngineerID">معرف المهندس المشرف:</label>
-                <input
-                  type="number"
-                  id="supervisingEngineerID"
-                  name="SupervisingEngineerID"
-                  required
-                /><br />
-
-                <label for="contractSignDate">تاريخ توقيع العقد:</label>
-                <input
-                  type="date"
-                  id="contractSignDate"
-                  name="ContractSignDate"
-                  required
-                /><br />
-
-                <label for="landLocation">موقع الأرض:</label>
-                <input
-                  type="text"
-                  id="landLocation"
-                  name="LandLocation"
-                  required
-                /><br />
-
-                <label for="landArea">مساحة الأرض:</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  id="landArea"
-                  name="LandArea"
-                  required
-                /><br />
-
-                <label for="isInPlan"> في المخطط:</label>
-                <input type="checkbox" id="isInPlan" name="IsInPlan" />
-
-                <label for="hasBuildingPermit"> تصريح بناء:</label>
-                <input
-                  type="checkbox"
-                  id="hasBuildingPermit"
-                  name="HasBuildingPermit"
-                />
-              </div>
-              <div class="form-group">
-                <hr />
-              </div>
-              <div class="form-group">
-                <label for="propertyType">نوع العقار:</label>
-                <select
-                  id="typeProject"
-                  name="typeProject"
-                  type="text"
-                  id="propertyType"
-                  name="PropertyType"
-                  required
-                >
-                  <!-- <input
-              type="text"
-              id="propertyType"
-              name="PropertyType"
-              required
-            />-->
-
-                  <option value="villa">فيلا</option>
-                  <option value="building">عمارة</option>
-                  <option value="market">سوق</option>
-                  <option value="hotel">فندق</option>
-                  <option value="hospital">مستشفى</option>
-                  <option value="school">مدرسة</option>
-                  <option value="school">شركة</option>
-                </select>
-                <br />
-                <label>وصف للعقار:</label>
-                <textarea
-                  placeholder="ضع وصف للعقار"
-                  type="text"
-                  step="0.01"
-                  id="PropertyDescription"
-                  name="PropertyDescription"
-                ></textarea>
-
-                <label for="coveredArea">مساحة المسقوف:</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  id="coveredArea"
-                  name="CoveredArea"
-                  required
-                /><br />
-
-                <label for="designerOfficeName">اسم مكتب المصمم:</label>
-                <input
-                  type="text"
-                  id="designerOfficeName"
-                  name="DesignerOfficeName"
-                  required
-                /><br />
-
-                <label for="designMapsSoftwareVersion"
-                  >نسخة من الخرائط والتصميم:</label
-                >
-                <input
-                  type="text"
-                  id="designMapsSoftwareVersion"
-                  name="DesignMapsSoftwareVersion"
-                /><br />
-
-                <label for="projectStartDate">تاريخ بدء المشروع:</label>
-                <input
-                  type="date"
-                  id="projectStartDate"
-                  name="ProjectStartDate"
-                  required
-                /><br />
-
-                <label for="projectEndDate">تاريخ انتهاء المشروع:</label>
-                <input
-                  type="date"
-                  id="projectEndDate"
-                  name="ProjectEndDate"
-                /><br />
-
-                <label for="projectStatus">حالة المشروع:</label>
-                <input
-                  type="text"
-                  id="projectStatus"
-                  name="ProjectStatus"
-                  required
-                /><br />
-
-                <label for="progressPercentage">نسبة الانجاز:</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  id="progressPercentage"
-                  name="ProgressPercentage"
-                  required
-                /><br />
-
-                <label for="totalAmountPaid">إجمالي المبلغ المدفوع:</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  id="totalAmountPaid"
-                  name="TotalAmountPaid"
-                  required
-                /><br />
-
-                <label for="amountSpent">المبلغ المنفق:</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  id="amountSpent"
-                  name="AmountSpent"
-                  required
-                /><br />
-              </div>
-            </div>
-            <div class="button-container">
-              <button type="submit" class="save-btn">حفظ</button>
-              <button type="button" class="cancel-btn">إلغاء</button>
-            </div>
-          </form>
-        </main>
-        <footer>
-          <p>&copy; 2024 منصة لإدارة المكتب الهندسي</p>
-        </footer>
-      </div>
-    </div>
-    <script>
-      document
-        .getElementById("projectForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-
-          var formData = new FormData(this);
-
-          fetch("insert_project.php", {
-            method: "POST",
-            body: formData,
-          })
-            .then((response) => response.text())
-            .then((data) => {
-              alert(data);
-            })
-            .catch((error) => {
-              console.error("Error:", error);
-            });
-        });
-    </script>
-    <!-- <script src="script.js"></script> -->
-  </body>
-</html>
-<!-- 
-<form >
-  <div class="form-container">
-    <div class="form-group">
-      <label>ID رقم الزبون :</label>
-      <input type="number" placeholder="الزبون" />
-      <label>ID المهندس المسؤول :</label>
-      <input type="number" placeholder="م." />
-      <label>تاريخ توقيع العقد</label>
-      <input type="date" />
-      <label>الموقع :</label>
-      <input type="text" placeholder="المكان" />
-      <label>المساحة:</label>
-      <input type="number" placeholder="متر²" /><span
-        style="font-size: 16px; font-weight: bold"
-        >متر²</span
-      >
-      <label style="display: inline-block">داخل المخطط</label>
-      <input type="checkbox" />
-      <label style="display: inline-block">رخصة بناء</label>
-      <input type="checkbox" />
-    </div>
-    <div class="form-group">
-      <hr />
-    </div>
-    <div class="form-group">
-      <label>نوع العقار:</label>
-      <select id="typeProject" name="typeProject">
-        <option value="villa">فيلا</option>
-        <option value="building">عماره</option>
-        <option value="market">سوق</option>
-        <option value="hotel">فندق</option>
-        <option value="hospital">مستشفى</option>
-        <option value="school">مدرسة</option>
-      </select>
-      <label>وصف للعقار:</label>
-      <textarea placeholder="ضع وصف للعقار"></textarea>
-      <label>مساحة المسقوف:</label>
-      <input type="number" placeholder="متر²" /><span
-        style="font-size: 16px; font-weight: bold"
-        >متر²</span
-      >
-      <label>المكتب المصمم:</label>
-      <input type="text" placeholder="إسم المكتب" />
-      <label>تصاميم المشروع</label>
-      <input type="file" style="background-color: white" />
-    </div>
-  </div>
-  <div class="button-container">
-    <button type="submit" class="save-btn">حفظ</button>
-
-    <button type="button" class="cancel-btn">إلغاء</button>
-  </div>
-</form> -->
