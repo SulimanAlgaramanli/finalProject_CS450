@@ -214,32 +214,26 @@
                                 <th>تاريخ الانتهاء</th>
                                 <th>حالة المشروع</th>
                                 <th>نسبة الانجاز</th>
-                                <!-- <th>إجمالي الدفعات د.ل</th>
-                                <th>اجمالي المصروفات د.ل</th> -->
+                                <th>إجمالي الدفعات د.ل</th>
+                                <th>اجمالي المصروفات د.ل</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-$servername = "localhost";
-$username = "root";
-$password = ""; // تحقق من كلمة المرور الصحيحة
-$dbname = "Engineering_Projects_Management";
+                                $servername = "localhost";
+                                $username = "root";
+                                $password = ""; // تحقق من كلمة المرور الصحيحة
+                                $dbname = "Engineering_Projects_Management";
 
-// إنشاء الاتصال
-$conn = new mysqli($servername, $username, $password, $dbname);
+                                // إنشاء الاتصال
+                                $conn = new mysqli($servername, $username, $password, $dbname);
 
-// التحقق من الاتصال
-if ($conn->connect_error) {
-    die("فشل الاتصال: " . $conn->connect_error);
-}
-echo "تم الاتصال بنجاح";
-
-// الاستعلام وباقي الكود
-
-$conn->close();
-?>
-
+                                // التحقق من الاتصال
+                                if ($conn->connect_error) {
+                                    die("فشل الاتصال: " . $conn->connect_error);
+                                }
+                            
 
                             // استلام قيم الفلاتر من طلب GET
                             $filter_year = isset($_GET['year']) ? $_GET['year'] : '';
@@ -250,12 +244,47 @@ $conn->close();
 
                             // بناء استعلام SQL مع الفلاتر
 
-                            $sql = "SELECT ProjectID, CustomerName, eng.employeeName AS engineer_username, LandLocation, ProjectStartDate, ProjectEndDate, statusname, ProgressPercentage
-                            FROM projects
-                            JOIN projectstatus ON projects.ProjectStatus = projectstatus.id
-                            JOIN customers AS cus ON projects.CustomerID = cus.CustomerId 
-                            JOIN employees AS eng ON projects.SupervisingEngineerID = eng.employeeId
-                            ";
+                            // $sql = "SELECT ProjectID, CustomerName, eng.employeeName AS engineer_username, LandLocation, ProjectStartDate, ProjectEndDate, statusname, ProgressPercentage
+                            // FROM projects
+                            // JOIN projectstatus ON projects.ProjectStatus = projectstatus.id
+                            // JOIN customers AS cus ON projects.CustomerID = cus.CustomerId 
+                            // JOIN employees AS eng ON projects.SupervisingEngineerID = eng.employeeId
+                            // ";
+                            
+                            $sql = "SELECT 
+    projects.ProjectID, 
+    CustomerName, 
+    eng.employeeName AS engineer_username, 
+    LandLocation, 
+    ProjectStartDate, 
+    ProjectEndDate, 
+    statusname, 
+    ProgressPercentage,
+    SUM(py.amount) AS totalPayments,
+    SUM(
+        py.MaterialInvoices + py.TechnicianInvoices + 
+        (py.Amount - (py.Amount / (1 + (projects.rate_Of_CostPlus / 100))))
+    ) AS TotalExpenses
+FROM 
+    projects
+JOIN 
+    projectstatus ON projects.ProjectStatus = projectstatus.id
+JOIN 
+    customers AS cus ON projects.CustomerID = cus.CustomerId 
+JOIN 
+    employees AS eng ON projects.SupervisingEngineerID = eng.employeeId 
+LEFT JOIN  
+    payments AS py ON projects.ProjectID = py.ProjectID
+GROUP BY 
+    projects.ProjectID, 
+    CustomerName, 
+    engineer_username, 
+    LandLocation, 
+    ProjectStartDate, 
+    ProjectEndDate, 
+    statusname, 
+    ProgressPercentage
+";
 
 
 
@@ -297,8 +326,8 @@ $conn->close();
                                         echo "<td>" . $row["ProjectEndDate"] . "</td>";
                                         echo "<td>" . $row["statusname"] . "</td>";
                                         echo "<td>" . $row["ProgressPercentage"] . " %</td>";
-                                        // echo "<td>" . number_format($row["TotalAmountPaid"]) . "</td>";
-                                        // echo "<td>" . number_format($row["AmountSpent"]) . "</td>";
+                                        echo "<td>" . number_format($row["totalPayments"]) . "</td>";
+                                        echo "<td>" . number_format($row["TotalExpenses"]) . "</td>";
                                         
                                         echo    "<td>                                                    
                                                     <div class=\"action-buttons\">

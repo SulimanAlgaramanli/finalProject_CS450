@@ -18,15 +18,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $accountantID = isset($_POST['accountantID']) ? $_POST['accountantID'] : null;
     $paymentNumber = isset($_POST['paymentNumber']) ? $_POST['paymentNumber'] : null;
     $amount = isset($_POST['amount']) ? $_POST['amount'] : null;
-    $PaymentMethods = isset($_POST['PaymentMethodID']) ? $_POST['PaymentMethodName'] : null;
+    $PaymentMethodID = isset($_POST['PaymentMethodID']) ? $_POST['PaymentMethodID'] : null;
     $paymentDate = isset($_POST['paymentDate']) ? $_POST['paymentDate'] : null;
 
 
 
     // التحقق من أن جميع الحقول المطلوبة ليست فارغة
     if ($projectID && $accountantID && $paymentNumber && $amount && $paymentDate) {
-        $sql = "INSERT INTO payments (ProjectID, accountantID, paymentNumber, Amount, $PaymentMethods, PaymentDate, materialInvoices, technicianInvoices, feesAmount, SettlementDate)
-                VALUES ('$projectID', '$accountantID', '$paymentNumber', '$amount', '$PaymentMethods', '$paymentDate', '0', '0', '0', '$SettlementDate')";
+        $sql = "INSERT INTO payments (ProjectID, accountantID, paymentNumber, Amount, PaymentMethodID, PaymentDate, materialInvoices, technicianInvoices)
+                VALUES ('$projectID', '$accountantID', '$paymentNumber', '$amount', '$PaymentMethodID', '$paymentDate', '0', '0' )";
         
         if ($conn->query($sql) === TRUE) {
             // echo "تم إضافة الدفعة بنجاح";
@@ -53,8 +53,9 @@ order by ProjectID";
 $result_1 = $conn->query($sql_1);
 
 // استعلام SQL لاسترجاع أرقام المشاريع
-$sql_2 = "SELECT PaymentMethodID FROM PaymentMethods
-order by PaymentMethodID";
+$sql_2 = "SELECT PaymentMethodID, PaymentMethodName FROM PaymentMethods ORDER BY PaymentMethodID";
+// $sql_2 = "SELECT PaymentMethodID FROM PaymentMethods
+// order by PaymentMethodID";
 $result_2 = $conn->query($sql_2);
 
 ?>
@@ -169,7 +170,9 @@ $result_2 = $conn->query($sql_2);
                 // عرض خيارات طرق الدفع من قاعدة البيانات
                 if ($result_2->num_rows > 0) {
                     while ($row = $result_2->fetch_assoc()) {
+                        // echo "<option value='" . $row['PaymentMethodID'] . "'>" . $row['PaymentMethodName'] . "</option>";
                         echo "<option value='" . $row['PaymentMethodID'] . "'>" . $row['PaymentMethodName'] . "</option>";
+
                     }
                 } else {
                     echo "<option value=''>لا توجد  </option>";

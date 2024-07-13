@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 13, 2024 at 01:05 AM
+-- Generation Time: Jul 13, 2024 at 02:14 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -207,7 +207,11 @@ INSERT INTO `payments` (`PaymentID`, `ProjectID`, `Amount`, `PaymentDate`, `Sett
 (28, 5, 110000, '2024-02-01', '2024-06-10', 4, 70000.00, 30000.00, 7, 1),
 (29, 2, 110000, '2024-03-01', '2024-05-10', 8, 65000.00, 35000.00, 5, 1),
 (30, 4, 110000, '2024-03-01', '2024-06-10', 6, 70000.00, 30000.00, 7, 1),
-(31, 4, 110000, '2024-06-01', NULL, 7, 50000.00, 20000.00, 5, 1);
+(31, 4, 110000, '2024-06-01', NULL, 7, 50000.00, 20000.00, 5, 1),
+(32, 6, 11000, '2024-07-19', '0000-00-00', 1, 0.00, 0.00, 5, 1),
+(33, 6, 22000, '2024-07-20', '0000-00-00', 2, 0.00, 0.00, 5, 2),
+(34, 6, 50000, '2024-07-20', NULL, 3, 0.00, 0.00, 7, 3),
+(35, 6, 55000, '2024-07-12', NULL, 4, 0.00, 0.00, 5, 1);
 
 -- --------------------------------------------------------
 
@@ -255,7 +259,8 @@ INSERT INTO `projects` (`ProjectID`, `CustomerID`, `SupervisingEngineerID`, `Con
 (2, 2, 2, '2021-04-03', 'المشتل', 1, 0, 1, 600, '2021-04-28', NULL, 1, 70, NULL, 10),
 (3, 3, 4, '2022-05-14', 'ميزران', 1, 1, 5, 1500, '2022-06-08', NULL, 3, 20, NULL, 10),
 (4, 4, 3, '2022-09-06', 'الدهماني', 1, 1, 1, 500, '2022-10-16', NULL, 1, 65, NULL, 10),
-(5, 5, 2, '2023-05-28', 'زناته', 1, 0, 2, 2000, '2023-05-30', NULL, 1, 15, NULL, 10);
+(5, 5, 2, '2023-05-28', 'زناته', 1, 0, 2, 2000, '2023-05-30', NULL, 1, 15, NULL, 10),
+(6, 2, 2, '2024-07-02', 'قرجي', 1, 0, 1, 300, '2024-07-17', NULL, 1, 0, NULL, 10);
 
 -- --------------------------------------------------------
 
@@ -648,7 +653,7 @@ ALTER TABLE `paymentmethods`
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `PaymentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `PaymentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `projectdocumentation`
@@ -660,7 +665,7 @@ ALTER TABLE `projectdocumentation`
 -- AUTO_INCREMENT for table `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `ProjectID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ProjectID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `projectstatus`
