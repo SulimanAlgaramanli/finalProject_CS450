@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>الزبائن</title>
+    <title>الفنيين</title>
     <link rel="icon" href="../icons/engineer.png" type="image/x-icon" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="../Css/main.css" />
@@ -86,7 +86,7 @@
             </aside>
         </div>
 
-        <h1>بيانات الزبائن</h1>
+        <h1>بيانات الفنيين</h1>
         <div class="min-contener"  style="margin-right: 160px;">
             <form class="form_fillter" method="GET" action="">
     
@@ -108,7 +108,11 @@
         
             <div class="box_fillter3">
                 <div class="search-container">
-                    <input type="text" name="search_name" id="search_name" class="filtter_input_search" placeholder="ابحث عن اسم الزبون" />
+                    <input type="text" name="search_name" id="search_name" class="filtter_input_search" placeholder="ابحث عن اسم الفني" />
+                    <button type="submit" class="filtter_icon_search">&#128269;</button>
+<div id="space" >
+</div>
+                    <input type="text" name="search_search_Nationality" id="search_search_Nationality" class="filtter_input_search" placeholder="ابحث عن اسم الجنسية" />
                     <button type="submit" class="filtter_icon_search">&#128269;</button>
                 </div>
             </div>
@@ -121,112 +125,119 @@
                         <i class="fas fa-print"></i> طباعة
                     </button>
 
-                    <button onclick="location.href='SingUp_For_Customers.php'" type="button" class="button_add" id="add-Btn">
+                    <button onclick="location.href='new_Technicians.php'" type="button" class="button_add" id="add-Btn">
                         <i class="fas fa-plus"></i> إضافة
                     </button>
                 </div>
             </form>
-
-
 
                 <div class="table-container">
                     <div class='table-wrapper'>
                         <table id="table_projects">
                             <thead>
                                 <tr>
-                                    <th>رقم الزبون</th>
-                                    <th>اسم الزبون</th>
-                                    <th>الايميل</th>
+                                    <th>رقم الفني</th>
+                                    <th>اسم الفني</th>
+                                    <th>التخصص</th>
+                                    <th>الجنسية</th>
                                     <th>الهاتف</th>
                                     <th>تاريخ الانضمام</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php
-                                // تعيين معلومات الاتصال بقاعدة البيانات
-                                $servername = "localhost";
-                                $username = "root";
-                                $password = "";
-                                $dbname = "Engineering_Projects_Management";
+                            
+                            <?php
+// تعيين معلومات الاتصال بقاعدة البيانات
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "Engineering_Projects_Management";
 
-                                // إنشاء اتصال بقاعدة البيانات
-                                $conn = new mysqli($servername, $username, $password, $dbname);
+// إنشاء اتصال بقاعدة البيانات
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-                                // التحقق من الاتصال
-                                if ($conn->connect_error) {
-                                    die("فشل الاتصال: " . $conn->connect_error);
-                                }
+// التحقق من الاتصال
+if ($conn->connect_error) {
+    die("فشل الاتصال: " . $conn->connect_error);
+}
 
+// استلام قيم الفلاتر من طلب GET
+$filter_year = isset($_GET['year']) ? $_GET['year'] : '';
+$search_name = isset($_GET['search_name']) ? $_GET['search_name'] : '';
+$search_Nationality = isset($_GET['search_search_Nationality']) ? $_GET['search_search_Nationality'] : '';
 
-                                
+// بناء استعلام SQL مع الفلاتر
+$sql = "SELECT tech.TechnicianID, tech.TechnicianName, GROUP_CONCAT(sp.SpecializationName SEPARATOR ', ') AS Specializations, tech.Nationality, tech.PhoneNumber, tech.JoinDate
+        FROM Technicians AS tech
+        LEFT JOIN technician_specializations AS ts ON tech.TechnicianID = ts.TechnicianID
+        LEFT JOIN specializations AS sp  ON ts.SpecializationID = sp.SpecializationID
+";
 
-                                // استلام قيم الفلاتر من طلب GET
-                                $filter_year = isset($_GET['year']) ? $_GET['year'] : '';
-                                $search_name = isset($_GET['search_name']) ? $_GET['search_name'] : '';
+// إضافة الفلاتر إذا كانت موجودة
+$conditions = array();
 
-                                // بناء استعلام SQL مع الفلاتر
-                                $sql = "SELECT CustomerId, CustomerName, email, CustomerPhone, joinDate
-                                        FROM Customers";
+if (!empty($filter_year)) {
+    $conditions[] = "YEAR(tech.JoinDate) = '$filter_year'";
+}
 
-                                // إضافة الفلاتر إذا كانت موجودة
-                                $conditions = array();
+if (!empty($search_name)) {
+    $conditions[] = "tech.TechnicianName LIKE '%$search_name%'";
+}
+if (!empty($search_Nationality)) {
+    $conditions[] = "tech.Nationality LIKE '%$search_Nationality%'";
+}
 
-                                if (!empty($filter_year)) {
-                                    $conditions[] = "YEAR(joinDate) = '$filter_year'";
-                                }
+if (count($conditions) > 0) {
+    $sql .= " WHERE " . implode(' AND ', $conditions);
+}
 
-                                if (!empty($search_name)) {
-                                    $conditions[] = "CustomerName LIKE '%$search_name%'";
-                                }
+$sql .= " GROUP BY tech.TechnicianID, tech.TechnicianName, tech.Nationality, tech.PhoneNumber, tech.JoinDate";
 
-                                if (count($conditions) > 0) {
-                                    $sql .= " WHERE " . implode(' AND ', $conditions);
-                                }
+// تنفيذ الاستعلام والتحقق من النتائج
+$result = $conn->query($sql);
 
-                                // تنفيذ الاستعلام والتحقق من النتائج
-                                $result = $conn->query($sql);
+if ($result === false) {
+    echo "خطأ في الاستعلام: " . $conn->error;
+} else {
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr>";
+            echo "<td>" . $row["TechnicianID"] . "</td>";
+            echo "<td>" . $row["TechnicianName"] . "</td>";
+            echo "<td>" . $row["Specializations"] . "</td>";
+            echo "<td>" . $row["Nationality"] . "</td>";
+            echo "<td>" . $row["PhoneNumber"] . "</td>";
+            echo "<td>" . $row["JoinDate"] . "</td>";
+            echo "<td>
+                    <div class='action-buttons'>
+                        <form class='botton_table' method='GET' action='edit_Technicians.php' style='display: inline-block;'>
+                            <input type='hidden' name='project_id' value='" . $row["TechnicianID"] . "'>
+                            <button class='button_edit' type='submit'>
+                                <i id='i_edit' class='fas fa-edit'></i> تعديل
+                            </button>
+                        </form>
+                        <form class='botton_table' method='POST' action='delete_Technicians.php'>
+                            <input type='hidden' name='project_id' value='" . $row["TechnicianID"] . "'>
+                            <button class='button_delet' type='submit' onclick='return confirm(\"هل أنت متأكد من الحذف؟\")'>
+                                <i id='i_del' class='fas fa-trash-alt'></i> حذف
+                            </button>
+                        </form>
+                    </div>
+                </td>";
+            echo "</tr>";
+        }
+    } else {
+        echo "<tr><td colspan='7'>لا توجد بيانات</td></tr>";
+    }
+}
 
-                                if ($result === false) {
-                                    echo "خطأ في الاستعلام: " . $conn->error;
-                                } else {
-                                    if ($result->num_rows > 0) {
-                                        while ($row = $result->fetch_assoc()) {
-                                            echo "<tr>";
-                                            echo "<td>" . $row["CustomerId"] . "</td>";
-                                            echo "<td>" . $row["CustomerName"] . "</td>";
-                                            echo "<td>" . $row["email"] . "</td>";
-                                            echo "<td>" . $row["CustomerPhone"] . "</td>";
-                                            echo "<td>" . $row["joinDate"] . "</td>";
-                                            
-                                        echo    "<td>                                                    
-                                        <div class=\"action-buttons\">
+$conn->close();
+?>
 
-                                            <form class='botton_table' method='GET' action='edit_customers.php' style='display: inline-block;'>
-                                                <input type='hidden' name='project_id' value='" . $row["CustomerId"] . "'>
-                                                <button class='button_edit' type='submit'>
-                                                    <i id='i_edit' class='fas fa-edit'></i> تعديل
-                                                </button>
-                                            </form>
-                                            <form class='botton_table' method='POST' action='delete_customers.php'>
-                                                <input type='hidden' name='project_id' value='" . $row["CustomerId"] . "'>
-                                                <button class='button_delet' type='submit' onclick='return confirm(\"هل أنت متأكد من الحذف؟\")'><i id='i_del' class='fas fa-trash-alt'></i> حذف </button>
-                                            </form>
-                                        </div>
-                                    </td>";
-                                            echo "</tr>";
-                                        }
-                                    } else {
-                                        echo "<tr><td colspan='6'>لا توجد بيانات</td></tr>";
-                                    }
-                                }
+                            
+                            
 
-
-
-
-
-                                $conn->close();
-                                ?>
                             </tbody>
                         </table>
                     </div>

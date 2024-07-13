@@ -28,7 +28,10 @@ body {
 .navbar .left-section {
   display: flex;
 }
+.sidebar-toggle{
+  position: fixed;
 
+}
 .navbar .username {
   font-size: 25px;
   margin: 10px;
@@ -87,10 +90,13 @@ body {
   border-bottom-right-radius: 0px;
 }
 
+
 #bar {
   cursor: pointer;
   font-size: 30px;
-  padding: 10px;
+  /* padding: 5px; */
+  display: flex;
+
 }
 .sidebar {
   width: 300px;
@@ -128,6 +134,8 @@ body {
   padding: 10px;
   font-size: 30px;
   cursor: pointer;
+  text-align: right;
+  padding-right: 20px;
 }
 
 .sidebar i {
@@ -279,14 +287,18 @@ th {
   padding: 15px;
   font-size: 18px;
   font-weight: bold;
-  background-color: #9fb5df;
+  background-color: #b8d0ff;
 }
+.th-01 {
+  background-color: #e0ecff;
+}
+
 tr:nth-child(even) {
   background-color: #ffffff; /* لون الصفوف الزوجية */
 }
 
 tr:nth-child(odd) {
-  background-color: #e3e3e3; /* لون الصفوف الفردية */
+  background-color: #f1f1f1; /* لون الصفوف الفردية */
 }
 
 tr:hover {
@@ -485,6 +497,7 @@ button {
 .search-container {
   display: flex;
   align-items: center;
+  /* gap: 25px; */
 }
 .filtter_icon_search {
   margin: 0px;
@@ -498,6 +511,9 @@ button {
   border-top-right-radius: 0px;
   border-bottom-left-radius: 50px;
   border-bottom-right-radius: 0px;
+}
+#space{
+  padding: 25px;
 }
 .filtter_input_search {
   padding: 5px;
@@ -559,8 +575,6 @@ button {
   gap: 5px;
 }
 
-.button_print,
-.button_add,
 .button_edit,
 .button_delet {
   border: none; /* إزالة حدود الزر */
@@ -574,6 +588,23 @@ button {
   cursor: pointer; /* تغيير شكل المؤشر عند التحريك */
   border-radius: 5px; /* شكل زوايا الزر */
   transition-duration: 0.5s; /* زمن التحويل */
+}
+
+.button_print,
+.button_add {
+  border: none; /* إزالة حدود الزر */
+  color: white; /* لون النص */
+  padding: 1px; /* حجم الحشو */
+  text-align: center; /* محاذاة النص */
+  text-decoration: none; /* إزالة تزيين النص */
+  display: inline-block; /* عرض كمربع متساوي الأطراف */
+  font-size: 20px; /* حجم الخط */
+  margin: 1px; /* هامش بين الأزرار */
+  cursor: pointer; /* تغيير شكل المؤشر عند التحريك */
+  border-radius: 5px; /* شكل زوايا الزر */
+  transition-duration: 0.5s; /* زمن التحويل */
+  width: 120px;
+  height: 60px;
 }
 
 /* استايل تحريك المؤشر على الزر */
@@ -620,7 +651,6 @@ button {
   border-radius: 5px; /* شكل زوايا الزر */
   transition-duration: 0.5s; /* زمن التحويل */
   margin-bottom: 80px; /* مسافة من الأعلى */
-
 }
 
 .button_save:hover {

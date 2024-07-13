@@ -45,6 +45,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $total_amount_paid = $_POST['total_amount_paid'];
     $amount_spent = $_POST['amount_spent'];
 
+    // $CopyOfDesignMaps = isset($_POST['CopyOfDesignMaps']) ? $_POST['CopyOfDesignMaps'] : null;
+    // $CopyOfDocuments = isset($_POST['CopyOfDocuments']) ? $_POST['CopyOfDocuments'] : null;
+    // $PicturesOfConstructionStages = isset($_POST['PicturesOfConstructionStages']) ? $_POST['PicturesOfConstructionStages'] : null;
+
     // تحديث بيانات المشروع باستخدام prepared statement
     $sql = "UPDATE projects
             SET CustomerID = ?,
@@ -108,6 +112,7 @@ label {
 
 input[type="number"],
 input[type="text"],
+input[type=checkbox],
 input[type="date"] {
     width: calc(100% - 20px);
     padding: 10px;
@@ -155,7 +160,27 @@ button[type="submit"]:hover {
         <input type="date" id="project_end_date" name="project_end_date" value="<?php echo $project['ProjectEndDate']; ?>"><br>
 
         <label for="project_status">حالة المشروع:</label>
-        <input type="text" id="project_status" name="project_status" value="<?php echo $project['ProjectStatus']; ?>" required><br>
+        <select id="project_status" name="project_status" required>
+                <option value="" disabled selected>اختر حالة المشروع</option>
+                <option value="1">تحت التنفيذ</option>
+                <option value="2">مكتمل</option>
+                <option value="3">متوقف</option>
+            </select><br />
+
+
+
+
+            <!-- <label for="CopyOfDesignMaps">نسخة من التصاميم:</label>
+                <input type="text" id="CopyOfDesignMaps" name="CopyOfDesignMaps" /><br />
+
+                <label for="CopyOfDocuments">نسخة من المستندات:</label>
+                <input type="text" id="CopyOfDocuments" name="CopyOfDocuments" /><br />
+
+                <label for="PicturesOfConstructionStages">صور للموقع ومراحل البناء:</label>
+                <input type="text" id="PicturesOfConstructionStages" name="PicturesOfConstructionStages" /><br />
+ -->
+
+
 
         <label for="progress_percentage">نسبة التقدم:</label>
         <input type="number" id="progress_percentage" name="progress_percentage" value="<?php echo $project['ProgressPercentage']; ?>" required><br>

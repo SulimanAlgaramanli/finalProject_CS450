@@ -38,7 +38,7 @@
             margin-bottom: 5px;
         }
 
-        input {
+        input, select {
             margin-bottom: 15px;
             padding: 10px;
             border: 1px solid #ddd;
@@ -63,6 +63,12 @@
     <div class="container">
         <h2>تسجيل الدخول</h2>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+            <label for="user_type">نوع المستخدم</label>
+            <select id="user_type" name="user_type" required>
+                <option value="customer">زبون</option>
+                <option value="employee">موظف</option>
+            </select>
+            
             <label for="email">البريد الإلكتروني</label>
             <input type="email" id="email" name="email" required>
             
@@ -74,6 +80,8 @@
     </div>
     
     <?php
+    session_start(); // تفعيل الجلسات
+
     // الكود PHP للتحقق من بيانات تسجيل الدخول والتحقق منها
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $servername = "localhost";
@@ -90,28 +98,45 @@
         }
         
         // الحصول على البيانات من النموذج
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+
+        $user_type = isset($_POST['user_type']) ? $_POST['user_type'] : '';
+        $email = isset($_POST['email']) ? $_POST['email'] : '';
+        $password = isset($_POST['password']) ? $_POST['password'] : '';
+
+        // تحديد الجدول بناءً على نوع المستخدم
+        if ($user_type == 'customer') {
+            $table = 'Customers';
+            $id_field = 'CustomerId';
+            $name_field = 'CustomerName';
+        } else {
+            $table = 'Employees';
+            $id_field = 'employeeId';
+            $name_field = 'employeeName';
+        }
         
         // استعلام للتحقق من وجود المستخدم في قاعدة البيانات
-        $sql = "SELECT * FROM Customers WHERE email='$email'";
+        $sql = "SELECT * FROM $table WHERE email='$email'";
         $result = $conn->query($sql);
         
         if ($result->num_rows == 1) {
             $row = $result->fetch_assoc();
             if (password_verify($password, $row['password'])) {
-                echo "<p>تم تسجيل الدخول بنجاح</p>";
-                header("Location: dashboard.php");
+                echo "<script>alert('تم تسجيل الدخول بنجاح');</script>";
+                $_SESSION['user_id'] = $row[$id_field]; // تخزين معرف المستخدم في الجلسة
+                $_SESSION['user_name'] = $row[$name_field]; // تخزين اسم المستخدم في الجلسة
+                header("Location: index.php");
+                exit(); // تأكد من استخدام exit بعد header
             } else {
-                echo "كلمة المرور غير صحيحة";
+                echo "<script>alert('كلمة المرور غير صحيحة');</script>";
             }
         } else {
-            echo "البريد الإلكتروني غير مسجل";
+            echo "<script>alert('البريد الإلكتروني غير مسجل');</script>";
         }
         
         // إغلاق الاتصال بقاعدة البيانات
         $conn->close();
     }
     ?>
+    <script src="script.js"></script>
 </body>
 </html>

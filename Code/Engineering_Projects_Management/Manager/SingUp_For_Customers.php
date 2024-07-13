@@ -7,115 +7,149 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            direction: rtl;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: 100vh; /* لجعل الصفحة تمتد إلى كامل ارتفاع النافذة */
             margin: 0;
+            background-color: #f0f0f0; /* لون الخلفية للصفحة */
+            
         }
-
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
-
-        h2 {
-            margin-bottom: 20px;
+        h2{
             text-align: center;
+            justify-content: center;        
         }
-
         form {
-            display: flex;
-            flex-direction: column;
-            direction: rtl;
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         label {
-            margin-bottom: 5px;
+            display: block;
+            margin-bottom: 10px;
         }
 
-        input {
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"] {
+            width: calc(100% - 20px);
+            padding: 10px;
             margin-bottom: 15px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 16px;
+            box-sizing: border-box;
         }
 
-        button {
-            padding: 10px;
-            background-color: #5cb85c;
+        button[type="submit"] {
+            background-color: #4CAF50;
             color: white;
+            padding: 10px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: 3px;
             cursor: pointer;
+            font-size: 16px;
         }
 
-        button:hover {
-            background-color: #4cae4c;
+        button[type="submit"]:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>تسجيل حساب زبون جديد</h2>
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
-            <label for="name">الاسم</label>
-            <input type="text" id="name" name="name" required>
-            
-            <label for="email">البريد الإلكتروني</label>
-            <input type="email" id="email" name="email" required>
-            
-            <label for="password">كلمة المرور</label>
-            <input type="password" id="password" name="password" required>
-            
-            <label for="phone">رقم الهاتف</label>
-            <input type="text" id="phone" name="phone" required>
-            
-            <button type="submit">تسجيل الحساب</button>
-        </form>
-    </div>
-    
+
+    <form method="POST" action="SingUp_For_Customers.php">
+    <h2>تسجيل حساب زبون جديد</h2>
+
+        <label for="CustomerName">الاسم:</label>
+        <input type="text" id="CustomerName" name="CustomerName" required>
+
+        <label for="email">البريد الإلكتروني:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">كلمة المرور:</label>
+        <input type="password" id="password" name="password" required>
+
+        <label for="confirm_password">تأكيد كلمة المرور:</label>
+        <input type="password" id="confirm_password" name="confirm_password" required>
+
+        <label for="CustomerPhone">رقم الهاتف:</label>
+        <input type="tel" id="CustomerPhone" name="CustomerPhone" required>
+
+        <button type="submit">تسجيل الحساب</button>
+    </form>
     <?php
-    // الكود PHP لمعالجة بيانات النموذج وإدخالها إلى قاعدة البيانات
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "Engineering_Projects_Management";
-        
-        // إنشاء اتصال بقاعدة البيانات
-        $conn = new mysqli($servername, $username, $password, $dbname);
-        
-        // التحقق من الاتصال
-        if ($conn->connect_error) {
-            die("فشل الاتصال: " . $conn->connect_error);
-        }
-        
-        // الحصول على البيانات من النموذج
-        $name = $_POST['name'];
-        $email = $_POST['email'];
-        $phone = $_POST['phone'];
-        // $password = $_POST['password']; 
-        $password = password_hash($_POST['password'], PASSWORD_DEFAULT); 
-        
-        
-        // إدخال البيانات إلى قاعدة البيانات
-        $sql = "INSERT INTO Customers (CustomerName, email, password, CustomerPhone, userType, joinDate) 
-                VALUES ('$name', '$email', '$password', '$phone', 2, NOW())";
-        
-        if ($conn->query($sql) === TRUE) {
-            echo "<p>تم تسجيل الحساب بنجاح</p>";
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "Engineering_Projects_Management";
+
+// إنشاء اتصال بقاعدة البيانات
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// التحقق من الاتصال
+if ($conn->connect_error) {
+    die("فشل الاتصال: " . $conn->connect_error);
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $customerName = $_POST['CustomerName'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $confirm_password = $_POST['confirm_password'];
+    $customerPhone = $_POST['CustomerPhone'];
+    $userType = 2; // تحديد نوع المستخدم للزبائن
+    $joinDate = date("Y-m-d");
+
+    // التحقق من تطابق كلمة المرور وتأكيد كلمة المرور
+    if ($password !== $confirm_password) {
+        echo "<script>alert('كلمة المرور وتأكيد كلمة المرور غير متطابقتين');</script>";
+    } else {
+        // التحقق من أن الاسم والبريد الإلكتروني فريدان
+        $sql = "SELECT COUNT(*) AS count FROM customers WHERE CustomerName = ? OR email = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ss", $customerName, $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        if ($row['count'] > 0) {
+            echo "<script>alert('اسم الزبون أو البريد الإلكتروني موجود بالفعل');</script>";
         } else {
-            echo "خطأ في تسجيل الحساب: " . $conn->error;
+            // إدراج الزبون الجديد
+            $sql = "INSERT INTO customers (CustomerName, email, password, CustomerPhone, userType, joinDate) VALUES (?, ?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT); // تشفير كلمة المرور
+
+            $stmt->bind_param("ssssss", $customerName, $email, $hashed_password, $customerPhone, $userType, $joinDate);
+
+            if ($stmt->execute()) {
+                header("HTTP/1.1 303 See Other");
+                header("Location: Customers.php");
+                exit();
+            } else {
+                echo "<script>alert('يرجى المحاولة مرة أخرى');</script>";
+            }
         }
-        
-        // إغلاق الاتصال بقاعدة البيانات
-        $conn->close();
+        $stmt->close();
     }
-    ?>
+}
+
+$conn->close();
+?>
+
+<script src="script.js"></script>
+
 </body>
 </html>
+
+
+<!-- Done -->

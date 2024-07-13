@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>قسم المشاريع / المشاريع</title>
+    <title>المشاريع</title>
     <link rel="icon" href="../icons/engineer.png" type="image/x-icon" />
 
     <link
@@ -15,11 +15,66 @@
 
 </head>
 <body>
+
+<style>
+    /* .form_fillter {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-bottom: 20px;
+}
+
+.filters-container {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+    width: 100%;
+}
+
+.box_fillter1,
+.box_fillter2,
+.box_fillter3 {
+    display: flex;
+    align-items: center;
+}
+
+.fillter_label {
+    margin-right: 10px;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+}
+
+.filtter_input_search {
+    margin-right: 5px;
+}
+
+.filtter_icon_search {
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .filters-container {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .box_fillter1,
+    .box_fillter2,
+    .box_fillter3 {
+        width: 100%;
+    }
+} */
+
+</style>
+
 <div class="master">
     <div class="header">
         <div class="navbar">
             <div class="left-section">
-                <div class="sidebar-toggle" onclick="toggleSidebar()">
+                <div class="" onclick="toggleSidebar()">
                     <i class="fas fa-bars" id="bar" ></i>
                 </div>
             </div>
@@ -36,115 +91,110 @@
         </div>
     </div>
     <div class="contener">
-        <div class="sidebar hidden" id="sidebar">
+    <div class="sidebar hidden" id="sidebar">
             <aside class="sidebar-content">
                 <nav>
                     <ul>
+
                         <li>
                             <a href="index.php"
-                            ><i class="fas fa-home"></i> الصفحة الرئيسية</a
-                            >
+                            ><i class="fas fa-home"></i> الصفحة الرئيسية</a>
                         </li>
+
                         <li>
-                            <a href="customers.php"
-                            ><i class="fas fa-users"></i> قسم الزبائن</a
-                            >
+                            <a href="Projects_Table.php">
+                            <i class="fas fa-project-diagram"></i>  المشاريع </a>
                         </li>
-                        <li class="has-submenu">
-                            <span onclick="toggleSubmenu(this)">
-                                <i class="fas fa-project-diagram"></i> قسم المشاريع
-                                <i class="fas fa-chevron-down"></i>
-                            </span>
-                            <ul class="submenu">
-                                <li><a href="Projects_Table.php">جدول المشاريع</a></li>
-                                <li><a href="Engineers_Table.php">جدول المهندسين</a></li>
-                                <li><a href="Technicians_Table.php">جدول الفنيين</a></li>
-                            </ul>
-                        </li>
-                        <li class="has-submenu">
-                            <span onclick="toggleSubmenu(this)">
-                                <i class="fas fa-dollar-sign"></i> القسم المالي
-                                <i class="fas fa-chevron-down"></i>
-                            </span>
-                            <ul class="submenu">
-                                <li>
-                                    <a href="Customers_Payment_Table.php"
-                                    >جدول دفعات الزبائن</a
-                                    >
-                                </li>
-                                <li>
-                                    <a href="Procurement_Covenant_Table.php"
-                                    >جدول عهد المشتريات</a
-                                    >
-                                </li>
-                                <li>
-                                    <a href="Technician_Invoices_Table.php"
-                                    >جدول فواتير الفنيين</a
-                                    >
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="has-submenu">
-                            <span onclick="toggleSubmenu(this)">
-                                <i class="fas fa-shopping-cart"></i> قسم المشتريات
-                                <i class="fas fa-chevron-down"></i>
-                            </span>
-                            <ul class="submenu">
-                                <li>
-                                    <a href="Purchase_Invoices_Table.php"
-                                    >جدول فواتير المشتريات</a
-                                    >
-                                </li>
-                            </ul>
-                        </li>
+
                         <li>
-                            <a href="Control_Board.php"
-                            ><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a
-                            >
+                            <a href="Customers_Payment_Table.php">
+                            <i class="fas fa-dollar-sign"></i> دفعات الزبائن </a>
                         </li>
+
+                        <li>
+                            <a href="MaterialInvoices.php">
+                            <i class="fas fa-shopping-cart"></i> فواتير المواد </a>
+                        </li>
+
+                        <li>
+                            <a href="Technician_Invoices_Table.php">
+                            <i class="fas fa-file-invoice"></i> فواتير الفنيين </a>
+                        </li>
+
+                        <li>
+                            <a href="customers.php">
+                            <i class="fas fa-user-friends"></i> الزبائن </a>
+                        </li>
+
+                        <li>
+                            <a href="employees.php">
+                            <i class="fas fa-user-tie"></i> الموظفين </a>
+                        </li>
+
+                        <li>
+                            <a href="Technicians.php">
+                            <i class="fas fa-tools"></i> الفنيين </a>
+                        </li>
+
+                        <li>
+                            <a href="Control_Board.php">
+                            <i class="fas fa-tachometer-alt"></i> لوحة التحكم </a>
+                        </li>
+
                     </ul>
                 </nav>
             </aside>
         </div>
-        <div class="min-contener">
-            <h1 >بيانات المشاريع</h1>
+        <h1 >بيانات المشاريع</h1>
+
+        <div class="min-contener" style="margin-right: 160px;">
             
             <form class="form_fillter" method="GET" action="">
-                    <div class="box_fillter1">
-                        <label class="fillter_label" for="year">اختر السنة:</label>
-                        <select class="fillter_label" name="year" id="year" onchange="this.form.submit()">
-                            <option value="">الكل</option>
-                            <option value="2024" <?php if(isset($_GET['year']) && $_GET['year'] == '2024') echo 'selected'; ?>>2024</option>
-                            <option value="2023" <?php if(isset($_GET['year']) && $_GET['year'] == '2023') echo 'selected'; ?>>2023</option>
-                            <option value="2022" <?php if(isset($_GET['year']) && $_GET['year'] == '2022') echo 'selected'; ?>>2022</option>
-                            <option value="2021" <?= isset($_GET['year']) && $_GET['year'] == '2021' ? 'selected' : '' ?>>2021</option>
-                            <option value="2020" <?= isset($_GET['year']) && $_GET['year'] == '2020' ? 'selected' : '' ?>>2020</option>
-                        </select>
-                    </div>
-                    <div class="box_fillter2">
-                        <label class="fillter_label" for="status">حالة المشروع:</label>
-                        <select class="fillter_label" name="status" id="status" onchange="this.form.submit()">
-                            <option value="">الكل</option>
-                            <option value="تحت التنفيذ" <?php if(isset($_GET['status']) && $_GET['status'] == 'تحت التنفيذ') echo 'selected'; ?>>تحت التنفيذ</option>
-                            <option value="مكتمل" <?php if(isset($_GET['status']) && $_GET['status'] == 'مكتمل') echo 'selected'; ?>>مكتمل</option>
-                            <option value="متوقف" <?php if(isset($_GET['status']) && $_GET['status'] == 'متوقف') echo 'selected'; ?>>متوقف</option>
-                        </select>
-                    </div>
-                    <div class="box_fillter3">
-                        <div class="search-container">
-                            <input type="text" name="search_name" id="search_name" class="filtter_input_search" placeholder="ابحث عن اسم الزبون" />
-                            <button type="submit" class="filtter_icon_search">&#128269;</button>
-                        </div>
-                    </div>  
-                    
+    <div class="filters-container">
+        <div class="box_fillter1">
+            <label class="fillter_label" for="year">اختر السنة:</label>
+            <select class="fillter_label" name="year" id="year" onchange="this.form.submit()">
+                <option value="">الكل</option>
+                <option value="2024" <?php if(isset($_GET['year']) && $_GET['year'] == '2024') echo 'selected'; ?>>2024</option>
+                <option value="2023" <?php if(isset($_GET['year']) && $_GET['year'] == '2023') echo 'selected'; ?>>2023</option>
+                <option value="2022" <?php if(isset($_GET['year']) && $_GET['year'] == '2022') echo 'selected'; ?>>2022</option>
+                <option value="2021" <?= isset($_GET['year']) && $_GET['year'] == '2021' ? 'selected' : '' ?>>2021</option>
+                <option value="2020" <?= isset($_GET['year']) && $_GET['year'] == '2020' ? 'selected' : '' ?>>2020</option>
+            </select>
+        </div>
+        <div class="box_fillter2">
+            <label class="fillter_label" for="status">حالة المشروع:</label>
+            <select class="fillter_label" name="status" id="status" onchange="this.form.submit()">
+                <option value="">الكل</option>
+                <option value="تحت التنفيذ" <?php if(isset($_GET['status']) && $_GET['status'] == 'تحت التنفيذ') echo 'selected'; ?>>تحت التنفيذ</option>
+                <option value="مكتمل" <?php if(isset($_GET['status']) && $_GET['status'] == 'مكتمل') echo 'selected'; ?>>مكتمل</option>
+                <option value="متوقف" <?php if(isset($_GET['status']) && $_GET['status'] == 'متوقف') echo 'selected'; ?>>متوقف</option>
+            </select>
+        </div>
+        <div class="box_fillter3">
+            <div class="search-container">
+                <input type="text" name="search_cus" id="search_cus" class="filtter_input_search" placeholder="ابحث عن اسم الزبون" />
+                <button type="submit" class="filtter_icon_search">&#128269;</button>
+                <div id="space" >   </div>
+                <input type="text" name="search_eng" id="search_eng" class="filtter_input_search" placeholder="ابحث عن اسم مدير المشروع" />
+                <button type="submit" class="filtter_icon_search">&#128269;</button>
+            </div>
+        </div>
+    </div>
+
                     
                 <!-- أزرار الطباعة والإضافة -->
                 <div class="div_print_add_button">
-                    <button class="button_print" onclick="window.print()">
-                        <i class="fas fa-print"></i> طباعة
-                    </button>
+                <button class="button_print" onclick="printTable()">
+                    <i class="fas fa-print"></i> طباعة
+                </button>
 
-                        <button onclick="location.href='newProject.php'" type="button" class="button_add" id="addProjectBtn">
+
+                    <!-- <button class="button_print" onclick="window.print()">
+                        <i class="fas fa-print"></i> طباعة
+                    </button> -->
+
+                        <button onclick="location.href='newProject.php'" type="button" class="button_add" id="add-Btn">
                             <i class="fas fa-plus"></i> إضافة
                         </button>
                 </div>
@@ -164,36 +214,43 @@
                                 <th>تاريخ الانتهاء</th>
                                 <th>حالة المشروع</th>
                                 <th>نسبة الانجاز</th>
-                                <th>إجمالي الدفعات د.ل</th>
-                                <th>اجمالي المصروفات د.ل</th>
-                                <th>الازرار</th>
+                                <!-- <th>إجمالي الدفعات د.ل</th>
+                                <th>اجمالي المصروفات د.ل</th> -->
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            // تعيين معلومات الاتصال بقاعدة البيانات
-                            $servername = "localhost";
-                            $username = "root";
-                            $password = "";
-                            $dbname = "Engineering_Projects_Management";
+$servername = "localhost";
+$username = "root";
+$password = ""; // تحقق من كلمة المرور الصحيحة
+$dbname = "Engineering_Projects_Management";
 
-                            // إنشاء اتصال بقاعدة البيانات
-                            $conn = new mysqli($servername, $username, $password, $dbname);
+// إنشاء الاتصال
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-                            // التحقق من الاتصال
-                            if ($conn->connect_error) {
-                                die("فشل الاتصال: " . $conn->connect_error);
-                            }
+// التحقق من الاتصال
+if ($conn->connect_error) {
+    die("فشل الاتصال: " . $conn->connect_error);
+}
+echo "تم الاتصال بنجاح";
+
+// الاستعلام وباقي الكود
+
+$conn->close();
+?>
+
 
                             // استلام قيم الفلاتر من طلب GET
                             $filter_year = isset($_GET['year']) ? $_GET['year'] : '';
                             $filter_status = isset($_GET['status']) ? $_GET['status'] : '';
-                            $search_name = isset($_GET['search_name']) ? $_GET['search_name'] : '';
+                            $search_cus = isset($_GET['search_cus']) ? $_GET['search_cus'] : '';
+                            $search_eng = isset($_GET['search_eng']) ? $_GET['search_eng'] : '';
 
 
                             // بناء استعلام SQL مع الفلاتر
 
-                            $sql = "SELECT ProjectID, CustomerName, eng.employeeName AS engineer_username, LandLocation, ProjectStartDate, ProjectEndDate, statusname, ProgressPercentage, TotalAmountPaid, AmountSpent
+                            $sql = "SELECT ProjectID, CustomerName, eng.employeeName AS engineer_username, LandLocation, ProjectStartDate, ProjectEndDate, statusname, ProgressPercentage
                             FROM projects
                             JOIN projectstatus ON projects.ProjectStatus = projectstatus.id
                             JOIN customers AS cus ON projects.CustomerID = cus.CustomerId 
@@ -211,8 +268,11 @@
                             if (!empty($filter_status)) {
                                 $sql .= " AND projectstatus.statusname = '$filter_status'";
                             }
-                            if (!empty($search_name)) {
-                                $conditions[] = "CustomerName LIKE '%$search_name%'";
+                            if (!empty($search_cus)) {
+                                $conditions[] = "CustomerName LIKE '%$search_cus%'";
+                            }
+                            if (!empty($search_eng)) {
+                                $conditions[] = "employeeName LIKE '%$search_eng%'";
                             }
                             if (count($conditions) > 0) {
                                 $sql .= " WHERE " . implode(' AND ', $conditions);
@@ -237,8 +297,8 @@
                                         echo "<td>" . $row["ProjectEndDate"] . "</td>";
                                         echo "<td>" . $row["statusname"] . "</td>";
                                         echo "<td>" . $row["ProgressPercentage"] . " %</td>";
-                                        echo "<td>" . number_format($row["TotalAmountPaid"]) . "</td>";
-                                        echo "<td>" . number_format($row["AmountSpent"]) . "</td>";
+                                        // echo "<td>" . number_format($row["TotalAmountPaid"]) . "</td>";
+                                        // echo "<td>" . number_format($row["AmountSpent"]) . "</td>";
                                         
                                         echo    "<td>                                                    
                                                     <div class=\"action-buttons\">
@@ -255,7 +315,6 @@
                                                         </form>
                                                     </div>
                                                 </td>";
-                                        // echo "<td><form method='POST' action='delete_project.php'><button class='button_delet'  type='submit' name='delete' value='" . $row["ProjectID"] . "'>حذف</button></form></td>";
                                         echo "</tr>";    
                                     }
                                 } else {
@@ -283,29 +342,9 @@
         <p>المكتب الهندسي لإدارة المشاريع 2024 &copy;</p>
     </div>
 </div>
-<script>
-    function toggleSidebar() {
-        var sidebar = document.getElementById("sidebar");
-        var sidebarToggle = document.querySelector(".sidebar-toggle i");
-        if (sidebar.classList.contains("hidden")) {
-            sidebar.classList.remove("hidden");
-            sidebarToggle.classList.remove("fa-bars");
-            sidebarToggle.classList.add("fa-times");
-            document.body.style.marginRight = "300px";
-        } else {
-            sidebar.classList.add("hidden");
-            sidebarToggle.classList.remove("fa-times");
-            sidebarToggle.classList.add("fa-bars");
-            document.body.style.marginRight = "0";
-        }
-    }
 
-    function toggleSubmenu(element) {
-        var submenu = element.nextElementSibling;
-        element.querySelector(".fa-chevron-down").classList.toggle("rotate");
-        submenu.classList.toggle("show");
-    }
+<script src="script.js"></script>
 
-</script>
+
 </body>
 </html>

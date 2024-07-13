@@ -13,7 +13,7 @@
     <div class="header">
         <div class="navbar">
             <div class="left-section">
-                <div class="sidebar-toggle" onclick="toggleSidebar()">
+                <div class="" onclick="toggleSidebar()">
                     <i class="fas fa-bars" id="bar"></i>
                 </div>
             </div>
@@ -34,48 +34,43 @@
             <aside class="sidebar-content">
                 <nav>
                     <ul>
-                        <li><a href="index.php"><i class="fas fa-home"></i> الصفحة الرئيسية</a></li>
-                        <li><a href="customers.php"><i class="fas fa-users"></i> قسم الزبائن</a></li>
-                        <li class="has-submenu">
-                            <span onclick="toggleSubmenu(this)">
-                                <i class="fas fa-project-diagram"></i> قسم المشاريع
-                                <i class="fas fa-chevron-down"></i>
-                            </span>
-                            <ul class="submenu">
-                                <li><a href="Projects_Table.php">جدول المشاريع</a></li>
-                                <li><a href="Engineers_Table.php">جدول المهندسين</a></li>
-                                <li><a href="Technicians_Table.php">جدول الفنيين</a></li>
-                            </ul>
+                        <li>
+                            <a href="index.php"><i class="fas fa-home"></i> الصفحة الرئيسية</a>
                         </li>
-                        <li class="has-submenu">
-                            <span onclick="toggleSubmenu(this)">
-                                <i class="fas fa-dollar-sign"></i> القسم المالي
-                                <i class="fas fa-chevron-down"></i>
-                            </span>
-                            <ul class="submenu">
-                                <li><a href="Customers_Payment_Table.php">جدول دفعات الزبائن</a></li>
-                                <li><a href="Procurement_Covenant_Table.php">جدول عهد المشتريات</a></li>
-                                <li><a href="Technician_Invoices_Table.php">جدول فواتير الفنيين</a></li>
-                            </ul>
+                        <li>
+                            <a href="Projects_Table.php"><i class="fas fa-project-diagram"></i> المشاريع </a>
                         </li>
-                        <li class="has-submenu">
-                            <span onclick="toggleSubmenu(this)">
-                                <i class="fas fa-shopping-cart"></i> قسم المشتريات
-                                <i class="fas fa-chevron-down"></i>
-                            </span>
-                            <ul class="submenu">
-                                <li><a href="Purchase_Invoices_Table.php">جدول فواتير المشتريات</a></li>
-                            </ul>
+                        <li>
+                            <a href="Customers_Payment_Table.php"><i class="fas fa-dollar-sign"></i> دفعات الزبائن </a>
                         </li>
-                        <li><a href="Control_Board.php"><i class="fas fa-tachometer-alt"></i> لوحة التحكم</a></li>
+                        <li>
+                            <a href="MaterialInvoices.php"><i class="fas fa-shopping-cart"></i> فواتير المواد </a>
+                        </li>
+                        <li>
+                            <a href="Technician_Invoices_Table.php"><i class="fas fa-file-invoice"></i> فواتير الفنيين </a>
+                        </li>
+                        <li>
+                            <a href="customers.php"><i class="fas fa-user-friends"></i> الزبائن </a>
+                        </li>
+                        <li>
+                            <a href="employees.php"><i class="fas fa-user-tie"></i> الموظفين </a>
+                        </li>
+                        <li>
+                            <a href="Technicians.php"><i class="fas fa-tools"></i> الفنيين </a>
+                        </li>
+                        <li>
+                            <a href="Control_Board.php"><i class="fas fa-tachometer-alt"></i> لوحة التحكم </a>
+                        </li>
                     </ul>
                 </nav>
             </aside>
-        </div>
-        <div class="min-contener">
-            <h1>بيانات الموظفين</h1>
-            <div style="margin-right: 160px;">
-                <form method="GET" action="">
+        </div>   
+        
+        <h1>بيانات الموظفين</h1>
+
+        <div class="min-contener" style="margin-right: 160px;">
+            <form class="form_fillter" method="GET" action="">
+                <div class="filters-container">
                     <div class="box_fillter1">
                         <label class="fillter_label" for="year">اختر السنة:</label>
                         <select class="fillter_label" name="year" id="year" onchange="this.form.submit()">
@@ -87,150 +82,139 @@
                             <option value="2020" <?= isset($_GET['year']) && $_GET['year'] == '2020' ? 'selected' : '' ?>>2020</option>
                         </select>
                     </div>
-                    <div class="box_fillter2">
+
+                    <div class="box_fillter3">
                         <div class="search-container">
                             <input type="text" name="search_name" id="search_name" class="filtter_input_search" placeholder="ابحث عن اسم الموظف" />
                             <button type="submit" class="filtter_icon_search">&#128269;</button>
                         </div>
                     </div>
-                </form>
-                <div class="table-container">
-                    <div class='table-wrapper'>
-                        <table id="table_projects">
-                            <thead>
-                                <tr>
-                                    <th>رقم الموظف</th>
-                                    <th>اسم الموظف</th>
-                                    <th>نوع الموظف</th>
-                                    <th>الايميل</th>
-                                    <th>الهاتف</th>
-                                    <th>تاريخ الانضمام</th>
-                                </tr>
-                            </thead>
-                            <tbody>    
+                </div>
+                    
+                <!-- أزرار الطباعة والإضافة -->
+                <div class="div_print_add_button">
+                    <button class="button_print" onclick="printTable()">
+                        <i class="fas fa-print"></i> طباعة
+                    </button>
+
+                    <button onclick="location.href='SingUp_For_employees.php'" type="button" class="button_add" id="add-Btn">
+                        <i class="fas fa-plus"></i> إضافة
+                    </button>
+                </div>
+            </form>
+
+            <div class="table-container">
+                <div class='table-wrapper'>
+                    <table id="table_projects">
+                        <thead>
+                            <tr>
+                                <th>رقم الموظف</th>
+                                <th>اسم الموظف</th>
+                                <th>نوع الموظف</th>
+                                <th>الايميل</th>
+                                <th>الهاتف</th>
+                                <th>تاريخ الانضمام</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>    
+                        
+                        <?php
+                            // تعيين معلومات الاتصال بقاعدة البيانات
+                            $servername = "localhost";
+                            $username = "root";
+                            $password = "";
+                            $dbname = "Engineering_Projects_Management";
+
+                            // إنشاء اتصال بقاعدة البيانات
+                            $conn = new mysqli($servername, $username, $password, $dbname);
+
+                            // التحقق من الاتصال
+                            if ($conn->connect_error) {
+                                die("فشل الاتصال: " . $conn->connect_error);
+                            }
+
+                            // استلام قيم الفلاتر من طلب GET
+                            $filter_year = isset($_GET['year']) ? $_GET['year'] : '';
+                            $search_name = isset($_GET['search_name']) ? $_GET['search_name'] : '';
+
+                            // بناء الاستعلام مع الفلاتر
+                            $sql = "SELECT e.employeeId, e.employeeName, ut.type, e.email, e.employeePhone, e.joinDate
+                                    FROM employees e
+                                    JOIN usertype ut ON e.userType = ut.id";
                             
-                            <?php
-                                // تعيين معلومات الاتصال بقاعدة البيانات
-                                $servername = "localhost";
-                                $username = "root";
-                                $password = "";
-                                $dbname = "Engineering_Projects_Management";
+                            // إضافة الفلاتر إذا كانت موجودة
+                            $conditions = array();
 
-                                // إنشاء اتصال بقاعدة البيانات
-                                $conn = new mysqli($servername, $username, $password, $dbname);
+                            if (!empty($filter_year)) {
+                                $conditions[] = "YEAR(e.joinDate) = '$filter_year'";
+                            }
 
-                                // التحقق من الاتصال
-                                if ($conn->connect_error) {
-                                    die("فشل الاتصال: " . $conn->connect_error);
-                                }
+                            if (!empty($search_name)) {
+                                $conditions[] = "e.employeeName LIKE '%$search_name%'";
+                            }
 
-                                // استلام قيم الفلاتر من طلب GET
-                                $filter_year = isset($_GET['year']) ? $_GET['year'] : '';
-                                $search_name = isset($_GET['search_name']) ? $_GET['search_name'] : '';
+                            // إضافة WHERE إذا كان هناك شروط
+                            if (!empty($conditions)) {
+                                $sql .= " WHERE " . implode(' AND ', $conditions);
+                            }
 
-                                $sql = "SELECT e.employeeId, e.employeeName, ut.Type, e.email, e.employeePhone, e.joinDate
-                                        FROM employees e
-                                        JOIN userType ut ON e.userType = ut.id";
+                            $sql .= " ORDER BY e.employeeId";
 
-                                // إضافة الفلاتر إذا كانت موجودة
-                                $conditions = array();
+                            // تنفيذ الاستعلام والتحقق من النتائج
+                            $result = $conn->query($sql);
 
-                                if (!empty($filter_year)) {
-                                    $conditions[] = "YEAR(e.joinDate) = '$filter_year'";
-                                }
-
-                                if (!empty($search_name)) {
-                                    $conditions[] = "e.employeeName LIKE '%$search_name%'";
-                                }
-
-                                // إضافة WHERE إذا كان هناك شروط
-                                if (!empty($conditions)) {
-                                    $sql .= " WHERE " . implode(' AND ', $conditions);
-                                }
-
-                                // تنفيذ الاستعلام والتحقق من النتائج
-                                $result = $conn->query($sql);
-
-                                if ($result === false) {
-                                    echo "خطأ في الاستعلام: " . $conn->error;
-                                } else {
-                                    if ($result->num_rows > 0) {
-                                        while ($row = $result->fetch_assoc()) {
-                                            echo "<tr>";
-                                            echo "<td>" . $row["employeeId"] . "</td>";
-                                            echo "<td>" . $row["employeeName"] . "</td>";
-                                            echo "<td>" . $row["Type"] . "</td>";
-                                            echo "<td>" . $row["email"] . "</td>";
-                                            echo "<td>" . $row["employeePhone"] . "</td>";
-                                            echo "<td>" . $row["joinDate"] . "</td>";
-                                            echo "</tr>";
-                                        }
-                                    } else {
-                                        echo "<tr><td colspan='6'>لا توجد بيانات</td></tr>";
+                            if ($result === false) {
+                                echo "خطأ في الاستعلام: " . $conn->error;
+                            } else {
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo "<tr>";
+                                        echo "<td>" . $row["employeeId"] . "</td>";
+                                        echo "<td>" . $row["employeeName"] . "</td>";
+                                        echo "<td>" . $row["type"] . "</td>";
+                                        echo "<td>" . $row["email"] . "</td>";
+                                        echo "<td>" . $row["employeePhone"] . "</td>";
+                                        echo "<td>" . $row["joinDate"] . "</td>";
+                                        echo "<td>
+                                            <div class=\"action-buttons\">
+                                                <form class='botton_table' method='GET' action='edit_employees.php' style='display: inline-block;'>
+                                                    <input type='hidden' name='employee_id' value='" . $row["employeeId"] . "'>
+                                                    <button class='button_edit' type='submit'>
+                                                        <i id='i_edit' class='fas fa-edit'></i> تعديل
+                                                    </button>
+                                                </form>
+                                                <form class='botton_table' method='POST' action='delete_employees.php'>
+                                                    <input type='hidden' name='employee_id' value='" . $row["employeeId"] . "'>
+                                                    <button class='button_delet' type='submit' onclick='return confirm(\"هل أنت متأكد من الحذف؟\")'><i id='i_del' class='fas fa-trash-alt'></i> حذف </button>
+                                                </form>
+                                            </div>
+                                        </td>";
+                                        echo "</tr>";
                                     }
+                                } else {
+                                    echo "<tr><td colspan='7'>لا توجد بيانات لعرضها</td></tr>";
                                 }
-                                $conn->close();
-                            ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <!-- Buttons Section -->
-            <div class="big-buttons-section">
-                <div class="action-button-print-button">
-                    <button onclick="window.print()"><i class="fas fa-print"></i> طباعة</button>
-                </div>
-                <div class="buttons-section">
-                    <div class="action-button">
-                        <div class="action-button-add-button" >
-                            <form action="SingUp_For_employees.php" method="get">
-                                <button  type="submit" class="projects_button" id="addProjectBtn">
-                                    <i class="fas fa-plus"></i> إضافة 
-                                </button>
-                            </form>
-                        </div>  
-                    </div>
-                    <div class="action-button">
-                        <div class="action-button-edit-button">
-                            <button class="projects_button"><i class="fas fa-edit"></i> تعديل</button>
-                        </div>
-                    </div>
-                    <div class="action-button">
-                        <div class="action-button-delete-button">
-                            <button><i class="fas fa-trash-alt"></i> حذف</button>
-                        </div>
-                    </div>
+                            }
+
+                            // إغلاق الاتصال بقاعدة البيانات
+                            $conn->close();
+                        ?>
+                        </tbody>            
+                    </table>
                 </div>
             </div>
         </div>
-    </div>
+    </div>    
 </div>
-<div class="footer">
-    <p>المكتب الهندسي لإدارة المشاريع 2024 &copy;</p>
-</div>
+
 <script>
     function toggleSidebar() {
-        var sidebar = document.getElementById("sidebar");
-        var sidebarToggle = document.querySelector(".sidebar-toggle i");
-        if (sidebar.classList.contains("hidden")) {
-            sidebar.classList.remove("hidden");
-            sidebarToggle.classList.remove("fa-bars");
-            sidebarToggle.classList.add("fa-times");
-            document.body.style.marginRight = "300px";
-        } else {
-            sidebar.classList.add("hidden");
-            sidebarToggle.classList.remove("fa-times");
-            sidebarToggle.classList.add("fa-bars");
-            document.body.style.marginRight = "0";
-        }
-    }
-
-    function toggleSubmenu(element) {
-        var submenu = element.nextElementSibling;
-        element.querySelector(".fa-chevron-down").classList.toggle("rotate");
-        submenu.classList.toggle("show");
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('hidden');
     }
 </script>
+<script src="script.js"></script>
+
 </body>
 </html>
