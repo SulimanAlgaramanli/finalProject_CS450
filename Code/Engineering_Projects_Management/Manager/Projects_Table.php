@@ -1,3 +1,15 @@
+<?php
+    include 'con_db.php';
+
+    // Fetch project statuses
+    $sql_projectstatus = "SELECT * FROM projectstatus";
+    $result_projectstatus = $conn->query($sql_projectstatus);
+
+    if ($result_projectstatus === false) {
+        die("Error fetching project statuses: " . $conn->error);
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -16,59 +28,6 @@
 </head>
 <body>
 
-<style>
-    /* .form_fillter {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    margin-bottom: 20px;
-}
-
-.filters-container {
-    display: flex;
-    justify-content: flex-start;
-    gap: 20px;
-    width: 100%;
-}
-
-.box_fillter1,
-.box_fillter2,
-.box_fillter3 {
-    display: flex;
-    align-items: center;
-}
-
-.fillter_label {
-    margin-right: 10px;
-}
-
-.search-container {
-    display: flex;
-    align-items: center;
-}
-
-.filtter_input_search {
-    margin-right: 5px;
-}
-
-.filtter_icon_search {
-    cursor: pointer;
-}
-
-@media (max-width: 768px) {
-    .filters-container {
-        flex-direction: column;
-        align-items: flex-end;
-    }
-
-    .box_fillter1,
-    .box_fillter2,
-    .box_fillter3 {
-        width: 100%;
-    }
-} */
-
-</style>
 
 <div class="master">
     <div class="header">
@@ -152,7 +111,7 @@
             <form class="form_fillter" method="GET" action="">
     <div class="filters-container">
         <div class="box_fillter1">
-            <label class="fillter_label" for="year">اختر السنة:</label>
+            <label class="fillter_label" for="year">سنة البدء:</label>
             <select class="fillter_label" name="year" id="year" onchange="this.form.submit()">
                 <option value="">الكل</option>
                 <option value="2024" <?php if(isset($_GET['year']) && $_GET['year'] == '2024') echo 'selected'; ?>>2024</option>
@@ -161,15 +120,33 @@
                 <option value="2021" <?= isset($_GET['year']) && $_GET['year'] == '2021' ? 'selected' : '' ?>>2021</option>
                 <option value="2020" <?= isset($_GET['year']) && $_GET['year'] == '2020' ? 'selected' : '' ?>>2020</option>
             </select>
-        </div>
-        <div class="box_fillter2">
-            <label class="fillter_label" for="status">حالة المشروع:</label>
-            <select class="fillter_label" name="status" id="status" onchange="this.form.submit()">
-                <option value="">الكل</option>
-                <option value="تحت التنفيذ" <?php if(isset($_GET['status']) && $_GET['status'] == 'تحت التنفيذ') echo 'selected'; ?>>تحت التنفيذ</option>
-                <option value="مكتمل" <?php if(isset($_GET['status']) && $_GET['status'] == 'مكتمل') echo 'selected'; ?>>مكتمل</option>
-                <option value="متوقف" <?php if(isset($_GET['status']) && $_GET['status'] == 'متوقف') echo 'selected'; ?>>متوقف</option>
+    
+            
+
+            <label class='fillter_label' for='status'>حالة المشروع:</label>
+            <select class='fillter_label' name='status' id='status' onchange='this.form.submit()'>
+                <option value=''>الكل</option>
+                <?php
+                while ($row_status = $result_projectstatus->fetch_assoc()) {
+                    $selected = isset($_GET['status']) && $_GET['status'] == $row_status['id'] ? 'selected' : '';
+                    echo "<option value='" . $row_status['id'] . "' $selected>" . $row_status['StatusName'] . "</option>";
+                }
+                ?>
             </select>
+
+
+
+                <!-- <label class="fillter_label" for="status">حالة المشروع:</label>
+                <select class="fillter_label" name="status" id="status" onchange="this.form.submit()">
+                    <option value="">الكل</option>
+                    <option value="تحت التنفيذ" <?php // if(isset($_GET['status']) && $_GET['status'] == 'تحت التنفيذ') echo 'selected'; ?>>تحت التنفيذ</option>
+                    <option value="مكتمل" <?php // if(isset($_GET['status']) && $_GET['status'] == 'مكتمل') echo 'selected'; ?>>مكتمل</option>
+                    <option value="متوقف" <?php // if(isset($_GET['status']) && $_GET['status'] == 'متوقف') echo 'selected'; ?>>متوقف</option>
+                </select> -->
+
+            
+
+
         </div>
         <div class="box_fillter3">
             <div class="search-container">
@@ -221,97 +198,63 @@
                         </thead>
                         <tbody>
                             <?php
-                                $servername = "localhost";
-                                $username = "root";
-                                $password = ""; // تحقق من كلمة المرور الصحيحة
-                                $dbname = "Engineering_Projects_Management";
-
-                                // إنشاء الاتصال
-                                $conn = new mysqli($servername, $username, $password, $dbname);
-
-                                // التحقق من الاتصال
-                                if ($conn->connect_error) {
-                                    die("فشل الاتصال: " . $conn->connect_error);
-                                }
-                            
 
                             // استلام قيم الفلاتر من طلب GET
+
                             $filter_year = isset($_GET['year']) ? $_GET['year'] : '';
                             $filter_status = isset($_GET['status']) ? $_GET['status'] : '';
                             $search_cus = isset($_GET['search_cus']) ? $_GET['search_cus'] : '';
                             $search_eng = isset($_GET['search_eng']) ? $_GET['search_eng'] : '';
 
-
-                            // بناء استعلام SQL مع الفلاتر
-
-                            // $sql = "SELECT ProjectID, CustomerName, eng.employeeName AS engineer_username, LandLocation, ProjectStartDate, ProjectEndDate, statusname, ProgressPercentage
-                            // FROM projects
-                            // JOIN projectstatus ON projects.ProjectStatus = projectstatus.id
-                            // JOIN customers AS cus ON projects.CustomerID = cus.CustomerId 
-                            // JOIN employees AS eng ON projects.SupervisingEngineerID = eng.employeeId
-                            // ";
-                            
                             $sql = "SELECT 
     projects.ProjectID, 
-    CustomerName, 
+    cus.CustomerName, 
     eng.employeeName AS engineer_username, 
-    LandLocation, 
-    ProjectStartDate, 
-    ProjectEndDate, 
-    statusname, 
-    ProgressPercentage,
-    SUM(py.amount) AS totalPayments,
-    SUM(
-        py.MaterialInvoices + py.TechnicianInvoices + 
-        (py.Amount - (py.Amount / (1 + (projects.rate_Of_CostPlus / 100))))
-    ) AS TotalExpenses
+    projects.LandLocation, 
+    projects.ProjectStartDate, 
+    projects.ProjectEndDate, 
+    projectstatus.statusname, 
+    projects.ProgressPercentage, 
+    COALESCE(SUM(py.amount), 0) AS totalPayments, 
+    COALESCE(SUM(py.MaterialInvoices + py.TechnicianInvoices + (py.Amount - (py.Amount / (1 + (projects.rate_Of_CostPlus / 100))))), 0) AS TotalExpenses 
 FROM 
-    projects
-JOIN 
-    projectstatus ON projects.ProjectStatus = projectstatus.id
-JOIN 
-    customers AS cus ON projects.CustomerID = cus.CustomerId 
-JOIN 
-    employees AS eng ON projects.SupervisingEngineerID = eng.employeeId 
-LEFT JOIN  
-    payments AS py ON projects.ProjectID = py.ProjectID
-GROUP BY 
-    projects.ProjectID, 
-    CustomerName, 
-    engineer_username, 
-    LandLocation, 
-    ProjectStartDate, 
-    ProjectEndDate, 
-    statusname, 
-    ProgressPercentage
-";
-
-
-
-                            // إضافة الفلاتر إذا كانت موجودة
-                            $conditions = array();
+    projects 
+    JOIN projectstatus ON projects.ProjectStatus = projectstatus.id 
+    JOIN customers AS cus ON projects.CustomerID = cus.CustomerId 
+    JOIN employees AS eng ON projects.SupervisingEngineerID = eng.employeeId 
+    LEFT JOIN payments AS py ON projects.ProjectID = py.ProjectID 
+    where 1=1
+                                    ";
 
                             if (!empty($filter_year)) {
                                 $sql .= " AND YEAR(ProjectStartDate) = '$filter_year'";
                             }
                             if (!empty($filter_status)) {
-                                $sql .= " AND projectstatus.statusname = '$filter_status'";
+                                $sql .= " AND projects.ProjectStatus  = '$filter_status'";
                             }
+
                             if (!empty($search_cus)) {
-                                $conditions[] = "CustomerName LIKE '%$search_cus%'";
+                                $sql .= " AND CustomerName LIKE '%$search_cus%'";
                             }
                             if (!empty($search_eng)) {
-                                $conditions[] = "employeeName LIKE '%$search_eng%'";
+                                $sql .= " AND eng.employeeName LIKE '%$search_eng%'";
                             }
-                            if (count($conditions) > 0) {
-                                $sql .= " WHERE " . implode(' AND ', $conditions);
-                            }
-                            $sql .= " ORDER BY ProjectID ASC";
 
+                            $sql .= " GROUP BY
+                                    
+                                        projects.ProjectID, 
+                                        cus.CustomerName, 
+                                        eng.employeeName, 
+                                        projects.LandLocation, 
+                                        projects.ProjectStartDate, 
+                                        projects.ProjectEndDate, 
+                                        projectstatus.statusname, 
+                                        projects.ProgressPercentage;
+                                    
+                                    ";
 
-                             // تنفيذ الاستعلام والتحقق من النتائج
+                            // echo($sql);
                             $result = $conn->query($sql);
-
                             if ($result === false) {
                                 echo "خطأ في الاستعلام: " . $conn->error;
                             } else {
@@ -351,6 +294,7 @@ GROUP BY
                                 }
                             }
 
+
                             $conn->close();
                             ?>
                         
@@ -371,9 +315,9 @@ GROUP BY
         <p>المكتب الهندسي لإدارة المشاريع 2024 &copy;</p>
     </div>
 </div>
-
 <script src="script.js"></script>
 
 
 </body>
 </html>
+

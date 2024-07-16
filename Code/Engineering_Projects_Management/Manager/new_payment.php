@@ -23,6 +23,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 
+    
+
     // التحقق من أن جميع الحقول المطلوبة ليست فارغة
     if ($projectID && $accountantID && $paymentNumber && $amount && $paymentDate) {
         $sql = "INSERT INTO payments (ProjectID, accountantID, paymentNumber, Amount, PaymentMethodID, PaymentDate, materialInvoices, technicianInvoices)

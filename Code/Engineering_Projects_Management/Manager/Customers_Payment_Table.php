@@ -190,34 +190,55 @@
 
                             
                             // بناء استعلام SQL مع الشروط المطلوبة
-                            $sql = "SELECT 
-                                    py.PaymentID,
-                                    py.ProjectID,
-                                    c.CustomerName,
-                                    py.PaymentNumber,
-                                    py.Amount,
-                                    pm.PaymentMethodName,
-                                    py.PaymentDate,
-                                    py.SettlementDate,
-                                    py.PaymentMethodID,
-                                    py.MaterialInvoices,
-                                    py.TechnicianInvoices,
-                                    py.Amount - (py.Amount / (1 + (p.rate_Of_CostPlus / 100))) AS FeesAmount,
-                                    (py.MaterialInvoices + py.TechnicianInvoices + py.Amount - (py.Amount / (1 + (p.rate_Of_CostPlus / 100)))) AS TotalExpenses,  
-                                    (py.Amount - py.MaterialInvoices - py.TechnicianInvoices - (py.Amount - (py.Amount / (1 + (p.rate_Of_CostPlus / 100)))) ) AS RemainingAmount,
-                                    e.EmployeeName
+                        
 
-                                FROM 
-                                    payments AS py
-                                JOIN 
-                                    PaymentMethods AS pm ON py.PaymentMethodID = pm.PaymentMethodID
-                                JOIN 
-                                    projects AS p ON py.ProjectID = p.ProjectID
-                                JOIN 
-                                    customers AS c ON p.CustomerID = c.CustomerID
-                                JOIN 
-                                    employees AS e ON py.AccountantID = e.EmployeeId   
-                                WHERE 1=1";
+                            $sql = "SELECT 
+                                        py.PaymentID,
+                                        py.ProjectID,
+                                        c.CustomerName,
+                                        py.PaymentNumber,
+                                        py.Amount,
+                                        pm.PaymentMethodName,
+                                        py.PaymentDate,
+                                        py.SettlementDate,
+                                        py.PaymentMethodID,
+                            
+                                        (SELECT SUM(mi.amount) 
+                                            FROM materialinvoices AS mi
+                                            WHERE mi.project_id = py.ProjectID AND mi.payment_id = py.PaymentID
+                                        ) AS MaterialInvoices_m,
+                            
+                                        (SELECT SUM(ti.Amount)
+                                            FROM technicianinvoices AS ti
+                                            WHERE ti.ProjectID = py.ProjectID AND ti.PaymentID  = py.PaymentID
+                                        ) AS TechnicianInvoices_t,
+                            
+                                        py.Amount - (py.Amount / (1 + (p.rate_Of_CostPlus / 100))) AS FeesAmount,
+
+                                        (py.Amount - (py.Amount / (1 + (p.rate_Of_CostPlus / 100))) + 
+                                            (SELECT SUM(mi.amount) FROM materialinvoices AS mi WHERE mi.project_id = py.ProjectID AND mi.payment_id = py.PaymentID) +
+                                            (SELECT SUM(ti.Amount) FROM technicianinvoices AS ti WHERE ti.ProjectID = py.ProjectID AND ti.PaymentID  = py.PaymentID)
+                                        ) AS TotalExpenses,
+                                        (py.Amount - 
+                                            (SELECT SUM(mi.amount) FROM materialinvoices AS mi WHERE mi.project_id = py.ProjectID AND mi.payment_id = py.PaymentID) -
+                                            (SELECT SUM(ti.Amount) FROM technicianinvoices AS ti WHERE ti.ProjectID = py.ProjectID AND ti.PaymentID  = py.PaymentID) -
+                                            (py.Amount - (py.Amount / (1 + (p.rate_Of_CostPlus / 100))))
+                                        ) AS RemainingAmount,
+                                        e.EmployeeName
+                            
+                                    FROM 
+                                        payments AS py
+                                    JOIN 
+                                        PaymentMethods AS pm ON py.PaymentMethodID = pm.PaymentMethodID
+                                    JOIN 
+                                        projects AS p ON py.ProjectID = p.ProjectID
+                                    JOIN 
+                                        customers AS c ON p.CustomerID = c.CustomerID
+                                    JOIN 
+                                        employees AS e ON py.AccountantID = e.EmployeeId  
+                            
+                                    WHERE 1=1";
+                
 
 
                             // إضافة الفلاتر إذا كانت موجودة
@@ -266,8 +287,8 @@
                                     echo "<td>" . $row["PaymentMethodName"] . "</td>";
                                     echo "<td>" . $row["PaymentDate"] . "</td>";
                                     echo "<td>" . $row["SettlementDate"] . "</td>";
-                                    echo "<td>" . number_format($row["MaterialInvoices"]) . "</td>";
-                                    echo "<td>" . number_format($row["TechnicianInvoices"]) . "</td>";
+                                    echo "<td>" . number_format($row["MaterialInvoices_m"]) . "</td>";
+                                    echo "<td>" . number_format($row["TechnicianInvoices_t"]) . "</td>";
                                     echo "<td>" . number_format($row["FeesAmount"]) . "</td>";
                                     echo "<td>" . number_format($row["TotalExpenses"]) . "</td>";
                                     echo "<td>" . number_format($row["RemainingAmount"]) . "</td>";

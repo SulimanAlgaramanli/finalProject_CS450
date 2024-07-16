@@ -10,55 +10,6 @@ session_start();
   <link rel="icon" href="../icons/engineering.png" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <link rel="stylesheet" href="../Css/main.css" />
-  <style>
-    .username {
-      font-size: 18px;
-      margin-right: 10px;
-    }
-    .img_user {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      margin-left: 10px;
-    }
-    .sidebar-close {
-      cursor: pointer;
-    }
-    .settings-dropdown {
-      position: relative;
-      display: inline-block;
-    }
-    .settings-dropdown-content {
-      display: none;
-      position: absolute;
-      background-color: #f9f9f9;
-      min-width: 160px;
-      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-      z-index: 1;
-    }
-    .settings-dropdown-content a {
-      color: black;
-      padding: 12px 16px;
-      text-decoration: none;
-      display: block;
-    }
-    .settings-dropdown-content a:hover {
-      background-color: #f1f1f1;
-    }
-    .settings-dropdown:hover .settings-dropdown-content {
-      display: block;
-    }
-
-
-
-
-
-
-
-
-
-
-  </style>
 </head>
 <body>
 

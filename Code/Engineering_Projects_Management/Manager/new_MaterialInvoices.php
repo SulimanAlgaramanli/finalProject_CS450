@@ -1,3 +1,56 @@
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "Engineering_Projects_Management";
+
+// اتصال بقاعدة البيانات
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// التحقق من الاتصال
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // تعريف المتغيرات والتأكد من قيمها
+    $projectID = isset($_POST['ProjectID']) ? $_POST['ProjectID'] : null;
+    $InvoiceNumber = isset($_POST['InvoiceNumber']) ? $_POST['InvoiceNumber'] : null;
+    $specialty = isset($_POST['specialty']) ? $_POST['specialty'] : null;
+    $Description = isset($_POST['Description']) ? $_POST['Description'] : null;
+    $Amount = isset($_POST['Amount']) ? $_POST['Amount'] : null;
+    $InvoiceDate = isset($_POST['InvoiceDate']) ? $_POST['InvoiceDate'] : null;
+    $PaymentMethod = isset($_POST['PaymentMethod']) ? $_POST['PaymentMethod'] : null;
+    $StoreName = isset($_POST['StoreName']) ? $_POST['StoreName'] : null;
+
+    
+    // التحقق من صورة الفاتورة وتحويلها إلى Base64
+    $imgContent = null;
+    if (isset($_FILES['InvoiceImagePath']) && $_FILES['InvoiceImagePath']['error'] === UPLOAD_ERR_OK) {
+        $fileTmpPath = $_FILES['InvoiceImagePath']['tmp_name'];
+        $imgContent = base64_encode(file_get_contents($fileTmpPath));
+    }
+
+    // استعلام SQL لإدخال بيانات الفاتورة
+    $sql = "INSERT INTO `MaterialInvoices` (`ProjectID`, `InvoiceNumber`, `specialty`, `Description`, `Amount`, `InvoiceDate`, `PaymentMethod`, `StoreName`, `InvoiceImage`) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    $stmt = $conn->prepare($sql);
+    // ربط المتغيرات بالاستعلام
+    $stmt->bind_param("isssdssss", $projectID, $InvoiceNumber, $specialty, $Description, $Amount, $InvoiceDate, $PaymentMethod, $StoreName, $imgContent);
+
+    if ($stmt->execute()) {
+        echo "<script>alert('تمت إضافة الفاتورة بنجاح!');</script>";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    $stmt->close();
+}
+
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -50,7 +103,7 @@
 
         /* تنسيق الزر */
 
-        .button-container{
+        .button-container {
             align-items: center;
             text-align: center;
         }
@@ -82,100 +135,46 @@
     </style>
 </head>
 <body>
+    <div class="min-contener">
+        <form id="invoiceForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" enctype="multipart/form-data">
+            <div class="form-container">
+                <h1>إضافة فاتورة</h1>
 
-        <div class="min-contener">
-            <form id="invoiceForm" action="new_MaterialInvoices.php" method="POST" enctype="multipart/form-data">
-                <div class="form-container">
-                    <h1>إضافة فاتورة</h1>
+                <div class="form-group">
+                    <label for="ProjectID">معرف المشروع:</label>
+                    <input type="number" id="ProjectID" name="ProjectID" required /><br />
 
-                    <div class="form-group">
-                        <label for="ProjectID">معرف المشروع:</label>
-                        <input type="number" id="ProjectID" name="ProjectID" required /><br />
+                    <label for="InvoiceNumber">رقم الفاتورة:</label>
+                    <input type="text" id="InvoiceNumber" name="InvoiceNumber" required /><br />
 
-                        <label for="InvoiceNumber">رقم الفاتورة:</label>
-                        <input type="text" id="InvoiceNumber" name="InvoiceNumber" required /><br />
+                    <label for="specialty">التخصص:</label>
+                    <input type="text" id="specialty" name="specialty" required /><br />
 
-                        <label for="specialty">التخصص:</label>
-                        <input type="text" id="specialty" name="specialty" required /><br />
+                    <label for="Description">الوصف:</label>
+                    <textarea id="Description" name="Description" rows="4" required></textarea><br />
 
-                        <label for="Description">الوصف:</label>
-                        <textarea id="Description" name="Description" rows="4" required></textarea><br />
+                    <label for="Amount">المبلغ:</label>
+                    <input type="number" step="0.01" id="Amount" name="Amount" required /><br />
 
-                        <label for="Amount">المبلغ:</label>
-                        <input type="number" step="0.01" id="Amount" name="Amount" required /><br />
+                    <label for="InvoiceDate">تاريخ الدفع:</label>
+                    <input type="date" id="InvoiceDate" name="InvoiceDate" required /><br />
 
-                        <label for="InvoiceDate">تاريخ الدفع:</label>
-                        <input type="date" id="InvoiceDate" name="InvoiceDate" required /><br />
+                    <label for="PaymentMethod">طريقة الدفع:</label>
+                    <input type="text" id="PaymentMethod" name="PaymentMethod" required /><br />
 
-                        <label for="PaymentMethod">طريقة الدفع:</label>
-                        <input type="text" id="PaymentMethod" name="PaymentMethod" required /><br />
+                    <label for="StoreName">اسم المتجر:</label>
+                    <input type="text" id="StoreName" name="StoreName" required /><br />
 
-                        <label for="StoreName">اسم المتجر:</label>
-                        <input type="text" id="StoreName" name="StoreName" required /><br />
+                    <label for="InvoiceImagePath">صورة الفاتورة:</label>
+                    <input type="file" id="InvoiceImagePath" name="InvoiceImagePath" /><br />
+                </div>
+            </div>
 
-                        <label for="InvoiceImagePath">صورة الفاتورة:</label>
-                        <input type="file" id="InvoiceImagePath" name="InvoiceImagePath"  /><br />
-                    </div>                </div>
-
-                <div class="button-container" >
-                    <button type="submit" class="button_save"><i class="fas fa-save"></i> حفظ</button>
-                    <button type="button" class="button_cancel"><i class="fas fa-close"></i> إلغاء</button>
-            </form>
-
-            <?php
-            $servername = "localhost";
-            $username = "root";
-            $password = "";
-            $dbname = "Engineering_Projects_Management";
-
-            // اتصال بقاعدة البيانات
-            $conn = new mysqli($servername, $username, $password, $dbname);
-
-            // التحقق من الاتصال
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
-
-            if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                $projectID = isset($_POST['ProjectID']) ? $_POST['ProjectID'] : null;
-                $InvoiceNumber = isset($_POST['InvoiceNumber']) ? $_POST['InvoiceNumber'] : null;
-                $specialty = isset($_POST['specialty']) ? $_POST['specialty'] : null;
-                $Description = isset($_POST['Description']) ? $_POST['Description'] : null;
-                $Amount = isset($_POST['Amount']) ? $_POST['Amount'] : null;
-                $InvoiceDate = isset($_POST['InvoiceDate']) ? $_POST['InvoiceDate'] : null;
-                $PaymentMethod = isset($_POST['PaymentMethod']) ? $_POST['PaymentMethod'] : null;
-                $StoreName = isset($_POST['StoreName']) ? $_POST['StoreName'] : null;
-
-                // التحقق من صورة الفاتورة
-                if (isset($_FILES['InvoiceImage']) && $_FILES['InvoiceImage']['error'] === UPLOAD_ERR_OK) {
-                    $fileTmpPath = $_FILES['InvoiceImage']['tmp_name'];
-                    $fileName = $_FILES['InvoiceImage']['name'];
-                    $fileSize = $_FILES['InvoiceImage']['size'];
-                    $fileType = $_FILES['InvoiceImage']['type'];
-                    $fileNameCmps = explode(".", $fileName);
-                    $fileExtension = strtolower(end($fileNameCmps));
-                    $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
-                    $allowedfileExtensions = array('jpg', 'gif', 'png', 'jpeg');
-                    if (in_array($fileExtension, $allowedfileExtensions)) {
-                        $uploadFileDir = '../upload_folder' . $newFileName;
-                        move_uploaded_file($fileTmpPath, $uploadFileDir);
-                    }
-                }
-
-                // استعلام SQL لإدخال بيانات الفاتورة
-                $sql = "INSERT INTO `MaterialInvoices` (`ProjectID`, `InvoiceNumber`, `specialty`, `Description`, `Amount`, `InvoiceDate`, `PaymentMethod`, `StoreName`, `InvoiceImage`) 
-                        VALUES ('$projectID', '$InvoiceNumber', '$specialty', '$Description', '$Amount', '$InvoiceDate', '$PaymentMethod', '$StoreName', '$newFileName')";
-
-                if ($conn->query($sql) === TRUE) {
-                    echo "<script>alert('تمت إضافة الفاتورة بنجاح!');</script>";
-                } else {
-                    echo "Error: " . $sql . "<br>" . $conn->error;
-                }
-            }
-
-            $conn->close();
-            ?>
-        </div>
-    <!-- <script src="../Js/app.js"></script> -->
+            <div class="button-container">
+                <button type="submit" class="button_save"><i class="fas fa-save"></i> حفظ</button>
+                <button type="button" class="button_cancel"><i class="fas fa-close"></i> إلغاء</button>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
