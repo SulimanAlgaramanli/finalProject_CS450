@@ -1,6 +1,8 @@
 <?php
     
     include 'con_db.php';
+    include 'formatNumber.php';
+
 
 
     $sql_stores = "SELECT * FROM  stores";
@@ -116,15 +118,31 @@
 
                 <div class="box_fillter1">
                     <div class="search-container">
-                        <input type="text" name="search_tech" id="search_tech" class="filtter_input_search" placeholder="ابحث عن اسم الفني" />
+
+                        <label class="fillter_label" for="search_tech"> الفني:</label>
+                        <input type="text" name="search_tech" id="search_tech" class="filtter_input_search" placeholder="ابحث عن اسم الفني"  value="<?php echo isset($_GET['search_tech']) ? htmlspecialchars($_GET['search_tech']) : ''; ?>" />
                         <button type="submit" class="filtter_icon_search">&#128269;</button>
                         <div id="space"></div>
-                        <input type="text" name="search_project" id="search_project" class="filtter_input_search" placeholder="ابحث عن رقم المشروع" />
+                        
+                        <label class="fillter_label" for="search_project"> المشروع:</label>
+                        <input type="text" name="search_project" id="search_project" class="filtter_input_search" placeholder="ابحث عن رقم المشروع" value="<?php echo isset($_GET['search_project']) ? htmlspecialchars($_GET['search_project']) : ''; ?>" />
                         <button type="submit" class="filtter_icon_search">&#128269;</button>
+                        <div id="space"></div>
+
+                        <label class="fillter_label" for="PaymentID"> الدفعة:</label>
+                        <input type="text" name="PaymentID" id="PaymentID" class="filtter_input_search" placeholder="ابحث عن رقم الدفعة" value="<?php echo isset($_GET['PaymentID']) ? htmlspecialchars($_GET['PaymentID']) : ''; ?>" />
+                        <button type="submit" class="filtter_icon_search">&#128269;</button>
+
                     </div>
                 </div>
 
                 <div class="div_print_add_button">
+                    <button type="reset" class="button_reset" onclick="window.location.href='Technician_Invoices_Table.php'">
+                            <i class="fas fa-refresh"></i>الفلترة 
+                        </button>
+                        <div id="space"></div>
+                        <div id="space"></div>
+
                     <button class="button_print" onclick="printTable()">
                         <i class="fas fa-print"></i> طباعة
                     </button>
@@ -142,6 +160,7 @@
                                 <th >رقم تسلسلي</th>
                                 <th >اسم الفني</th>
                                 <th >رقم المشروع</th>
+                                <th >الدفعة الجارية</th>
                                 <th >رقم الفاتورة</th>
                                 <th >التخصص</th>
                                 <th >القيمة د.ل</th>
@@ -165,9 +184,11 @@
                                 $filter_paymentmethods = isset($_GET['paymentmethods']) ? $_GET['paymentmethods'] : '';
                                 $search_tech = isset($_GET['search_tech']) ? $_GET['search_tech'] : '';
                                 $search_project = isset($_GET['search_project']) ? $_GET['search_project'] : '';
+                                $search_PaymentID = isset($_GET['PaymentID']) ? $_GET['PaymentID'] : '';
+
 
                                 // Build SQL query with necessary joins
-                                $sql = "SELECT ti.InvoiceID , tech.TechnicianName, ti.ProjectID , ti.InvoiceNumber, s.SpecializationName, ti.Description, ti.amount, ti.InvoiceDate, pm.PaymentMethodName, ti.InvoiceImage
+                                $sql = "SELECT ti.InvoiceID , tech.TechnicianName, ti.ProjectID , ti.PaymentID, ti.InvoiceNumber, s.SpecializationName, ti.Description, ti.amount, ti.InvoiceDate, pm.PaymentMethodName, ti.InvoiceImage
                                         FROM technicianinvoices ti          
                                         LEFT JOIN technicians  AS tech ON ti.TechnicianID  = tech.TechnicianID 
                                         LEFT JOIN specializations s ON ti.SpecializationID  = s.SpecializationID
@@ -194,11 +215,16 @@
                                     $search_project = $_GET['search_project'];
                                     $where_clauses[] = "ti.ProjectID LIKE '%$search_project%'";
                                 }
+                                if (!empty($search_PaymentID)) {
+                                    $where_clauses[] = "ti.PaymentID LIKE '%$search_PaymentID%'";
+                                }
+
 
                                 if (!empty($where_clauses)) {
                                     $sql .= " WHERE " . implode(" AND ", $where_clauses);
                                 }
                                 // $sql .= " ORDER BY ti.InvoiceID  ASC";
+                                
                                 
                                 
                                 // Execute SQL query
@@ -214,13 +240,14 @@
                                         echo "<td>" . $row["InvoiceID"] . "</td>";
                                         echo "<td>" . $row["TechnicianName"] . "</td>";
                                         echo "<td>" . $row["ProjectID"] . "</td>";
+                                        echo "<td>" . $row["PaymentID"] . "</td>";
                                         echo "<td>" . $row["InvoiceNumber"] . "</td>";
                                         echo "<td>" . $row["SpecializationName"] . "</td>";
-                                        echo "<td>" . $row["amount"] . "</td>";
+                                        echo "<td>" . myFormatNumber($row["amount"]) . "</td>";
                                         echo "<td>" . $row["InvoiceDate"] . "</td>";
                                         echo "<td>" . $row["PaymentMethodName"] . "</td>";
                                         echo "<td>" . $row["Description"] . "</td>";
-                                        echo "<td><a href='data:image;base64," . base64_encode($row['InvoiceImage']) . "' target='_blank'><img height='50' width='50' src='data:image;base64," . base64_encode($row['InvoiceImage']) . "'/></a></td>";
+                                        echo "<td><a href='data:image;base64," . base64_encode($row['InvoiceImage']) . "' target='_blank'><img class='invoice-img' height='100' width='100' src='data:image;base64," . base64_encode($row['InvoiceImage']) . "'/></a></td>";
                                         echo "<td>    
                                                 <div class=\"action-buttons\">
                                                     <form class='botton_table' method='GET' action='edit_T_invoice.php' style='display: inline-block;'>

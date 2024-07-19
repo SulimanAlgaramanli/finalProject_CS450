@@ -1,3 +1,9 @@
+<?php
+    
+    include 'con_db.php';
+    include 'formatNumber.php';
+?>
+
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -206,6 +212,9 @@
             </div>
         </div>
     </div>    
+</div>
+<div class="footer">
+    <p>المكتب الهندسي لإدارة المشاريع 2024 &copy;</p>
 </div>
 
 <script>

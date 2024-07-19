@@ -1,36 +1,37 @@
+
+
+
 <?php
-// تفاصيل الاتصال بقاعدة البيانات
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "Engineering_Projects_Management";
 
-// إنشاء الاتصال
+// إنشاء اتصال بقاعدة البيانات
 $conn = new mysqli($servername, $username, $password, $dbname);
 
 // التحقق من الاتصال
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("فشل الاتصال: " . $conn->connect_error);
 }
 
-// استلام معرف المشروع من البيانات المرسلة عبر POST
+// استقبال معرف المشروع من الطلب POST
 $projectID = $_POST['projectID'];
 
-// استعلام للحصول على أعلى رقم دفعة وزيادته بواحد
-$sql_max_payment = "SELECT MAX(paymentNumber) AS max_payment FROM payments WHERE ProjectID = $projectID";
-$result_max_payment = $conn->query($sql_max_payment);
+// استعلام SQL للحصول على آخر رقم دفعة
+$sql = "SELECT MAX(paymentNumber) AS lastPaymentNumber FROM payments WHERE ProjectID = '$projectID'";
+$result = $conn->query($sql);
 
-if ($result_max_payment->num_rows > 0) {
-    $row = $result_max_payment->fetch_assoc();
-    $next_payment_number = $row['max_payment'] + 1;
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $lastPaymentNumber = $row['lastPaymentNumber'] ? $row['lastPaymentNumber'] + 1 : 1;
+    // إعداد البيانات للرجوع بها كاستجابة JSON
+    $response = array('paymentNumber' => $lastPaymentNumber);
+    echo json_encode($response);
 } else {
-    // إذا لم يكن هناك أي دفعات سابقة، يمكنك تعيين القيمة الأولى كما تشاء
-    $next_payment_number = 1;
+    $response = array('paymentNumber' => 1); // إذا لم يكن هناك دفعات سابقة
+    echo json_encode($response);
 }
 
-// إغلاق الاتصال
 $conn->close();
-
-// إرجاع القيمة كاستجابة JSON
-echo json_encode($next_payment_number);
 ?>

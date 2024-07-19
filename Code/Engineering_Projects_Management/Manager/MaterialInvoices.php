@@ -1,7 +1,7 @@
 <?php
     
     include 'con_db.php';
-
+    include 'formatNumber.php';
 
     $sql_stores = "SELECT * FROM  stores";
     $sql_specializations = "SELECT * FROM  specializations";
@@ -109,33 +109,49 @@
                             }
                             ?>
                         </select>
-                    <label class="fillter_label" for="paymentmethods">طريقة الدفع:</label>
-                    <select class="fillter_label" name="paymentmethods" id="paymentmethods" onchange="this.form.submit()">
-                        <option value="">الكل</option>
-                        <?php
-                        if ($result_paymentmethods->num_rows > 0) {
-                            while ($row_paymentmethods = $result_paymentmethods->fetch_assoc()) {
-                                $selected = isset($_GET['paymentmethods']) && $_GET['paymentmethods'] == $row_paymentmethods['PaymentMethodID'] ? 'selected' : '';
-                                echo "<option value='" . $row_paymentmethods['PaymentMethodID'] . "' $selected>" . $row_paymentmethods['PaymentMethodName'] . "</option>";
+                        <label class="fillter_label" for="paymentmethods">طريقة الدفع:</label>
+                        <select class="fillter_label" name="paymentmethods" id="paymentmethods" onchange="this.form.submit()">
+                            <option value="">الكل</option>
+                            <?php
+                            if ($result_paymentmethods->num_rows > 0) {
+                                while ($row_paymentmethods = $result_paymentmethods->fetch_assoc()) {
+                                    $selected = isset($_GET['paymentmethods']) && $_GET['paymentmethods'] == $row_paymentmethods['PaymentMethodID'] ? 'selected' : '';
+                                    echo "<option value='" . $row_paymentmethods['PaymentMethodID'] . "' $selected>" . $row_paymentmethods['PaymentMethodName'] . "</option>";
+                                }
                             }
-                        }
-                        ?>
-                    </select>
+                            ?>
+                        </select>
                     </div>
 
+        
                 </div>
 
                 <div class="box_fillter1">
                     <div class="search-container">
-                        <input type="text" name="search_cus" id="search_cus" class="filtter_input_search" placeholder="ابحث عن اسم الزبون" />
+
+                        <label class="fillter_label" for="search_cus"> الزبون:</label>
+                        <input type="text" name="search_cus" id="search_cus" class="filtter_input_search" placeholder="ابحث عن اسم الزبون"  value="<?php echo isset($_GET['search_cus']) ? htmlspecialchars($_GET['search_cus']) : ''; ?>" />
                         <button type="submit" class="filtter_icon_search">&#128269;</button>
                         <div id="space"></div>
-                        <input type="text" name="search_project" id="search_project" class="filtter_input_search" placeholder="ابحث عن رقم المشروع" />
+                        
+                        <label class="fillter_label" for="search_project"> المشروع:</label>
+                        <input type="text" name="search_project" id="search_project" class="filtter_input_search" placeholder="ابحث عن رقم المشروع" value="<?php echo isset($_GET['search_project']) ? htmlspecialchars($_GET['search_project']) : ''; ?>" />
                         <button type="submit" class="filtter_icon_search">&#128269;</button>
+                        <div id="space"></div>
+
+                        <label class="fillter_label" for="payment_id"> الدفعة:</label>
+                        <input type="text" name="payment_id" id="payment_id" class="filtter_input_search" placeholder="ابحث عن رقم الدفعة" value="<?php echo isset($_GET['payment_id']) ? htmlspecialchars($_GET['payment_id']) : ''; ?>" />
+                        <button type="submit" class="filtter_icon_search">&#128269;</button>
+
                     </div>
                 </div>
 
                 <div class="div_print_add_button">
+                <button type="reset" class="button_reset" onclick="window.location.href='MaterialInvoices.php'">
+                            <i class="fas fa-refresh"></i>الفلترة 
+                        </button>
+                        <div id="space"></div>
+                        <div id="space"></div>
                     <button class="button_print" onclick="printTable()">
                         <i class="fas fa-print"></i> طباعة
                     </button>
@@ -153,6 +169,7 @@
                                 <th >رقم تسلسلي</th>
                                 <th >اسم الزبون</th>
                                 <th >رقم المشروع</th>
+                                <th >الدفعة الجارية</th>
                                 <th >رقم الفاتورة</th>
                                 <th >التخصص</th>
                                 <th >البيان</th>
@@ -181,9 +198,11 @@
                                 $filter_paymentmethods = isset($_GET['paymentmethods']) ? $_GET['paymentmethods'] : '';
                                 $search_cus = isset($_GET['search_cus']) ? $_GET['search_cus'] : '';
                                 $search_project = isset($_GET['search_project']) ? $_GET['search_project'] : '';
+                                $search_payment_id = isset($_GET['payment_id']) ? $_GET['payment_id'] : '';
+
 
                                 // Build SQL query with necessary joins
-                                $sql = "SELECT mi.invoice_id, cus.CustomerName, mi.project_id, mi.invoice_number, s.SpecializationName, mi.description, mi.amount, mi.invoice_date, pm.PaymentMethodName, st.StoreName, mi.invoice_image
+                                $sql = "SELECT mi.invoice_id, cus.CustomerName, mi.project_id, mi.payment_id,  mi.invoice_number, s.SpecializationName, mi.description, mi.amount, mi.invoice_date, pm.PaymentMethodName, st.StoreName, mi.invoice_image
                                         FROM MaterialInvoices mi
                                         JOIN projects ON projects.ProjectID  = mi.project_id
                                         JOIN customers AS cus ON projects.ProjectID = cus.CustomerId
@@ -217,10 +236,14 @@
                                     $where_clauses[] = "mi.project_id LIKE '%$search_project%'";
                                 }
 
+                                if (!empty($search_payment_id)) {
+                                    $where_clauses[] = "mi.payment_id LIKE '%$search_payment_id%'";
+                                }
+
                                 if (!empty($where_clauses)) {
                                     $sql .= " WHERE " . implode(" AND ", $where_clauses);
                                 }
-                                // $sql .= " ORDER BY mi.Invoice_id  ASC";
+                                $sql .= " ORDER BY mi.Invoice_id  ASC";
                                 
                                 
                                 // Execute SQL query
@@ -236,10 +259,11 @@
                                         echo "<td>" . $row["invoice_id"] . "</td>";
                                         echo "<td>" . $row["CustomerName"] . "</td>";
                                         echo "<td>" . $row["project_id"] . "</td>";
+                                        echo "<td>" . $row["payment_id"] . "</td>";
                                         echo "<td>" . $row["invoice_number"] . "</td>";
                                         echo "<td>" . $row["SpecializationName"] . "</td>";
                                         echo "<td>" . $row["description"] . "</td>";
-                                        echo "<td>" . $row["amount"] . "</td>";
+                                        echo "<td>" . myFormatNumber($row["amount"]) . "</td>";
                                         echo "<td>" . $row["invoice_date"] . "</td>";
                                         echo "<td>" . $row["PaymentMethodName"] . "</td>";
                                         echo "<td>" . $row["StoreName"] . "</td>";

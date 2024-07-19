@@ -72,7 +72,7 @@ $result_4 = $conn->query($sql_4);
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <title>مشروع جديد</title>
+    <title>إضافة مشروع</title>
     <link rel="icon" href="../icons/engineer.png" type="image/x-icon" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="../Css/main.css" />
@@ -87,6 +87,11 @@ $result_4 = $conn->query($sql_4);
             border: 1px solid #ddd;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            height: 900px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
         .form-container label {
             font-weight: bold;
@@ -143,9 +148,9 @@ $result_4 = $conn->query($sql_4);
 <body>
 
 <div class="min-contener">
-    <h1 style="text-align: center;">مشروع جديد</h1>
     <form id="projectForm" action="newProject.php" method="POST">
         <div class="form-container">
+        <h1 style="text-align: center;">إضافة مشروع جديد</h1><br>
             <div class="form-group">
                 <label for="customerName">اسم الزبون:</label>
                 <select id="customerName" name="customerName" required>
@@ -233,7 +238,7 @@ $result_4 = $conn->query($sql_4);
 
                 <div class="button-container" style="  text-align: center; ">
                     <button type="submit" class="button_save"><i class="fas fa-save"></i>حفظ</button>
-                    <button type="button" class="button_cancel"><i class="fas fa-close"></i>إلغاء</button>
+                    <button type="button" class="button_cancel"  onclick="window.location.href='Projects_Table.php';"><i class="fas fa-close"></i>إلغاء</button>
                 </div>
         </div>
     </form>

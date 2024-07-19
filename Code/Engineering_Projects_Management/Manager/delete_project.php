@@ -1,43 +1,35 @@
 <?php
-// تعيين معلومات الاتصال بقاعدة البيانات
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "Engineering_Projects_Management";
+    include 'con_db.php'; // تأكد من تضمين ملف الاتصال بقاعدة البيانات
 
-// إنشاء اتصال بقاعدة البيانات
-$conn = new mysqli($servername, $username, $password, $dbname);
+    if (isset($_POST['project_id'])) {
+        $project_id = $_POST['project_id'];
 
-// التحقق من الاتصال
-if ($conn->connect_error) {
-    die("فشل الاتصال: " . $conn->connect_error);
-}
+        // تحقق من أن $project_id هو رقم صحيح
+        if (is_numeric($project_id)) {
+            // إعداد استعلام الحذف
+            $sql = "DELETE FROM projects WHERE ProjectID = ?";
 
-// التحقق مما إذا كان معرف المشروع قد تم إرساله
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['project_id'])) {
-    $project_id = $_POST['project_id'];
+            if ($stmt = $conn->prepare($sql)) {
+                $stmt->bind_param("i", $project_id);
 
-    // إعداد استعلام الحذف
-    $sql = "DELETE FROM projects WHERE ProjectID = ?";
+                if ($stmt->execute()) {
+                    // إعادة توجيه المستخدم إلى صفحة المشاريع بعد الحذف
+                    header("Location: Projects_Table.php");
+                    exit;
+                } else {
+                    echo "خطأ في تنفيذ الاستعلام: " . $stmt->error;
+                }
 
-    // تحضير الاستعلام
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $project_id);
-
-    // تنفيذ الاستعلام والتحقق من النجاح
-    if ($stmt->execute()) {
-        echo "تم حذف المشروع بنجاح.";
+                $stmt->close();
+            } else {
+                echo "خطأ في إعداد الاستعلام: " . $conn->error;
+            }
+        } else {
+            echo "معرف المشروع غير صحيح.";
+        }
     } else {
-        echo "حدث خطأ أثناء حذف المشروع: " . $stmt->error;
+        echo "معرف المشروع غير موجود.";
     }
 
-    $stmt->close();
-}
-
-// إغلاق الاتصال بقاعدة البيانات
-$conn->close();
-
-// إعادة توجيه المستخدم إلى صفحة جدول المشاريع بعد الحذف
-header("Location: Projects_Table.php");
-exit();
+    $conn->close();
 ?>

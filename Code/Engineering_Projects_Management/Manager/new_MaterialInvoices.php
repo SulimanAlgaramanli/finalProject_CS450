@@ -14,16 +14,19 @@ if ($conn->connect_error) {
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // تعريف المتغيرات والتأكد من قيمها
-    $projectID = isset($_POST['ProjectID']) ? $_POST['ProjectID'] : null;
-    $InvoiceNumber = isset($_POST['InvoiceNumber']) ? $_POST['InvoiceNumber'] : null;
-    $specialty = isset($_POST['specialty']) ? $_POST['specialty'] : null;
-    $Description = isset($_POST['Description']) ? $_POST['Description'] : null;
-    $Amount = isset($_POST['Amount']) ? $_POST['Amount'] : null;
-    $InvoiceDate = isset($_POST['InvoiceDate']) ? $_POST['InvoiceDate'] : null;
-    $PaymentMethod = isset($_POST['PaymentMethod']) ? $_POST['PaymentMethod'] : null;
-    $StoreName = isset($_POST['StoreName']) ? $_POST['StoreName'] : null;
+    $project_id = isset($_POST['project_id']) ? $_POST['project_id'] : null;
+    $invoice_number = isset($_POST['invoice_number']) ? $_POST['invoice_number'] : null;
+    $payment_id = isset($_POST['payment_id']) ? $_POST['payment_id'] : null;
+    $specialization_id = isset($_POST['specialization_id']) ? $_POST['specialization_id'] : null;
+    $description = isset($_POST['description']) ? $_POST['description'] : null;
+    $amount = isset($_POST['amount']) ? $_POST['amount'] : null;
+    $invoice_date = isset($_POST['invoice_date']) ? $_POST['invoice_date'] : null;
 
-    
+    $payment_method_id = isset($_POST['payment_method_id']) ? $_POST['payment_method_id'] : null;
+    $store_id = isset($_POST['store_id']) ? $_POST['store_id'] : null;
+
+
+
     // التحقق من صورة الفاتورة وتحويلها إلى Base64
     $imgContent = null;
     if (isset($_FILES['InvoiceImagePath']) && $_FILES['InvoiceImagePath']['error'] === UPLOAD_ERR_OK) {
@@ -32,21 +35,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // استعلام SQL لإدخال بيانات الفاتورة
-    $sql = "INSERT INTO `MaterialInvoices` (`ProjectID`, `InvoiceNumber`, `specialty`, `Description`, `Amount`, `InvoiceDate`, `PaymentMethod`, `StoreName`, `InvoiceImage`) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO `MaterialInvoices` (`project_id`, `invoice_number`, `payment_id`,  `specialization_id`, `description`, `amount`, `invoice_date`, `payment_method_id`, `store_id`, `invoice_image`) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = $conn->prepare($sql);
     // ربط المتغيرات بالاستعلام
-    $stmt->bind_param("isssdssss", $projectID, $InvoiceNumber, $specialty, $Description, $Amount, $InvoiceDate, $PaymentMethod, $StoreName, $imgContent);
+    $stmt->bind_param("iiiissisis", $project_id, $invoice_number, $payment_id, $specialization_id, $description, $amount, $invoice_date, $payment_method_id, $store_id, $imgContent);
 
     if ($stmt->execute()) {
         echo "<script>alert('تمت إضافة الفاتورة بنجاح!');</script>";
+        header("Location: MaterialInvoices.php");
+        exit(); // تأكد من استخدام exit بعد header
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 
     $stmt->close();
 }
+
+// جلب البيانات من جداول المشاريع، التخصصات، طرق الدفع والمتاجر
+$projects = $conn->query("SELECT ProjectID FROM projects   ORDER BY ProjectID  ASC");
+$specializations = $conn->query("SELECT SpecializationID, SpecializationName FROM specializations  ORDER BY SpecializationID  ASC");
+$paymentMethods = $conn->query("SELECT PaymentMethodID, PaymentMethodName FROM paymentmethods  ORDER BY PaymentMethodID  ASC ");
+$stores = $conn->query("SELECT StoreID, StoreName FROM stores  ORDER BY StoreID  ASC");
 
 $conn->close();
 ?>
@@ -56,24 +67,30 @@ $conn->close();
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>إضافة فاتورة</title>
+    <title>إضافة فاتورة مواد</title>
     <link rel="icon" href="../icons/engineer.png" type="image/x-icon" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="../Css/main.css" />
+
+
+
     <style>
-        /* تنسيق النموذج */
         .form-container {
             width: 80%;
             max-width: 600px;
-            margin: 20px auto;
+            height: 800px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             padding: 20px;
             background-color: #f9f9f9;
             border: 1px solid #ddd;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+            text-align: center; /* توسيط المحتوى */
 
-        /* تنسيق الحقول والتسميات */
+        }
         .form-container label {
             font-weight: bold;
             display: block;
@@ -82,13 +99,13 @@ $conn->close();
             font-size: 20px;
             margin-bottom: 10px;
             display: inline-block;
+            justify-content: center;
+            align-items: center;
         }
-
         .form-container input[type=text],
         .form-container input[type=date],
         .form-container input[type=number],
-        .form-container input[type=checkbox],
-        .form-container input[type=radio],
+        .form-container input[type=file],
         .form-container textarea,
         .form-container select {
             width: 65%;
@@ -101,80 +118,128 @@ $conn->close();
             box-sizing: border-box;
         }
 
-        /* تنسيق الزر */
-
-        .button-container {
-            align-items: center;
-            text-align: center;
-        }
-
-        .form-container .button_save,
-        .form-container .button_cancel {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin-top: 10px;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
-        }
-
-        .form-container .button_cancel {
-            background-color: #f44336;
-            margin-right: 10px;
-        }
-
-        .form-container .button_save:hover,
-        .form-container .button_cancel:hover {
-            background-color: #45a049;
-        }
-    </style>
+    </style> 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <div class="min-contener">
+    <div class="min-contener" style="  align-items: center; text-align: center;">
         <form id="invoiceForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" enctype="multipart/form-data">
             <div class="form-container">
-                <h1>إضافة فاتورة</h1>
-
+                <h1>إضافة فاتورة مواد</h1>
                 <div class="form-group">
-                    <label for="ProjectID">معرف المشروع:</label>
-                    <input type="number" id="ProjectID" name="ProjectID" required /><br />
+                    <label for="project_id">رقم المشروع:</label>
+                    <select id="project_id" name="project_id" required>
+                        <option value="" disabled selected>اختر المشروع</option>
+                        <?php
+                        if ($projects->num_rows > 0) {
+                            while($row = $projects->fetch_assoc()) {
+                                echo "<option value='" . $row["ProjectID"] . "'>" . $row["ProjectID"] . "</option>";
+                            }
+                        }
+                        ?>
+                    </select><br />
+                    
+                    <label for="invoice_number">رقم الفاتورة:</label>
+                    <input type="text" id="invoice_number" name="invoice_number" readonly required /><br />
 
-                    <label for="InvoiceNumber">رقم الفاتورة:</label>
-                    <input type="text" id="InvoiceNumber" name="InvoiceNumber" required /><br />
 
-                    <label for="specialty">التخصص:</label>
-                    <input type="text" id="specialty" name="specialty" required /><br />
+                    <label for="payment_id">رقم الدفعه:</label>
+                    <input type="text" id="payment_id" name="payment_id" readonly /><br />
 
-                    <label for="Description">الوصف:</label>
-                    <textarea id="Description" name="Description" rows="4" required></textarea><br />
 
-                    <label for="Amount">المبلغ:</label>
-                    <input type="number" step="0.01" id="Amount" name="Amount" required /><br />
+                    <label for="specialization_id">التخصص:</label>
+                    <select id="specialization_id" name="specialization_id" required>
+                        <option value="" disabled selected>اختر التخصص</option>
+                        <?php
+                        if ($specializations->num_rows > 0) {
+                            while($row = $specializations->fetch_assoc()) {
+                                echo "<option value='" . $row["SpecializationID"] . "'>" . $row["SpecializationName"] . "</option>";
+                            }
+                        }
+                        ?>
+                    </select><br />
+                    <label for="store_id">اسم المتجر:</label>
+                    <select id="store_id" name="store_id" required>
+                        <option value="" disabled selected>اختر المتجر</option>
+                        <?php
+                        if ($stores->num_rows > 0) {
+                            while($row = $stores->fetch_assoc()) {
+                                echo "<option value='" . $row["StoreID"] . "'>" . $row["StoreName"] . "</option>";
+                            }
+                        }
+                        ?>
+                    </select><br />
 
-                    <label for="InvoiceDate">تاريخ الدفع:</label>
-                    <input type="date" id="InvoiceDate" name="InvoiceDate" required /><br />
+                    <label for="description">البيان:</label>
+                    <textarea id="description" name="description" rows="4" ></textarea><br />
 
-                    <label for="PaymentMethod">طريقة الدفع:</label>
-                    <input type="text" id="PaymentMethod" name="PaymentMethod" required /><br />
+                    <label for="amount">المبلغ:</label>
+                    <input type="number" step="0.01" id="amount" name="amount" required /><br />
 
-                    <label for="StoreName">اسم المتجر:</label>
-                    <input type="text" id="StoreName" name="StoreName" required /><br />
+                    <label for="invoice_date">تاريخ الدفع:</label>
+                    <input type="date" id="invoice_date" name="invoice_date" required /><br />
+
+                    <label for="payment_method_id">طريقة الدفع:</label>
+                    <select id="payment_method_id" name="payment_method_id" required>
+                        <option value="" disabled selected>اختر طريقة الدفع</option>
+                        <?php
+                        if ($paymentMethods->num_rows > 0) {
+                            while($row = $paymentMethods->fetch_assoc()) {
+                                echo "<option value='" . $row["PaymentMethodID"] . "'>" . $row["PaymentMethodName"] . "</option>";
+                            }
+                        }
+                        ?>
+                    </select><br />
+
+                    
 
                     <label for="InvoiceImagePath">صورة الفاتورة:</label>
                     <input type="file" id="InvoiceImagePath" name="InvoiceImagePath" /><br />
                 </div>
-            </div>
-
-            <div class="button-container">
-                <button type="submit" class="button_save"><i class="fas fa-save"></i> حفظ</button>
-                <button type="button" class="button_cancel"><i class="fas fa-close"></i> إلغاء</button>
+                <button type="submit" class="button_save"><i class="fas fa-save"></i> حفظ </button>
+                <button type="button" class="button_cancel" onclick="window.location.href='MaterialInvoices.php';"><i class="fas fa-close"></i> إلغاء </button>
             </div>
         </form>
     </div>
+
+    <script>
+        $(document).ready(function(){
+    // عند تغيير اختيار رقم المشروع
+    $('#project_id').change(function(){
+        var projectID = $(this).val();
+        
+        // استخدام AJAX لجلب رقم الفاتورة
+        $.ajax({
+            url: 'get_M_invoice_number.php',
+            method: 'POST',
+            data: { projectID: projectID },
+            success: function(response){
+                var data = JSON.parse(response);
+                $('#invoice_number').val(data.invoiceNumber); // تعيين قيمة رقم الفاتورة
+            },
+            error: function(){
+                alert('حدث خطأ أثناء استرداد رقم الفاتورة.');
+            }
+        });
+
+        // استخدام AJAX لجلب رقم الدفعة
+        $.ajax({
+            url: 'get_payment_number_invoice.php',
+            method: 'POST',
+            data: { projectID: projectID },
+            success: function(response){
+                var data = JSON.parse(response);
+                $('#payment_id').val(data.paymentNumber); // تعيين قيمة رقم الدفعة
+            },
+            error: function(){
+                alert('حدث خطأ أثناء استرداد رقم الدفعة.');
+            }
+        });
+    });
+});
+
+    </script>
+
+    <script src="script.js"></script>
 </body>
 </html>

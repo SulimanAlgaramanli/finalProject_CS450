@@ -1,3 +1,9 @@
+<?php
+    
+    include 'con_db.php';
+    include 'formatNumber.php';
+?>
+
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -198,15 +204,19 @@
                                             echo "<td>" . $row["email"] . "</td>";
                                             echo "<td>" . $row["CustomerPhone"] . "</td>";
                                             echo "<td>" . $row["joinDate"] . "</td>";
-                                            
-                                        echo    "<td>                                                    
-                                        <div class=\"action-buttons\">
+                                        
+                                                echo "<td>
+                                                        <div class=\"action-buttons\">
+                                                            <form class='botton_table' method='GET' action='edit_customers.php' style='display: inline-block;'>
+                                                                <input type='hidden' name='customer_id' value='" . $row["CustomerId"] . "'>
+                                                                <button class='button_edit' type='submit'>
+                                                                    <i id='i_edit' class='fas fa-edit'></i> تعديل
+                                                                </button>
+                                                            </form>
 
-                                            <form class='botton_table' method='GET' action='edit_customers.php' style='display: inline-block;'>
-                                                <input type='hidden' name='project_id' value='" . $row["CustomerId"] . "'>
-                                                <button class='button_edit' type='submit'>
-                                                    <i id='i_edit' class='fas fa-edit'></i> تعديل
-                                                </button>
+
+
+
                                             </form>
                                             <form class='botton_table' method='POST' action='delete_customers.php'>
                                                 <input type='hidden' name='project_id' value='" . $row["CustomerId"] . "'>
@@ -214,8 +224,9 @@
                                             </form>
                                         </div>
                                     </td>";
-                                            echo "</tr>";
-                                        }
+                                                echo "</tr>";
+                                            }
+                                    
                                     } else {
                                         echo "<tr><td colspan='6'>لا توجد بيانات</td></tr>";
                                     }

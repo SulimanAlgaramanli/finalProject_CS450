@@ -64,15 +64,15 @@ function printTable() {
 }
 
 
-document.addEventListener('DOMContentLoaded', function() {
-  var cancelButton = document.querySelector('.button_cancel');
+// document.addEventListener('DOMContentLoaded', function() {
+//   var cancelButton = document.querySelector('.button_cancel');
 
-  if (cancelButton) {
-      cancelButton.addEventListener('click', function() {
-          window.location.href = 'projects_Table.php';
-      });
-  }
-});
+//   if (cancelButton) {
+//       cancelButton.addEventListener('click', function() {
+//           window.location.href = 'projects_Table.php';
+//       });
+//   }
+// });
 
 
 // function printTable() {

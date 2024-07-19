@@ -1,5 +1,6 @@
 <?php
     include 'con_db.php';
+    include 'formatNumber.php';
 
     // Fetch project statuses
     $sql_projectstatus = "SELECT * FROM projectstatus";
@@ -150,10 +151,10 @@
         </div>
         <div class="box_fillter3">
             <div class="search-container">
-                <input type="text" name="search_cus" id="search_cus" class="filtter_input_search" placeholder="ابحث عن اسم الزبون" />
+                <input type="text" name="search_cus" id="search_cus" class="filtter_input_search" placeholder="ابحث عن اسم الزبون" value="<?php echo isset($_GET['search_cus']) ? htmlspecialchars($_GET['search_cus']) : ''; ?>" />
                 <button type="submit" class="filtter_icon_search">&#128269;</button>
                 <div id="space" >   </div>
-                <input type="text" name="search_eng" id="search_eng" class="filtter_input_search" placeholder="ابحث عن اسم مدير المشروع" />
+                <input type="text" name="search_eng" id="search_eng" class="filtter_input_search" placeholder="ابحث عن اسم مدير المشروع" value="<?php echo isset($_GET['search_eng']) ? htmlspecialchars($_GET['search_eng']) : ''; ?>" />
                 <button type="submit" class="filtter_icon_search">&#128269;</button>
             </div>
         </div>
@@ -162,14 +163,19 @@
                     
                 <!-- أزرار الطباعة والإضافة -->
                 <div class="div_print_add_button">
+
+                <button type="reset" class="button_reset" onclick="window.location.href='Projects_Table.php'">
+                            <i class="fas fa-refresh"></i>الفلترة 
+                        </button>
+                        <div id="space"></div>
+                        <div id="space"></div>
+
+
                 <button class="button_print" onclick="printTable()">
                     <i class="fas fa-print"></i> طباعة
                 </button>
 
 
-                    <!-- <button class="button_print" onclick="window.print()">
-                        <i class="fas fa-print"></i> طباعة
-                    </button> -->
 
                         <button onclick="location.href='newProject.php'" type="button" class="button_add" id="add-Btn">
                             <i class="fas fa-plus"></i> إضافة
@@ -207,24 +213,27 @@
                             $search_eng = isset($_GET['search_eng']) ? $_GET['search_eng'] : '';
 
                             $sql = "SELECT 
-    projects.ProjectID, 
-    cus.CustomerName, 
-    eng.employeeName AS engineer_username, 
-    projects.LandLocation, 
-    projects.ProjectStartDate, 
-    projects.ProjectEndDate, 
-    projectstatus.statusname, 
-    projects.ProgressPercentage, 
-    COALESCE(SUM(py.amount), 0) AS totalPayments, 
-    COALESCE(SUM(py.MaterialInvoices + py.TechnicianInvoices + (py.Amount - (py.Amount / (1 + (projects.rate_Of_CostPlus / 100))))), 0) AS TotalExpenses 
-FROM 
-    projects 
-    JOIN projectstatus ON projects.ProjectStatus = projectstatus.id 
-    JOIN customers AS cus ON projects.CustomerID = cus.CustomerId 
-    JOIN employees AS eng ON projects.SupervisingEngineerID = eng.employeeId 
-    LEFT JOIN payments AS py ON projects.ProjectID = py.ProjectID 
-    where 1=1
-                                    ";
+                                        projects.ProjectID, 
+                                        cus.CustomerName, 
+                                        eng.employeeName AS engineer_username, 
+                                        projects.LandLocation, 
+                                        projects.ProjectStartDate, 
+                                        projects.ProjectEndDate, 
+                                        projectstatus.statusname, 
+                                        projects.ProgressPercentage, 
+                                        COALESCE(SUM(py.amount), 0) AS totalPayments, 
+                                        COALESCE(SUM(
+                                            IFNULL((SELECT SUM(mi.amount) FROM materialinvoices AS mi WHERE mi.project_id = projects.ProjectID AND mi.payment_id = py.PaymentID), 0) + 
+                                            IFNULL((SELECT SUM(ti.amount) FROM technicianinvoices AS ti WHERE ti.ProjectID = projects.ProjectID AND ti.PaymentID = py.PaymentID), 0) + 
+                                            (py.Amount - (py.Amount / (1 + (projects.rate_Of_CostPlus / 100))))
+                                        ), 0) AS TotalExpenses 
+                                    FROM 
+                                        projects 
+                                    JOIN projectstatus ON projects.ProjectStatus = projectstatus.id 
+                                    JOIN customers AS cus ON projects.CustomerID = cus.CustomerId 
+                                    JOIN employees AS eng ON projects.SupervisingEngineerID = eng.employeeId 
+                                    LEFT JOIN payments AS py ON projects.ProjectID = py.ProjectID 
+                                    WHERE 1=1";
 
                             if (!empty($filter_year)) {
                                 $sql .= " AND YEAR(ProjectStartDate) = '$filter_year'";
@@ -269,8 +278,8 @@ FROM
                                         echo "<td>" . $row["ProjectEndDate"] . "</td>";
                                         echo "<td>" . $row["statusname"] . "</td>";
                                         echo "<td>" . $row["ProgressPercentage"] . " %</td>";
-                                        echo "<td>" . number_format($row["totalPayments"]) . "</td>";
-                                        echo "<td>" . number_format($row["TotalExpenses"]) . "</td>";
+                                        echo "<td>" . myFormatNumber($row["totalPayments"]) . "</td>";
+                                        echo "<td>" . myFormatNumber($row["TotalExpenses"]) . "</td>";
                                         
                                         echo    "<td>                                                    
                                                     <div class=\"action-buttons\">

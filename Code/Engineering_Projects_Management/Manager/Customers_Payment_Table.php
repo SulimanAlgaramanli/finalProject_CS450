@@ -1,3 +1,9 @@
+<?php
+    
+    include 'con_db.php';
+    include 'formatNumber.php';
+?>
+
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -93,47 +99,72 @@
 
         <h1 >بيانات دفعات الزبائن</h1>
         <div class="min-contener">
-        <form class="form_fillter" method="GET" action="">
-                    <div class="box_fillter1">
-                        <label class="fillter_label" for="year">اختر السنة:</label>
-                        <select class="fillter_label" name="year" id="year" onchange="this.form.submit()">
-                            <option value="">الكل</option>
-                            <option value="2024" <?php if(isset($_GET['year']) && $_GET['year'] == '2024') echo 'selected'; ?>>2024</option>
-                            <option value="2023" <?php if(isset($_GET['year']) && $_GET['year'] == '2023') echo 'selected'; ?>>2023</option>
-                            <option value="2022" <?php if(isset($_GET['year']) && $_GET['year'] == '2022') echo 'selected'; ?>>2022</option>
-                            <option value="2021" <?= isset($_GET['year']) && $_GET['year'] == '2021' ? 'selected' : '' ?>>2021</option>
-                            <option value="2020" <?= isset($_GET['year']) && $_GET['year'] == '2020' ? 'selected' : '' ?>>2020</option>
-                        </select>
-                    </div>
+        
+        <div>
+            <form class="form_fillter" method="GET" action="">
+                <div class="search-container">
+                            <label class="fillter_label" for="year">اختر السنة:</label>
+                            <select class="fillter_label" name="year" id="year" onchange="this.form.submit()">
+                                <option value="">الكل</option>
+                                <option value="2024" <?php if(isset($_GET['year']) && $_GET['year'] == '2024') echo 'selected'; ?>>2024</option>
+                                <option value="2023" <?php if(isset($_GET['year']) && $_GET['year'] == '2023') echo 'selected'; ?>>2023</option>
+                                <option value="2022" <?php if(isset($_GET['year']) && $_GET['year'] == '2022') echo 'selected'; ?>>2022</option>
+                                <option value="2021" <?= isset($_GET['year']) && $_GET['year'] == '2021' ? 'selected' : '' ?>>2021</option>
+                                <option value="2020" <?= isset($_GET['year']) && $_GET['year'] == '2020' ? 'selected' : '' ?>>2020</option>
+                            </select>
 
-                    <div class="box_fillter2">
-                        <label class="fillter_label" for="Settlement">التسويه:</label>
-                        <select class="fillter_label" name="Settlement" id="Settlement" onchange="this.form.submit()">
-                        <option value="">الكل</option>
-                        <option value="settled" <?php if(isset($_GET['Settlement']) && $_GET['Settlement'] == 'settled') echo 'selected'; ?>>تمت تسويتها</option>
-                        <option value="not_settled" <?php if(isset($_GET['Settlement']) && $_GET['Settlement'] == 'not_settled') echo 'selected'; ?>>لم تتم التسوية بعد</option>
-                        </select>
-                    </div>
-                    <div class="box_fillter3">
-                        <div class="search-container">
-                            <input type="text" name="search_name" id="search_name" class="filtter_input_search" placeholder="ابحث عن اسم الزبون" />
-                            <button type="submit" class="filtter_icon_search">&#128269;</button>
+                            <label class="fillter_label" for="Settlement">التسويه:</label>
+                            <select class="fillter_label" name="Settlement" id="Settlement" onchange="this.form.submit()">
+                            <option value="">الكل</option>
+                            <option value="settled" <?php if(isset($_GET['Settlement']) && $_GET['Settlement'] == 'settled') echo 'selected'; ?>>تمت تسويتها</option>
+                            <option value="not_settled" <?php if(isset($_GET['Settlement']) && $_GET['Settlement'] == 'not_settled') echo 'selected'; ?>>لم تتم التسوية بعد</option>
+                            </select>
+
                             <div id="space" ></div>
-                            <input type="text" name="search_accounter" id="search_accounter" class="filtter_input_search" placeholder="ابحث عن اسم المحاسب" />
-                            <button type="submit" class="filtter_icon_search">&#128269;</button>
-                        </div>
-                    </div>
+                            <div id="space" ></div>
+
+                    <label class="fillter_label" for="search_name"> الزبون:</label>
+                    <input type="text" name="search_name" id="search_name" class="filtter_input_search" placeholder="ابحث عن اسم الزبون" value="<?php echo isset($_GET['search_name']) ? htmlspecialchars($_GET['search_name']) : ''; ?>" />
+                    <button type="submit" class="filtter_icon_search">&#128269;</button>
+                    <div id="space" ></div>
+
+                    <label class="fillter_label" for="search_project"> المشروع:</label>
+                    <input type="text" name="search_project" id="search_project" class="filtter_input_search" placeholder="ابحث عن رقم المشروع" value="<?php echo isset($_GET['search_project']) ? htmlspecialchars($_GET['search_project']) : ''; ?>" />
+                    <button type="submit" class="filtter_icon_search">&#128269;</button>
+                    <div id="space" ></div>
+                                
+                    <label class="fillter_label" for="search_accounter"> المحاسب:</label>
+                    <input type="text" name="search_accounter" id="search_accounter" class="filtter_input_search" placeholder="ابحث عن اسم المحاسب" value="<?php echo isset($_GET['search_accounter']) ? htmlspecialchars($_GET['search_accounter']) : ''; ?>" />
+                    <button type="submit" class="filtter_icon_search">&#128269;</button>
+                    <div id="space" ></div>
+
+                    <label class="fillter_label" for="paymentNumber"> الدفعة:</label>
+                    <input type="text" name="paymentNumber" id="paymentNumber" class="filtter_input_search" placeholder="ابحث عن رقم الدفعة" value="<?php echo isset($_GET['paymentNumber']) ? htmlspecialchars($_GET['paymentNumber']) : ''; ?>" />
+                    <button type="submit" class="filtter_icon_search">&#128269;</button>
+                </div>
+
+
+                        
+                            
+                            
                     
                     
                 <!-- أزرار الطباعة والإضافة -->
                 <div class="div_print_add_button">
-                <button class="button_print" onclick="printTable()">
+                    <button type="reset" class="button_reset" onclick="window.location.href='Customers_Payment_Table.php'">
+                            <i class="fas fa-refresh"></i>الفلترة 
+                    </button>
+
+                    <div id="space"></div>
+                    <div id="space"></div>
+
+                    <button class="button_print" onclick="printTable()">
                         <i class="fas fa-print"></i> طباعة
                     </button>
 
-                        <button onclick="location.href='new_payment.php'" type="button" class="button_add" id="add-Btn">
-                            <i class="fas fa-plus"></i> إضافة
-                        </button>
+                    <button onclick="location.href='new_payment.php'" type="button" class="button_add" id="add-Btn">
+                        <i class="fas fa-plus"></i> إضافة
+                    </button>
                 </div>
             </form>
 
@@ -185,61 +216,53 @@
                             $filter_year = isset($_GET['year']) ? $_GET['year'] : '';
                             $filter_settlement = isset($_GET['Settlement']) ? $_GET['Settlement'] : '';
                             $search_name = isset($_GET['search_name']) ? $_GET['search_name'] : '';
+                            $search_project = isset($_GET['search_project']) ? $_GET['search_project'] : '';
                             $search_accounter = isset($_GET['search_accounter']) ? $_GET['search_accounter'] : '';
+                            $search_paymentNumber = isset($_GET['paymentNumber']) ? $_GET['paymentNumber'] : '';
+
 
 
                             
                             // بناء استعلام SQL مع الشروط المطلوبة
-                        
-
                             $sql = "SELECT 
-                                        py.PaymentID,
-                                        py.ProjectID,
-                                        c.CustomerName,
-                                        py.PaymentNumber,
-                                        py.Amount,
-                                        pm.PaymentMethodName,
-                                        py.PaymentDate,
-                                        py.SettlementDate,
-                                        py.PaymentMethodID,
-                            
-                                        (SELECT SUM(mi.amount) 
-                                            FROM materialinvoices AS mi
-                                            WHERE mi.project_id = py.ProjectID AND mi.payment_id = py.PaymentID
-                                        ) AS MaterialInvoices_m,
-                            
-                                        (SELECT SUM(ti.Amount)
-                                            FROM technicianinvoices AS ti
-                                            WHERE ti.ProjectID = py.ProjectID AND ti.PaymentID  = py.PaymentID
-                                        ) AS TechnicianInvoices_t,
-                            
-                                        py.Amount - (py.Amount / (1 + (p.rate_Of_CostPlus / 100))) AS FeesAmount,
-
-                                        (py.Amount - (py.Amount / (1 + (p.rate_Of_CostPlus / 100))) + 
-                                            (SELECT SUM(mi.amount) FROM materialinvoices AS mi WHERE mi.project_id = py.ProjectID AND mi.payment_id = py.PaymentID) +
-                                            (SELECT SUM(ti.Amount) FROM technicianinvoices AS ti WHERE ti.ProjectID = py.ProjectID AND ti.PaymentID  = py.PaymentID)
-                                        ) AS TotalExpenses,
-                                        (py.Amount - 
-                                            (SELECT SUM(mi.amount) FROM materialinvoices AS mi WHERE mi.project_id = py.ProjectID AND mi.payment_id = py.PaymentID) -
-                                            (SELECT SUM(ti.Amount) FROM technicianinvoices AS ti WHERE ti.ProjectID = py.ProjectID AND ti.PaymentID  = py.PaymentID) -
-                                            (py.Amount - (py.Amount / (1 + (p.rate_Of_CostPlus / 100))))
-                                        ) AS RemainingAmount,
-                                        e.EmployeeName
-                            
-                                    FROM 
-                                        payments AS py
-                                    JOIN 
-                                        PaymentMethods AS pm ON py.PaymentMethodID = pm.PaymentMethodID
-                                    JOIN 
-                                        projects AS p ON py.ProjectID = p.ProjectID
-                                    JOIN 
-                                        customers AS c ON p.CustomerID = c.CustomerID
-                                    JOIN 
-                                        employees AS e ON py.AccountantID = e.EmployeeId  
-                            
-                                    WHERE 1=1";
+                            py.PaymentID, 
+                            py.ProjectID, 
+                            c.CustomerName, 
+                            py.PaymentNumber, 
+                            py.Amount, 
+                            pm.PaymentMethodName, 
+                            py.PaymentDate, 
+                            py.SettlementDate, 
+                            py.PaymentMethodID,
+                            -- جمع مجموع الفواتير للمواد باستخدام الاستعلام الفرعي
+                            IFNULL((SELECT SUM(mi.amount) FROM materialinvoices AS mi WHERE mi.project_id = py.ProjectID AND mi.payment_id = py.paymentNumber), 0) AS MaterialInvoices_m,
+                            -- جمع مجموع الفواتير للفنيين باستخدام الاستعلام الفرعي
+                            IFNULL((SELECT SUM(ti.amount) FROM technicianinvoices AS ti WHERE ti.ProjectID = py.ProjectID AND ti.PaymentID = py.paymentNumber), 0) AS TechnicianInvoices_t,
+                            -- حساب مبلغ الرسوم
+                            py.Amount - (py.Amount / (1 + (p.rate_Of_CostPlus / 100))) AS FeesAmount,
+                            -- حساب المصروفات الإجمالية بجمع مجموع الفواتير ومبلغ الرسوم
+                            (py.Amount - (py.Amount / (1 + (p.rate_Of_CostPlus / 100))) 
+                                + IFNULL((SELECT SUM(mi.amount) FROM materialinvoices AS mi WHERE mi.project_id = py.ProjectID AND mi.payment_id = py.paymentNumber), 0) 
+                                + IFNULL((SELECT SUM(ti.amount) FROM technicianinvoices AS ti WHERE ti.ProjectID = py.ProjectID AND ti.PaymentID = py.paymentNumber), 0)) AS TotalExpenses,
+                            -- حساب المبلغ المتبقي بطرح المصروفات الإجمالية من المبلغ الأصلي
+                            (py.Amount 
+                                - IFNULL((SELECT SUM(mi.amount) FROM materialinvoices AS mi WHERE mi.project_id = py.ProjectID AND mi.payment_id = py.paymentNumber), 0) 
+                                - IFNULL((SELECT SUM(ti.amount) FROM technicianinvoices AS ti WHERE ti.ProjectID = py.ProjectID AND ti.PaymentID = py.paymentNumber), 0) 
+                                - (py.Amount - (py.Amount / (1 + (p.rate_Of_CostPlus / 100))))) AS RemainingAmount, 
+                            e.EmployeeName 
+                        FROM 
+                            payments AS py 
+                        JOIN 
+                            PaymentMethods AS pm ON py.PaymentMethodID = pm.PaymentMethodID 
+                        JOIN 
+                            projects AS p ON py.ProjectID = p.ProjectID 
+                        JOIN 
+                            customers AS c ON p.CustomerID = c.CustomerID 
+                        JOIN 
+                            employees AS e ON py.AccountantID = e.EmployeeId 
+                        WHERE 
+                            1=1";
                 
-
 
                             // إضافة الفلاتر إذا كانت موجودة
                             $conditions = array();
@@ -261,7 +284,13 @@
                             if (!empty($search_accounter)) {
                                 $conditions[] = "e.EmployeeName LIKE '%$search_accounter%'";
                             }
-
+                            if (isset($_GET['search_project']) && !empty($_GET['search_project'])) {
+                                $conditions[] = "py.ProjectID LIKE '%$search_project%'";
+                            }
+                            
+                            if (!empty($search_paymentNumber)) {
+                                $conditions[] = "py.paymentNumber LIKE '%$search_paymentNumber%'";
+                            }
                             if (count($conditions) > 0) {
                                 $sql .= " AND " . implode(' AND ', $conditions);
                             }
@@ -283,15 +312,15 @@
                                     echo "<td>" . $row["ProjectID"] . "</td>";
                                     echo "<td>" . $row["PaymentNumber"] . "</td>";  
                                     echo "<td>" . $row["CustomerName"] . "</td>";
-                                    echo "<td>" . number_format($row["Amount"]) . "</td>";
+                                    echo "<td>" . myFormatNumber($row["Amount"]) . "</td>";
                                     echo "<td>" . $row["PaymentMethodName"] . "</td>";
                                     echo "<td>" . $row["PaymentDate"] . "</td>";
                                     echo "<td>" . $row["SettlementDate"] . "</td>";
-                                    echo "<td>" . number_format($row["MaterialInvoices_m"]) . "</td>";
-                                    echo "<td>" . number_format($row["TechnicianInvoices_t"]) . "</td>";
-                                    echo "<td>" . number_format($row["FeesAmount"]) . "</td>";
-                                    echo "<td>" . number_format($row["TotalExpenses"]) . "</td>";
-                                    echo "<td>" . number_format($row["RemainingAmount"]) . "</td>";
+                                    echo "<td>" . myFormatNumber($row["MaterialInvoices_m"]) . "</td>";
+                                    echo "<td>" . myFormatNumber($row["TechnicianInvoices_t"]) . "</td>";
+                                    echo "<td>" . myFormatNumber($row["FeesAmount"]) . "</td>";
+                                    echo "<td>" . myFormatNumber($row["TotalExpenses"]) . "</td>";
+                                    echo "<td>" . myFormatNumber($row["RemainingAmount"]) . "</td>";
                                     echo "<td>" . $row["EmployeeName"] . "</td>";
                                     echo    "<td>    
 
@@ -339,17 +368,3 @@
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-

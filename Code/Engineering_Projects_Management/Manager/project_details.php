@@ -1,3 +1,9 @@
+<?php
+    
+    include 'con_db.php';
+    include 'formatNumber.php';
+?>
+
 <!DOCTYPE html>
 <html lang="ar">
 <head>
