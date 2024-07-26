@@ -1,5 +1,10 @@
 <?php
-session_start();
+    session_start();
+
+    include 'con_db.php';
+    include 'hasPermission.php';
+
+
 ?>
 <!DOCTYPE html>
 <html lang="ar">
@@ -17,14 +22,12 @@ session_start();
   <div class="header">
     <div class="navbar">
         <div class="left-section">
-            <!-- <h1 style="margin: 40px;">مكتب لإدارة المشاريع الهندسية</h1> -->
         </div>
         <?php
         if (isset($_SESSION['user_name'])) {
             echo '
             <div class="left-section">
-                <div class="" onclick="toggleSidebar()">
-                    <i class="fas fa-bars" id="bar" ></i>
+                <div >
                 </div>
             </div>
                 <div class="search-box">
@@ -43,54 +46,61 @@ session_start();
                 </div>
                 <span class="username">' . htmlspecialchars($_SESSION['user_name']) . '</span>
                 <img src="../icons/user.png" class="img_user" alt="صورة المستخدم" />
-                <div class="sidebar-close" onclick="closeSidebar()"></div>
-                <div class="sidebar hidden" id="sidebar" style="  top: 65px;">
-                    <aside class="sidebar-content">
-                        <nav>
-                            <ul>
-                                <li><a href="index.php"><i class="fas fa-home"></i> الصفحة الرئيسية</a></li>
-                                <li><a href="Projects_Table.php"><i class="fas fa-project-diagram"></i>  المشاريع </a></li>
-                                <li><a href="Customers_Payment_Table.php"><i class="fas fa-dollar-sign"></i> دفعات الزبائن </a></li>
-                                <li><a href="MaterialInvoices.php"><i class="fas fa-shopping-cart"></i> فواتير المواد </a></li>
-                                <li><a href="Technician_Invoices_Table.php"><i class="fas fa-file-invoice"></i> فواتير الفنيين </a></li>
-                                <li><a href="customers.php"><i class="fas fa-user-friends"></i> الزبائن </a></li>
-                                <li><a href="employees.php"><i class="fas fa-user-tie"></i> الموظفين </a></li>
-                                <li><a href="Technicians.php"><i class="fas fa-tools"></i> الفنيين </a></li>
-                                <li><a href="Control_Board.php"><i class="fas fa-tachometer-alt"></i> لوحة التحكم </a></li>
-                            </ul>
-                        </nav>
-                    </aside>
-                </div>
-            ';
-        } else {
-            echo '
-                <form action="login.php" method="post">
-                    <button type="submit" id="button_login">تسجيل الدخول</button>
-                </form>
-            ';
-        }
-        ?>
+                <div class="sidebar hidden" style = "  right: 0px; " id="sidebar" style="  top: 65px;">';
+                    // استدعاء الـ Sidebar
+                    include 'sidebar_for_index.php';;
+                } else {
+                    echo '
+                        <form action="login.php" method="post">
+                            <button type="submit" id="button_login">تسجيل الدخول</button>
+                        </form>
+                    ';
+                }
+                ?>
     </div>
 </div>
 
-<div class="contener">
+<div class="contener" style = "  margin: 5px 120px; ">
     <div class="min-contener_ForIndex">
-        <div class="image-slider" id="imageSlider">
-            <img src="../img/Home/1.png" class="active" alt="صورة 1">
-            <img src="../img/Home/2.png" alt="صورة 2">
-            <img src="../img/Home/5.png" alt="صورة 4">
-            <img src="../img/Home/6.png" alt="صورة 5">
-            <img src="../img/Home/9.png" alt="صورة 6">
-            <img src="../img/Home/10.png" alt="صورة 7">
-        </div>
+        
+        <div class="content-box" style="margin-left: 110px;   text-align: right;  direction: rtl; ">
+    <h1 style="font-size: 40px;">مرحبًا بكم في المكتب الليبي لإدارة المشاريع الهندسية</h1>
+    <p style="font-size: 25px;   line-height: 1.6;">
+        نقدم خدمات إدارة وتنفيذ المشاريع الهندسية بحرفية ودقة عالية. نتخصص في تنفيذ أعمال البناء بنظام Cost Plus لضمان تقديم الجودة والشفافية في جميع مراحل المشروع.
+    </p>
+
+    <h3 style="font-size: 28px;" >اتصل بنا</h3>
+    <p style="font-size: 25px;   line-height: 1.6;">
+        للمزيد من المعلومات حول خدماتنا وكيفية التعاون معنا، لا تتردد في الاتصال بنا. فريقنا مستعد للإجابة على جميع استفساراتكم وتقديم الدعم اللازم لتحقيق مشاريعكم بنجاح.
+    </p>
+    <p style="font-size: 20px;   line-height: 1.6;">
+        <strong >عنوان المكتب: شارع الظل </strong> <br>
+        <strong >البريد الإلكتروني: LibyanEngProjects@eng.ly</strong> <br>
+        <strong >رقم الهاتف: 0912808288</strong>
+    </p>
+    <p style="font-size: 25px;   line-height: 1.6;">
+        نحن هنا لتحقيق رؤيتكم بأعلى معايير الجودة والشفافية. ننتظر تواصلكم لنبدأ معًا رحلتكم نحو النجاح !
+    </p>
+</div>
+        <!-- <br> -->
+
         <div class="home_container">
             <div class="box1">
-                <div class="content-box">
-                    <h2>محتوى تعريفي بالمكتب</h2>
-                    <p>
-                        هذا المكتب يقوم بتنفيذ أعمال البناء بنظام Cost Plus
-                    </p>
-                </div>
+            <div class="image-slider" id="imageSlider">
+                <img src="../img/Home/a1.jpg" class="active" alt="صورة 1">
+                <img src="../img/Home/a2.jpg" alt="صورة 2">
+                <img src="../img/Home/a.jpg" alt="صورة a">
+
+                <img src="../img/Home/a3.jpg" alt="صورة 3">
+                <img src="../img/Home/a4.jpg" alt="صورة 4">
+
+                <img src="../img/Home/1.png"  alt="صورة 1">
+                <img src="../img/Home/2.png" alt="صورة 2">
+                <img src="../img/Home/5.png" alt="صورة 4">
+                <img src="../img/Home/6.png" alt="صورة 5">
+                <img src="../img/Home/9.png" alt="صورة 6">
+                <img src="../img/Home/10.png" alt="صورة 7">
+        </div>
             </div>
             <div class="box2">
                 <div class="video-container">
@@ -145,19 +155,8 @@ session_start();
 
     setInterval(showNextImage, 3000); // Change image every 3 seconds
 
-    // Function to close the sidebar
-    function closeSidebar() {
-      var sidebar = document.getElementById('sidebar');
-      sidebar.classList.add('hidden');
-    }
 
-    // Function to toggle the sidebar
-    function toggleSidebar() {
-      var sidebar = document.getElementById('sidebar');
-      sidebar.classList.toggle('hidden');
-    }
-  </script>
-  <script src="script.js"></script>
+    </script>
 
 </body>
 </html>

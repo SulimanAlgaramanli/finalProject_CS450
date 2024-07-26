@@ -1,16 +1,8 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "Engineering_Projects_Management";
+// هذه الصفحة لإرجاع اخر دفعه تم ادخالها لعرضها في صفحة اضافة فاتورة (فنية او مواد)
 
-// اتصال بقاعدة البيانات
-$conn = new mysqli($servername, $username, $password, $dbname);
+include 'con_db.php';
 
-// التحقق من الاتصال
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
 
 // استقبال معرف المشروع من الطلب القادم
 $projectID = $_POST['projectID'];

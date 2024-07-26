@@ -1,4 +1,7 @@
 <?php
+session_start();
+?>
+<?php
     
     include 'con_db.php';
     include 'formatNumber.php';
@@ -33,43 +36,41 @@
 <div class="master">
     <div class="header">
         <div class="navbar">
-            <div class="left-section">
-                <!-- <div class="sidebar-toggle" onclick="toggleSidebar()"> -->
-                <div class="" onclick="toggleSidebar()">
-                    <i class="fas fa-bars" id="bar"></i>
+        
+        <?php
+            if (isset($_SESSION['user_name'])) {
+                echo '
+                <div class="left-section">
+                    <div class="" onclick="toggleSidebar()">
+                        <i class="fas fa-bars" id="bar"></i>
+                    </div>
                 </div>
+                    <div class="search-box">
+                        <input type="text" placeholder="البحث..." />
+                        <span class="search-icon">&#128269;</span>
+                    </div>
+                    <div class="icons">
+                        <i class="fas fa-bell icon"></i>
+                        <div class="settings-dropdown">
+                            <i class="fas fa-cog icon"></i>
+                            <div class="settings-dropdown-content">
+                                <a href="change_password.php">تغيير كلمة المرور</a>
+                                <a href="logout.php">تسجيل الخروج</a>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="username">' . htmlspecialchars($_SESSION['user_name']) . '</span>
+                    <img src="../icons/user.png" class="img_user" alt="صورة المستخدم" />
             </div>
-            <div class="search-box">
-                <input type="text" placeholder="البحث..." />
-                <span class="search-icon">&#128269;</span>
-            </div>
-            <div class="icons">
-                <i class="fas fa-bell icon"></i>
-                <i class="fas fa-cog icon"></i>
-            </div>
-            <span class="username">اسم المستخدم</span>
-            <img src="../icons/user.png" class="img_user" alt="صورة المستخدم" />
         </div>
-    </div>
-    <div class="contener">
-        <div class="sidebar hidden" id="sidebar">
-            <aside class="sidebar-content">
-                <nav>
-                    <ul>
-                        <li><a href="index.php"><i class="fas fa-home"></i> الصفحة الرئيسية</a></li>
-                        <li><a href="Projects_Table.php"><i class="fas fa-project-diagram"></i>  المشاريع </a></li>
-                        <li><a href="Customers_Payment_Table.php"><i class="fas fa-dollar-sign"></i> دفعات الزبائن </a></li>
-                        <li><a href="MaterialInvoices.php"><i class="fas fa-shopping-cart"></i> فواتير المواد </a></li>
-                        <li><a href="Technician_Invoices_Table.php"><i class="fas fa-file-invoice"></i> فواتير الفنيين </a></li>
-                        <li><a href="customers.php"><i class="fas fa-user-friends"></i> الزبائن </a></li>
-                        <li><a href="employees.php"><i class="fas fa-user-tie"></i> الموظفين </a></li>
-                        <li><a href="Technicians.php"><i class="fas fa-tools"></i> الفنيين </a></li>
-                        <li><a href="Control_Board.php"><i class="fas fa-tachometer-alt"></i> لوحة التحكم </a></li>
-                    </ul>
-                </nav>
-            </aside>
-        </div>
-
+                <div class="contener">';            
+                // استدعاء الـ Sidebar
+                include 'sidebar.php';
+            }else {
+                header("Location: index.php");
+                exit();
+                }
+        ?>
         <h1>بيانات فواتير الفنيين</h1>
         <div class="min-contener">
             <div>
@@ -113,11 +114,15 @@
                         ?>
                     </select>
                     </div>
-
                 </div>
 
                 <div class="box_fillter1">
                     <div class="search-container">
+
+                        <label class="fillter_label" for="search_name"> الزبون:</label>
+                        <input type="text" name="search_name" id="search_name" class="filtter_input_search" placeholder="ابحث عن اسم الزبون" value="<?php echo isset($_GET['search_name']) ? htmlspecialchars($_GET['search_name']) : ''; ?>" />
+                        <button type="submit" class="filtter_icon_search">&#128269;</button>
+                        <div id="space" ></div>
 
                         <label class="fillter_label" for="search_tech"> الفني:</label>
                         <input type="text" name="search_tech" id="search_tech" class="filtter_input_search" placeholder="ابحث عن اسم الفني"  value="<?php echo isset($_GET['search_tech']) ? htmlspecialchars($_GET['search_tech']) : ''; ?>" />
@@ -143,12 +148,24 @@
                         <div id="space"></div>
                         <div id="space"></div>
 
-                    <button class="button_print" onclick="printTable()">
-                        <i class="fas fa-print"></i> طباعة
-                    </button>
-                    <button onclick="location.href='new_TechnicianInvoices.php'" type="button" class="button_add" id="add-Btn">
+                        <?php
+                if (hasPermission($user_type, 33)) {
+                echo '
+                <button class="button_print" onclick="printTable()">
+                    <i class="fas fa-print"></i> طباعة
+                </button>
+                ';
+                }
+?>
+<?php
+                if (hasPermission($user_type, 14)) {
+                echo '
+                    <button onclick="location.href=\'new_TechnicianInvoices.php\'" type="button" class="button_add" id="add-Btn">
                         <i class="fas fa-plus"></i> إضافة
                     </button>
+                    ';
+                }
+                    ?>
                 </div>
             </form>
 
@@ -158,24 +175,28 @@
                         <thead>
                             <tr>
                                 <th >رقم تسلسلي</th>
-                                <th >اسم الفني</th>
+                                <th>اسم الزبون</th>
                                 <th >رقم المشروع</th>
                                 <th >الدفعة الجارية</th>
+                                <th >اسم الفني</th>  
                                 <th >رقم الفاتورة</th>
                                 <th >التخصص</th>
                                 <th >القيمة د.ل</th>
-                                <th >تاريخ الفاتورة</th>
+                                <th class='date-cell'>تاريخ الفاتورة</th>
                                 <th >طريقة الدفع</th>  
                                 <th >البيان</th>
                                 <th >صورة الفاتورة</th>
-                                <th >الإجراءات</th>
+                                <?php
+                                    if (hasPermission($user_type, 15)) {
+                                    echo "
+                                        <th>الإجراءات</th>
+                                    ";
+                                    }
+                                "
                             </tr>
                         </thead>
-                        <tbody>
-                            
-                            
-                            <?php
-                            
+                        <tbody>";
+
 
                                 // Initialize variables for filters
                                 $filter_year = isset($_GET['year']) ? $_GET['year'] : '';
@@ -185,16 +206,27 @@
                                 $search_tech = isset($_GET['search_tech']) ? $_GET['search_tech'] : '';
                                 $search_project = isset($_GET['search_project']) ? $_GET['search_project'] : '';
                                 $search_PaymentID = isset($_GET['PaymentID']) ? $_GET['PaymentID'] : '';
-
+                                $search_name = isset($_GET['search_name']) ? $_GET['search_name'] : '';
 
                                 // Build SQL query with necessary joins
-                                $sql = "SELECT ti.InvoiceID , tech.TechnicianName, ti.ProjectID , ti.PaymentID, ti.InvoiceNumber, s.SpecializationName, ti.Description, ti.amount, ti.InvoiceDate, pm.PaymentMethodName, ti.InvoiceImage
+                                $sql = "SELECT ti.InvoiceID, c.CustomerName, tech.TechnicianName, ti.ProjectID , ti.PaymentID, ti.InvoiceNumber, s.SpecializationName, ti.Description, ti.amount, ti.InvoiceDate, pm.PaymentMethodName, ti.InvoiceImage
                                         FROM technicianinvoices ti          
+
+                                        LEFT JOIN projects AS p ON ti.ProjectID = p.ProjectID 
+                                        LEFT JOIN customers AS c ON p.CustomerID = c.CustomerID 
                                         LEFT JOIN technicians  AS tech ON ti.TechnicianID  = tech.TechnicianID 
                                         LEFT JOIN specializations s ON ti.SpecializationID  = s.SpecializationID
                                         LEFT JOIN paymentmethods pm ON ti.PaymentMethodID  = pm.PaymentMethodID
                                         ";
-                                $where_clauses = [];
+                                        $where_clauses = [];
+                                        if (($_SESSION['user_type']) == 2 )
+                                        {
+                                            $where_clauses[] = "c.CustomerId  =  ". $_SESSION['user_id'];
+                                        }else if (($_SESSION['user_type']) == 3 )
+                                        {
+                                            $where_clauses[] =" p.SupervisingEngineerID   =  ". $_SESSION['user_id'];
+                                        }
+                                
                                 if (isset($_GET['year']) && !empty($_GET['year'])) {
                                     $year = $_GET['year'];
                                     $where_clauses[] = "YEAR(ti.InvoiceDate) = '$year'";
@@ -206,6 +238,9 @@
                                 if (isset($_GET['paymentmethods']) && !empty($_GET['paymentmethods'])) {
                                     $paymentmethods = $_GET['paymentmethods'];
                                     $where_clauses[] = "ti.PaymentMethodID = '$paymentmethods'";
+                                }
+                                if (!empty($search_name)) {
+                                    $where_clauses[] = "c.CustomerName LIKE '%$search_name%'";
                                 }
                                 if (isset($_GET['search_tech']) && !empty($_GET['search_tech'])) {
                                     $search_tech = $_GET['search_tech'];
@@ -237,33 +272,51 @@
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
                                         echo "<tr>";
-                                        echo "<td>" . $row["InvoiceID"] . "</td>";
-                                        echo "<td>" . $row["TechnicianName"] . "</td>";
-                                        echo "<td>" . $row["ProjectID"] . "</td>";
-                                        echo "<td>" . $row["PaymentID"] . "</td>";
-                                        echo "<td>" . $row["InvoiceNumber"] . "</td>";
-                                        echo "<td>" . $row["SpecializationName"] . "</td>";
-                                        echo "<td>" . myFormatNumber($row["amount"]) . "</td>";
-                                        echo "<td>" . $row["InvoiceDate"] . "</td>";
-                                        echo "<td>" . $row["PaymentMethodName"] . "</td>";
-                                        echo "<td>" . $row["Description"] . "</td>";
-                                        echo "<td><a href='data:image;base64," . base64_encode($row['InvoiceImage']) . "' target='_blank'><img class='invoice-img' height='100' width='100' src='data:image;base64," . base64_encode($row['InvoiceImage']) . "'/></a></td>";
-                                        echo "<td>    
-                                                <div class=\"action-buttons\">
-                                                    <form class='botton_table' method='GET' action='edit_T_invoice.php' style='display: inline-block;'>
-                                                        <input type='hidden' name='InvoiceID' value='" . $row["InvoiceID"] . "'>
-                                                        <button class='button_edit' type='submit'>
-                                                            <i id='i_edit' class='fas fa-edit'></i> تعديل
-                                                        </button>
-                                                    </form>
-                                                    <form class='botton_table' method='POST' action='delete_T_invoice.php'>
-                                                        <input type='hidden' name='InvoiceID' value='" . $row["InvoiceID"] . "'>
-                                                        <button class='button_delet' type='submit' onclick='return confirm(\"هل أنت متأكد من الحذف؟\")'>
-                                                            <i id='i_del' class='fas fa-trash-alt'></i> حذف
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </td>";
+                                            echo "<td>" . $row["InvoiceID"] . "</td>";
+                                            echo "<td>" . $row["CustomerName"] . "</td>";
+                                            echo "<td>" . $row["ProjectID"] . "</td>";
+                                            echo "<td>" . $row["PaymentID"] . "</td>";
+                                            echo "<td>" . $row["TechnicianName"] . "</td>";
+                                            echo "<td>" . $row["InvoiceNumber"] . "</td>";
+                                            echo "<td>" . $row["SpecializationName"] . "</td>";
+                                            echo "<td>" . myFormatNumber($row["amount"]) . "</td>";
+                                            echo "<td class='date-cell'>" . $row["InvoiceDate"] . "</td>";
+                                            echo "<td>" . $row["PaymentMethodName"] . "</td>";
+                                            echo "<td>" . $row["Description"] . "</td>";
+                                            echo "<td>
+                                                    <a href='/Engineering_Projects_Management/photo/TechnicianInvoices/". $row["InvoiceImage"] ."'>".$row['InvoiceImage']."</a>
+                                                </td>";  
+                                                
+                                                
+
+
+                                                if (hasPermission($user_type, 15)) {
+                                                    echo    "<td>                                                    
+                                                                <div class=\"action-buttons\">
+            
+                                                                    <form class='botton_table' method='GET' action='edit_T_invoice.php' style='display: inline-block;'>
+                                                                    <input type='hidden' name='InvoiceID' value='" . $row["InvoiceID"] . "'>
+                                                                    <button class='button_edit' type='submit'>
+                                                                        <i id='i_edit' class='fas fa-edit'></i> تعديل
+                                                                    </button>
+                                                                    ";
+                                                                    }
+                                                                    "    
+                                                                    </form>
+                                                                    <form class='botton_table' method='POST' action='delete_T_invoice.php'>
+                                                                    <input type='hidden' name='InvoiceID' value='" . $row["InvoiceID"] . "'>
+                                                                        ";
+                                                                        if (hasPermission($user_type, 16)) {
+                                                                        echo "
+                                                                            <button class='button_delet' type='submit' onclick='return confirm(\"هل أنت متأكد من الحذف؟\")'>
+                                                                                <i id='i_del' class='fas fa-trash-alt'></i> حذف
+                                                                            </button>
+                                                                        ";
+                                                                        }
+                                                                        "
+                                                                        </form>
+                                                            </div>
+                                                        </td>";
                                         echo "</tr>";
                                     }
                                 } else {

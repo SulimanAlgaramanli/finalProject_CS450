@@ -1,4 +1,9 @@
 <?php
+session_start();
+?>
+<?php
+
+
     include 'con_db.php';
     include 'formatNumber.php';
 
@@ -18,6 +23,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>المشاريع</title>
     <link rel="icon" href="../icons/engineer.png" type="image/x-icon" />
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
 
     <link
         rel="stylesheet"
@@ -33,78 +39,42 @@
 <div class="master">
     <div class="header">
         <div class="navbar">
-            <div class="left-section">
-                <div class="" onclick="toggleSidebar()">
-                    <i class="fas fa-bars" id="bar" ></i>
+            
+
+        <?php
+            if (isset($_SESSION['user_name'])) {
+                echo '
+                <div class="left-section">
+                    <div class="" onclick="toggleSidebar()">
+                        <i class="fas fa-bars" id="bar"></i>
+                    </div>
                 </div>
+                    <div class="search-box">
+                        <input type="text" placeholder="البحث..." />
+                        <span class="search-icon">&#128269;</span>
+                    </div>
+                    <div class="icons">
+                        <i class="fas fa-bell icon"></i>
+                        <div class="settings-dropdown">
+                            <i class="fas fa-cog icon"></i>
+                            <div class="settings-dropdown-content">
+                                <a href="change_password.php">تغيير كلمة المرور</a>
+                                <a href="logout.php">تسجيل الخروج</a>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="username">' . htmlspecialchars($_SESSION['user_name']) . '</span>
+                    <img src="../icons/user.png" class="img_user" alt="صورة المستخدم" />
             </div>
-            <div class="search-box">
-                <input type="text" placeholder="البحث..." />
-                <span class="search-icon">&#128269;</span>
-            </div>
-            <div class="icons">
-                <i class="fas fa-bell icon"></i>
-                <i class="fas fa-cog icon"></i>
-            </div>
-            <span class="username">اسم المستخدم</span>
-            <img src="../icons/user.png" class="img_user" alt="صورة المستخدم" />
         </div>
-    </div>
-    <div class="contener">
-    <div class="sidebar hidden" id="sidebar">
-            <aside class="sidebar-content">
-                <nav>
-                    <ul>
-
-                        <li>
-                            <a href="index.php"
-                            ><i class="fas fa-home"></i> الصفحة الرئيسية</a>
-                        </li>
-
-                        <li>
-                            <a href="Projects_Table.php">
-                            <i class="fas fa-project-diagram"></i>  المشاريع </a>
-                        </li>
-
-                        <li>
-                            <a href="Customers_Payment_Table.php">
-                            <i class="fas fa-dollar-sign"></i> دفعات الزبائن </a>
-                        </li>
-
-                        <li>
-                            <a href="MaterialInvoices.php">
-                            <i class="fas fa-shopping-cart"></i> فواتير المواد </a>
-                        </li>
-
-                        <li>
-                            <a href="Technician_Invoices_Table.php">
-                            <i class="fas fa-file-invoice"></i> فواتير الفنيين </a>
-                        </li>
-
-                        <li>
-                            <a href="customers.php">
-                            <i class="fas fa-user-friends"></i> الزبائن </a>
-                        </li>
-
-                        <li>
-                            <a href="employees.php">
-                            <i class="fas fa-user-tie"></i> الموظفين </a>
-                        </li>
-
-                        <li>
-                            <a href="Technicians.php">
-                            <i class="fas fa-tools"></i> الفنيين </a>
-                        </li>
-
-                        <li>
-                            <a href="Control_Board.php">
-                            <i class="fas fa-tachometer-alt"></i> لوحة التحكم </a>
-                        </li>
-
-                    </ul>
-                </nav>
-            </aside>
-        </div>
+                <div class="contener">';            
+                // استدعاء الـ Sidebar
+                include 'sidebar.php';
+            }else {
+                    header("Location: index.php");
+                    exit();
+                }
+        ?>
         <h1 >بيانات المشاريع</h1>
 
         <div class="min-contener" style="margin-right: 160px;">
@@ -135,19 +105,6 @@
                 ?>
             </select>
 
-
-
-                <!-- <label class="fillter_label" for="status">حالة المشروع:</label>
-                <select class="fillter_label" name="status" id="status" onchange="this.form.submit()">
-                    <option value="">الكل</option>
-                    <option value="تحت التنفيذ" <?php // if(isset($_GET['status']) && $_GET['status'] == 'تحت التنفيذ') echo 'selected'; ?>>تحت التنفيذ</option>
-                    <option value="مكتمل" <?php // if(isset($_GET['status']) && $_GET['status'] == 'مكتمل') echo 'selected'; ?>>مكتمل</option>
-                    <option value="متوقف" <?php // if(isset($_GET['status']) && $_GET['status'] == 'متوقف') echo 'selected'; ?>>متوقف</option>
-                </select> -->
-
-            
-
-
         </div>
         <div class="box_fillter3">
             <div class="search-container">
@@ -168,18 +125,26 @@
                             <i class="fas fa-refresh"></i>الفلترة 
                         </button>
                         <div id="space"></div>
+                        <button onclick="window.location.href='export_projects.php'">تصدير إلى إكسل</button>
                         <div id="space"></div>
-
-
+            <?php
+                if (hasPermission($user_type, 30)) {
+                echo '
                 <button class="button_print" onclick="printTable()">
                     <i class="fas fa-print"></i> طباعة
                 </button>
+                ';
+                }
 
-
-
-                        <button onclick="location.href='newProject.php'" type="button" class="button_add" id="add-Btn">
+                if (hasPermission($user_type, 2)) {
+                    echo '
+                        <button onclick="location.href=\'newProject.php\'" type="button" class="button_add" id="add-Btn">
                             <i class="fas fa-plus"></i> إضافة
                         </button>
+                    ';
+                }
+                ?>
+
                 </div>
             </form>
 
@@ -191,19 +156,25 @@
                             <tr >
                                 <th>رقم المشروع</th>
                                 <th>اسم الزبون</th>
-                                <th>مدير المشروع</th>
                                 <th>الموقع</th>
-                                <th>تاريخ البدء</th>
-                                <th>تاريخ الانتهاء</th>
+                                <th class='date-cell'>تاريخ البدء</th>
+                                <th class='date-cell'>تاريخ الانتهاء</th>
                                 <th>حالة المشروع</th>
                                 <th>نسبة الانجاز</th>
                                 <th>إجمالي الدفعات د.ل</th>
                                 <th>اجمالي المصروفات د.ل</th>
-                                <th></th>
+                                <th>مدير المشروع</th>
+                                <th>فنيين المشروع</th>
+                                <?php
+                                if (hasPermission($user_type, 3)) {
+                                    echo "
+                                        <th>الإجراءات</th>
+                                    ";
+                                    }
+                                "
                             </tr>
                         </thead>
-                        <tbody>
-                            <?php
+                        <tbody>";
 
                             // استلام قيم الفلاتر من طلب GET
 
@@ -223,9 +194,9 @@
                                         projects.ProgressPercentage, 
                                         COALESCE(SUM(py.amount), 0) AS totalPayments, 
                                         COALESCE(SUM(
-                                            IFNULL((SELECT SUM(mi.amount) FROM materialinvoices AS mi WHERE mi.project_id = projects.ProjectID AND mi.payment_id = py.PaymentID), 0) + 
-                                            IFNULL((SELECT SUM(ti.amount) FROM technicianinvoices AS ti WHERE ti.ProjectID = projects.ProjectID AND ti.PaymentID = py.PaymentID), 0) + 
-                                            (py.Amount - (py.Amount / (1 + (projects.rate_Of_CostPlus / 100))))
+                                            IFNULL((py.Amount - (IFNULL(py.Amount, 0)  / (1 + (projects.rate_Of_CostPlus / 100)))) , 0) 
+                                            + IFNULL((SELECT SUM(mi.amount) FROM materialinvoices AS mi WHERE mi.project_id = projects.ProjectID AND mi.payment_id = py.paymentNumber), 0) 
+                                            + IFNULL((SELECT SUM(ti.amount) FROM technicianinvoices AS ti WHERE ti.ProjectID = projects.ProjectID AND ti.PaymentID = py.paymentNumber), 0)
                                         ), 0) AS TotalExpenses 
                                     FROM 
                                         projects 
@@ -233,7 +204,17 @@
                                     JOIN customers AS cus ON projects.CustomerID = cus.CustomerId 
                                     JOIN employees AS eng ON projects.SupervisingEngineerID = eng.employeeId 
                                     LEFT JOIN payments AS py ON projects.ProjectID = py.ProjectID 
-                                    WHERE 1=1";
+                                    WHERE 1=1 ";
+
+                                    if (($_SESSION['user_type']) == 2 )
+                                    {
+                                        $sql .=" AND cus.CustomerId  =  ". $_SESSION['user_id'];
+                                    }else if (($_SESSION['user_type']) == 3 )
+                                    {
+                                        $sql .=" AND projects.SupervisingEngineerID  =  ". $_SESSION['user_id'];
+                                    }
+
+
 
                             if (!empty($filter_year)) {
                                 $sql .= " AND YEAR(ProjectStartDate) = '$filter_year'";
@@ -259,10 +240,8 @@
                                         projects.ProjectEndDate, 
                                         projectstatus.statusname, 
                                         projects.ProgressPercentage;
-                                    
                                     ";
 
-                            // echo($sql);
                             $result = $conn->query($sql);
                             if ($result === false) {
                                 echo "خطأ في الاستعلام: " . $conn->error;
@@ -272,27 +251,52 @@
                                         echo "<tr>";
                                         echo "<td><a href='project_details.php?project_id=" . $row["ProjectID"] . "' target='_blank' style='display: block; width: 100%; height: 100%;'>" . $row["ProjectID"] . "</a></td>";
                                         echo "<td>" . $row["CustomerName"] . "</td>";
-                                        echo "<td>" . $row["engineer_username"] . "</td>";
                                         echo "<td>" . $row["LandLocation"] . "</td>";
-                                        echo "<td>" . $row["ProjectStartDate"] . "</td>";
-                                        echo "<td>" . $row["ProjectEndDate"] . "</td>";
+                                        echo "<td class='date-cell'>" . $row["ProjectStartDate"] . "</td>";
+                                        echo "<td class='date-cell'>" . $row["ProjectEndDate"] . "</td>";
                                         echo "<td>" . $row["statusname"] . "</td>";
                                         echo "<td>" . $row["ProgressPercentage"] . " %</td>";
                                         echo "<td>" . myFormatNumber($row["totalPayments"]) . "</td>";
                                         echo "<td>" . myFormatNumber($row["TotalExpenses"]) . "</td>";
+                                        echo "<td>" . $row["engineer_username"] . "</td>";
+                                        echo "
+                                            <form class='botton_table' method='GET' action='project_Technicians.php' style='display: inline-block;'>
+                                            <input type='hidden' name='ProjectID' value='" . $row["ProjectID"] . "'>
+                                            <td>    
+                                                <button class='botton' type='submit'>
+                                                    تفاصيل
+                                                </button>
+                                            </td>
+                                            </form>
+                                            ";
+
+                                        // <a href='project_Technicians.php' target='_blank' style='display: block; width: 100%; height: 100%;'>  </a>
                                         
+                                        if (hasPermission($user_type, 3)) {
                                         echo    "<td>                                                    
                                                     <div class=\"action-buttons\">
 
                                                         <form class='botton_table' method='GET' action='edit_project.php' style='display: inline-block;'>
-                                                            <input type='hidden' name='project_id' value='" . $row["ProjectID"] . "'>
-                                                            <button class='button_edit' type='submit'>
+                                                            <input type='hidden' name='ProjectID' value='" . $row["ProjectID"] . "'>
+
+                                                        <button class='button_edit' type='submit'>
                                                                 <i id='i_edit' class='fas fa-edit'></i> تعديل
                                                             </button>
+                                                        ";
+                                                        }
+                                                        "    
                                                         </form>
                                                         <form class='botton_table' method='POST' action='delete_project.php'>
-                                                            <input type='hidden' name='project_id' value='" . $row["ProjectID"] . "'>
-                                                            <button class='button_delet' type='submit' onclick='return confirm(\"هل أنت متأكد من الحذف؟\")'><i id='i_del' class='fas fa-trash-alt'></i> حذف </button>
+                                                            <input type='hidden' name='ProjectID' value='" . $row["ProjectID"] . "'>
+                                                            ";
+                                                            if (hasPermission($user_type, 4)) {
+                                                            echo "
+                                                                <button class='button_delet' type='submit' onclick='return confirm(\"هل أنت متأكد من الحذف؟\")'>
+                                                                    <i id='i_del' class='fas fa-trash-alt'></i> حذف 
+                                                                </button>
+                                                            ";
+                                                            }
+                                                            "
                                                         </form>
                                                     </div>
                                                 </td>";

@@ -16,7 +16,7 @@ if (!isset($_SESSION['user_name'])) {
 
 $user_type = $_SESSION['user_type'];
 ?>
-<div class="sidebar hidden"  id="sidebar" style="top: 5px;">
+<div class="sidebar hidden"   id="sidebar" style=" right: 0px;  top: 10px;">
     <aside class="sidebar-content">
         <nav>
             <ul>

@@ -1,19 +1,7 @@
-
-
-
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "Engineering_Projects_Management";
+//  هذه الصفحة لإرجاع اخر رقم دفعه تم اضافته و +1 عليه واعتبار هذا رقم الدفعه الجديد
 
-// إنشاء اتصال بقاعدة البيانات
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// التحقق من الاتصال
-if ($conn->connect_error) {
-    die("فشل الاتصال: " . $conn->connect_error);
-}
+include 'con_db.php';
 
 // استقبال معرف المشروع من الطلب POST
 $projectID = $_POST['projectID'];

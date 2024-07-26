@@ -1,4 +1,7 @@
 <?php
+session_start();
+?>
+<?php
     
     include 'con_db.php';
     include 'formatNumber.php';
@@ -86,8 +89,29 @@ h2 {
                     <li class="nav-item"><a href="#construction-stages">مراحل البناء</a></li>
                 </ul>
             </div>
-            <span class="username">اسم المستخدم</span>
-            <img src="../icons/user.png" class="img_user" alt="صورة المستخدم" />
+            <div class="search-box">
+                <input type="text" placeholder="البحث..." />
+                <span class="search-icon">&#128269;</span>
+            </div>
+            <?php
+        if (isset($_SESSION['user_name'])) {
+            echo '
+            
+                <div class="icons">
+                    <i class="fas fa-bell icon"></i>
+                    <div class="settings-dropdown">
+                        <i class="fas fa-cog icon"></i>
+                        <div class="settings-dropdown-content">
+                            <a href="change_password.php">تغيير كلمة المرور</a>
+                            <a href="logout.php">تسجيل الخروج</a>
+                        </div>
+                    </div>
+                </div>
+                <span class="username">' . htmlspecialchars($_SESSION['user_name']) . '</span>
+                <img src="../icons/user.png" class="img_user" alt="صورة المستخدم" />
+            ';
+        } 
+        ?>
         </div>
     </div>
     <div class="contener">

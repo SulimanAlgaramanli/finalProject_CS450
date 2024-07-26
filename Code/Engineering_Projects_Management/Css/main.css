@@ -202,7 +202,7 @@ body {
 }
 
 .master {
-  background-color: rgb(239, 239, 239);
+  background-color: #ffffff;
   height: 100vh;
   width: 205.8vh;
 }
@@ -268,7 +268,7 @@ body {
 .table {
   font-size: 15px;
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: collapse; 
   border: 1px solid #000000;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   align-items: center;
@@ -282,9 +282,10 @@ td {
 }
 
 th {
+
   position: sticky;
   top: 0;
-  padding: 30px;
+  padding: 20px;
   font-size: 18px;
   font-weight: bold;
   background-color: #b8d0ff;
@@ -402,8 +403,8 @@ button {
 
 .content-box {
   width: 100%;
-  max-width: 650px;
-  max-height: 400px;
+  max-width: 1400px;
+  max-height: 600px;
   margin: 50px auto;
   padding: 20px;
   background-color: #f9f9f9;

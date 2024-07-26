@@ -1,16 +1,7 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "Engineering_Projects_Management";
 
-// اتصال بقاعدة البيانات
-$conn = new mysqli($servername, $username, $password, $dbname);
 
-// التحقق من الاتصال
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+include 'con_db.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // تعريف المتغيرات والتأكد من قيمها
@@ -24,12 +15,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $PaymentMethodID = isset($_POST['PaymentMethodID']) ? $_POST['PaymentMethodID'] : null;
     $TechnicianID = isset($_POST['TechnicianID']) ? $_POST['TechnicianID'] : null;
 
-    // التحقق من صورة الفاتورة وتحويلها إلى Base64
-    $imgContent = null;
-    if (isset($_FILES['InvoiceImagePath']) && $_FILES['InvoiceImagePath']['error'] === UPLOAD_ERR_OK) {
-        $fileTmpPath = $_FILES['InvoiceImagePath']['tmp_name'];
-        $imgContent = file_get_contents($fileTmpPath);
+    $fileName = Null;
+    if (!empty($_FILES['InvoiceImage']) && $_FILES['InvoiceImage']['error'] === UPLOAD_ERR_OK) {
+        $fileTmpPath = $_FILES['InvoiceImage']['tmp_name'];
+        $fileName = $_FILES['InvoiceImage']['name'];
+        $fileSize = $_FILES['InvoiceImage']['size'];
+        $fileType = $_FILES['InvoiceImage']['type'];
+        $fileNameCmps = explode(".", $fileName);
+        $fileExtension = strtolower(end($fileNameCmps));
+        $allowedfileExtensions = array('jpg', 'gif', 'png', 'jpeg');
+
+        if (in_array($fileExtension, $allowedfileExtensions)) {
+            $uploadFileDir = 'C:\\xampp\\htdocs\\Engineering_Projects_Management\\photo\\TechnicianInvoices\\';
+            $dest_path = $uploadFileDir . $fileName;
+
+            if (move_uploaded_file($fileTmpPath, $dest_path)) {
+                // echo 'File is successfully uploaded.';
+            } else {
+                // echo 'There was an error moving the uploaded file.';
+            }
+        } else {
+            // echo 'Upload failed. Allowed file types: ' . implode(',', $allowedfileExtensions);
+        }
     }
+
 
     // استعلام SQL لإدخال بيانات الفاتورة
     $sql = "INSERT INTO `technicianinvoices` (`ProjectID`, `InvoiceNumber`, `PaymentID`, `SpecializationID`, `Description`, `Amount`, `InvoiceDate`, `PaymentMethodID`, `TechnicianID`, `InvoiceImage`) 
@@ -37,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt = $conn->prepare($sql);
     // ربط المتغيرات بالاستعلام
-    $stmt->bind_param("iiiissisis", $ProjectID, $InvoiceNumber, $PaymentID, $SpecializationID, $Description, $Amount, $InvoiceDate, $PaymentMethodID, $TechnicianID, $imgContent);
+    $stmt->bind_param("iiiisdsiis", $ProjectID, $InvoiceNumber, $PaymentID, $SpecializationID, $Description, $Amount, $InvoiceDate, $PaymentMethodID, $TechnicianID, $fileName);
 
     if ($stmt->execute()) {
         echo "<script>alert('تمت إضافة الفاتورة بنجاح!');</script>";
@@ -49,6 +58,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $stmt->close();
 }
+
+
+// استعلام SQL لاسترجاع أسماء الزبائن
+$sql_cus = "SELECT CustomerId , CustomerName FROM Customers WHERE userType = 2 ORDER BY CustomerName";
+$result_cus = $conn->query($sql_cus);
+
 
 // جلب البيانات من جداول المشاريع، التخصصات، طرق الدفع والمتاجر
 $projects = $conn->query("SELECT ProjectID FROM projects ORDER BY ProjectID ASC");
@@ -119,17 +134,27 @@ $conn->close();
             <div class="form-container">
                 <h1>إضافة فاتورة فني</h1>
                 <div class="form-group">
+
+
+                    <label for="CustomerId">اسم الزبون:</label>
+                    <select id="CustomerId" name="CustomerId" required>
+                        <option value="" disabled selected>اختر الزبون</option>
+                        <?php
+                        if ($result_cus->num_rows > 0) {
+                            while ($row = $result_cus->fetch_assoc()) {
+                                echo "<option value='" . $row['CustomerId'] . "'>" . $row['CustomerName'] . "</option>";
+                            }
+                        } else {
+                            echo "<option value=''>لا يوجد زبائن متاحين</option>";
+                        }
+                        ?>
+                    </select>
+
                     <label for="ProjectID">رقم المشروع:</label>
                     <select id="ProjectID" name="ProjectID" required>
                         <option value="" disabled selected>اختر المشروع</option>
-                        <?php
-                        if ($projects->num_rows > 0) {
-                            while($row = $projects->fetch_assoc()) {
-                                echo "<option value='" . $row["ProjectID"] . "'>" . $row["ProjectID"] . "</option>";
-                            }
-                        }
-                        ?>
-                    </select><br />
+                        <!-- سيتم تحديث هذه الخيارات باستخدام AJAX -->
+                    </select>
                     
                     <label for="InvoiceNumber">رقم الفاتورة:</label>
                     <input type="text" id="InvoiceNumber" name="InvoiceNumber" readonly required /><br />
@@ -182,8 +207,8 @@ $conn->close();
                         ?>
                     </select><br />
 
-                    <label for="InvoiceImagePath">صورة الفاتورة:</label>
-                    <input type="file" id="InvoiceImagePath" name="InvoiceImagePath" accept="image/*" /><br />
+                    <label for="InvoiceImage">صورة الفاتورة:</label>
+                    <input type="file" id="InvoiceImage" name="InvoiceImage"  /><br />
                 </div>
                 <button type="submit" class="button_save"><i class="fas fa-save"></i> حفظ </button>
                 <button type="button" class="button_cancel" onclick="window.location.href='Technician_Invoices_Table.php';"><i class="fas fa-close"></i> إلغاء </button>            
@@ -192,43 +217,61 @@ $conn->close();
     </div>
 
 
+
     <script>
-        $(document).ready(function(){
-    // عند تغيير اختيار رقم المشروع
-    $('#ProjectID ').change(function(){
-        var projectID = $(this).val();
-        
-        // استخدام AJAX لجلب رقم الفاتورة
-        $.ajax({
-            url: 'get_T_invoice_number.php',
-            method: 'POST',
-            data: { projectID: projectID },
-            success: function(response){
-                var data = JSON.parse(response);
-                $('#InvoiceNumber').val(data.invoiceNumber); // تعيين قيمة رقم الفاتورة
-            },
-            error: function(){
-                alert('حدث خطأ أثناء استرداد رقم الفاتورة.');
-            }
-        });
+        $(document).ready(function() {
+            $('#CustomerId').change(function(){
+                var customerId = $(this).val();
+                if (customerId) {
+                    $.ajax({
+                        url: 'get_projects.php',
+                        type: 'POST',
+                        data: {CustomerId: customerId},
+                        success: function(data) {
+                            $('#ProjectID').html(data);
+                        },
+                        error: function() {
+                            alert('حدث خطأ أثناء استرداد المشاريع.');
+                        }
+                    });
+                } else {
+                    $('#ProjectID').html('<option value="">اختر الزبون أولاً</option>');
+                }
+            });
 
-        // استخدام AJAX لجلب رقم الدفعة
-        $.ajax({
-            url: 'get_payment_number.php',
-            method: 'POST',
-            data: { projectID: projectID },
-            success: function(response){
-                var data = JSON.parse(response);
-                $('#PaymentID').val(data.paymentNumber); // تعيين قيمة رقم الدفعة
-            },
-            error: function(){
-                alert('حدث خطأ أثناء استرداد رقم الدفعة.');
-            }
-        });
-    });
-});
+            $('#ProjectID').change(function(){
+                var projectID = $(this).val();
+                
+                $.ajax({
+                    url: 'get_T_invoice_number.php',
+                    method: 'POST',
+                    data: { projectID: projectID },
+                    success: function(response){
+                        var data = JSON.parse(response);
+                        $('#InvoiceNumber').val(data.invoiceNumber);
+                    },
+                    error: function(){
+                        alert('حدث خطأ أثناء استرداد رقم الفاتورة.');
+                    }
+                });
 
+                $.ajax({
+                    url: 'get_payment_number_invoice.php',
+                    method: 'POST',
+                    data: { projectID: projectID },
+                    success: function(response){
+                        var data = JSON.parse(response);
+                        $('#PaymentID').val(data.paymentNumber);
+                    },
+                    error: function(){
+                        alert('حدث خطأ أثناء استرداد رقم الدفعة.');
+                    }
+                });
+            });
+        });
     </script>
-
+    <script src="script.js"></script>
 </body>
 </html>
+
+

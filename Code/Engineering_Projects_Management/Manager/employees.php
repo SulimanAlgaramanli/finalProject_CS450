@@ -1,4 +1,7 @@
 <?php
+session_start();
+?>
+<?php
     
     include 'con_db.php';
     include 'formatNumber.php';
@@ -18,60 +21,41 @@
 <div class="master">
     <div class="header">
         <div class="navbar">
-            <div class="left-section">
-                <div class="" onclick="toggleSidebar()">
-                    <i class="fas fa-bars" id="bar"></i>
+    
+        <?php
+            if (isset($_SESSION['user_name'])) {
+                echo '
+                <div class="left-section">
+                    <div class="" onclick="toggleSidebar()">
+                        <i class="fas fa-bars" id="bar"></i>
+                    </div>
                 </div>
+                    <div class="search-box">
+                        <input type="text" placeholder="البحث..." />
+                        <span class="search-icon">&#128269;</span>
+                    </div>
+                    <div class="icons">
+                        <i class="fas fa-bell icon"></i>
+                        <div class="settings-dropdown">
+                            <i class="fas fa-cog icon"></i>
+                            <div class="settings-dropdown-content">
+                                <a href="change_password.php">تغيير كلمة المرور</a>
+                                <a href="logout.php">تسجيل الخروج</a>
+                            </div>
+                        </div>
+                    </div>
+                    <span class="username">' . htmlspecialchars($_SESSION['user_name']) . '</span>
+                    <img src="../icons/user.png" class="img_user" alt="صورة المستخدم" />
             </div>
-            <div class="search-box">
-                <input type="text" placeholder="البحث..." />
-                <span class="search-icon">&#128269;</span>
-            </div>
-            <div class="icons">
-                <i class="fas fa-bell icon"></i>
-                <i class="fas fa-cog icon"></i>
-            </div>
-            <span class="username">اسم المستخدم</span>
-            <img src="../icons/user.png" class="img_user" alt="صورة المستخدم" />
         </div>
-    </div>
-    <div class="contener">
-        <div class="sidebar hidden" id="sidebar">
-            <aside class="sidebar-content">
-                <nav>
-                    <ul>
-                        <li>
-                            <a href="index.php"><i class="fas fa-home"></i> الصفحة الرئيسية</a>
-                        </li>
-                        <li>
-                            <a href="Projects_Table.php"><i class="fas fa-project-diagram"></i> المشاريع </a>
-                        </li>
-                        <li>
-                            <a href="Customers_Payment_Table.php"><i class="fas fa-dollar-sign"></i> دفعات الزبائن </a>
-                        </li>
-                        <li>
-                            <a href="MaterialInvoices.php"><i class="fas fa-shopping-cart"></i> فواتير المواد </a>
-                        </li>
-                        <li>
-                            <a href="Technician_Invoices_Table.php"><i class="fas fa-file-invoice"></i> فواتير الفنيين </a>
-                        </li>
-                        <li>
-                            <a href="customers.php"><i class="fas fa-user-friends"></i> الزبائن </a>
-                        </li>
-                        <li>
-                            <a href="employees.php"><i class="fas fa-user-tie"></i> الموظفين </a>
-                        </li>
-                        <li>
-                            <a href="Technicians.php"><i class="fas fa-tools"></i> الفنيين </a>
-                        </li>
-                        <li>
-                            <a href="Control_Board.php"><i class="fas fa-tachometer-alt"></i> لوحة التحكم </a>
-                        </li>
-                    </ul>
-                </nav>
-            </aside>
-        </div>   
-        
+                <div class="contener">';            
+                // استدعاء الـ Sidebar
+                include 'sidebar.php';
+            }else {
+                    header("Location: index.php");
+                    exit();
+                }
+        ?>
         <h1>بيانات الموظفين</h1>
 
         <div class="min-contener" style="margin-right: 160px;">
@@ -99,13 +83,24 @@
                     
                 <!-- أزرار الطباعة والإضافة -->
                 <div class="div_print_add_button">
-                    <button class="button_print" onclick="printTable()">
-                        <i class="fas fa-print"></i> طباعة
-                    </button>
+                <?php
+                if (hasPermission($user_type, 35)) {
+                echo '
+                <button class="button_print" onclick="printTable()">
+                    <i class="fas fa-print"></i> طباعة
+                </button>
+                ';
+                }
 
-                    <button onclick="location.href='SingUp_For_employees.php'" type="button" class="button_add" id="add-Btn">
-                        <i class="fas fa-plus"></i> إضافة
-                    </button>
+                if (hasPermission($user_type, 22)) {
+                    echo '
+                        <button onclick="location.href=\'SingUp_For_employees.php\'" type="button" class="button_add" id="add-Btn">
+                            <i class="fas fa-plus"></i> إضافة
+                        </button>
+                    ';
+                }
+                ?>
+                    
                 </div>
             </form>
 
@@ -120,25 +115,16 @@
                                 <th>الايميل</th>
                                 <th>الهاتف</th>
                                 <th>تاريخ الانضمام</th>
-                                <th></th>
+                                <?php
+                                    if (hasPermission($user_type, 23)) {
+                                    echo "
+                                        <th>الإجراءات</th>
+                                    ";
+                                    }
+                                "
                             </tr>
                         </thead>
-                        <tbody>    
-                        
-                        <?php
-                            // تعيين معلومات الاتصال بقاعدة البيانات
-                            $servername = "localhost";
-                            $username = "root";
-                            $password = "";
-                            $dbname = "Engineering_Projects_Management";
-
-                            // إنشاء اتصال بقاعدة البيانات
-                            $conn = new mysqli($servername, $username, $password, $dbname);
-
-                            // التحقق من الاتصال
-                            if ($conn->connect_error) {
-                                die("فشل الاتصال: " . $conn->connect_error);
-                            }
+                        <tbody>";
 
                             // استلام قيم الفلاتر من طلب GET
                             $filter_year = isset($_GET['year']) ? $_GET['year'] : '';
@@ -182,20 +168,36 @@
                                         echo "<td>" . $row["email"] . "</td>";
                                         echo "<td>" . $row["employeePhone"] . "</td>";
                                         echo "<td>" . $row["joinDate"] . "</td>";
-                                        echo "<td>
-                                            <div class=\"action-buttons\">
-                                                <form class='botton_table' method='GET' action='edit_employees.php' style='display: inline-block;'>
-                                                    <input type='hidden' name='employee_id' value='" . $row["employeeId"] . "'>
-                                                    <button class='button_edit' type='submit'>
-                                                        <i id='i_edit' class='fas fa-edit'></i> تعديل
-                                                    </button>
-                                                </form>
-                                                <form class='botton_table' method='POST' action='delete_employees.php'>
-                                                    <input type='hidden' name='employee_id' value='" . $row["employeeId"] . "'>
-                                                    <button class='button_delet' type='submit' onclick='return confirm(\"هل أنت متأكد من الحذف؟\")'><i id='i_del' class='fas fa-trash-alt'></i> حذف </button>
-                                                </form>
-                                            </div>
-                                        </td>";
+                                        
+                                        
+                                        
+                                        if (hasPermission($user_type, 23)) {
+                                            echo    "<td>                                                    
+                                                        <div class=\"action-buttons\">
+    
+                                                            <form class='botton_table' method='GET' action='edit_employees.php' style='display: inline-block;'>
+                                                            <input type='hidden' name='employee_id' value='" . $row["employeeId"] . "'>
+                                                            <button class='button_edit' type='submit'>
+                                                                <i id='i_edit' class='fas fa-edit'></i> تعديل
+                                                            </button>
+                                                            ";
+                                                            }
+                                                            "    
+                                                            </form>
+                                                            <form class='botton_table' method='POST' action='delete_employees.php'>
+                                                            <input type='hidden' name='employee_id' value='" . $row["employeeId"] . "'>
+                                                                ";
+                                                                if (hasPermission($user_type, 24)) {
+                                                                echo "
+                                                                    <button class='button_delet' type='submit' onclick='return confirm(\"هل أنت متأكد من الحذف؟\")'>
+                                                                    <i id='i_del' class='fas fa-trash-alt'></i> حذف 
+                                                                    </button>
+                                                                ";
+                                                                }
+                                                                "
+                                                                </form>
+                                                    </div>
+                                                </td>";
                                         echo "</tr>";
                                     }
                                 } else {

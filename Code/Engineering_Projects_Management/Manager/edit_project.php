@@ -30,6 +30,7 @@ $progress_percentage = isset($project['ProgressPercentage']) ? $project['Progres
 $property_description = isset($project['PropertyDescription']) ? $project['PropertyDescription'] : '';
 $rate_of_cost_plus = isset($project['rate_Of_CostPlus']) ? $project['rate_Of_CostPlus'] : '';
 
+
 // جلب قائمة الزبائن
 $sql_customers = "SELECT CustomerID, CustomerName FROM customers";
 $result_customers = $conn->query($sql_customers);
@@ -38,7 +39,7 @@ if (!$result_customers) {
 }
 
 // جلب قائمة مديري المشاريع
-$sql_engineers = "SELECT employeeID, employeeName FROM employees";
+$sql_engineers = "SELECT employeeID, employeeName FROM employees WHERE userType = 3";
 $result_engineers = $conn->query($sql_engineers);
 if (!$result_engineers) {
     die("Error fetching engineers: " . $conn->error);
@@ -218,15 +219,15 @@ if (!$result_status) {
                 <br />
 
                 <label for="land_area">مساحة الأرض:</label>
-                <input type="number" name="land_area" id="land_area" value="<?php echo htmlspecialchars($land_area); ?>" />
+                <input type="text" name="land_area" id="land_area" value="<?php echo htmlspecialchars($land_area); ?>" />
                 <br />
 
-                <label for="project_start_date">تاريخ بدء المشروع:</label>
-                <input type="date" name="project_start_date" id="project_start_date" value="<?php echo htmlspecialchars($project_start_date); ?>" />
+                <label for="ProjectStartDate">تاريخ بدء المشروع:</label>
+                <input type="date" name="ProjectStartDate" id="ProjectStartDate" value="<?php echo htmlspecialchars($project_start_date); ?>" />
                 <br />
 
-                <label for="project_end_date">تاريخ انتهاء المشروع:</label>
-                <input type="date" name="project_end_date" id="project_end_date" value="<?php echo htmlspecialchars($project_end_date); ?>" />
+                <label for="ProjectEndDate">تاريخ انتهاء المشروع:</label>
+                <input type="date" name="ProjectEndDate" id="ProjectEndDate" value="<?php echo htmlspecialchars($project_end_date); ?>" />
                 <br />
 
                 <label for="project_status">حالة المشروع:</label>
@@ -240,7 +241,7 @@ if (!$result_status) {
                 </select>
                 <br />
 
-                <label for="progress_percentage">نسبة التقدم:</label>
+                <label for="progress_percentage">نسبة الإنجاز:</label>
                 <input type="number" name="progress_percentage" id="progress_percentage" value="<?php echo htmlspecialchars($progress_percentage); ?>" />
                 <br />
 
@@ -248,11 +249,11 @@ if (!$result_status) {
                 <textarea name="property_description" id="property_description"><?php echo htmlspecialchars($property_description); ?></textarea>
                 <br />
 
-                <label for="rate_of_cost_plus">نسبة تكلفة :</label>
-                <input type="number" name="rate_of_cost_plus" id="rate_of_cost_plus" value="<?php echo htmlspecialchars($rate_of_cost_plus); ?>" step="0.01" />
+                <label for="rate_of_cost_plus">نسبة تكلفة الزائد:</label>
+                <input type="text" name="rate_of_cost_plus" id="rate_of_cost_plus" value="<?php echo htmlspecialchars($rate_of_cost_plus); ?>" />
                 <br />
 
-                <input type="submit" class="button_add" value="تحديث" />
+                <input type="submit" class="button_add" value="تعديل المشروع" />
             </form>
         </div>
     </div>

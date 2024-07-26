@@ -1,43 +1,20 @@
 <?php
-// تعيين معلومات الاتصال بقاعدة البيانات
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "Engineering_Projects_Management";
+include 'con_db.php';
 
-// إنشاء اتصال بقاعدة البيانات
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// التحقق من الاتصال
-if ($conn->connect_error) {
-    die("فشل الاتصال: " . $conn->connect_error);
-}
-
-// التحقق مما إذا كان معرف الدفعة قد تم إرساله
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['project_id'])) {
-    $project_id = $_POST['project_id'];
-
-    // إعداد استعلام الحذف
-    $sql = "DELETE FROM Payments WHERE PaymentID = ?";
-
-    // تحضير الاستعلام
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $project_id);
-
-    // تنفيذ الاستعلام والتحقق من النجاح
+if (isset($_POST['delete']) && isset($_POST['delete_invoice_id'])) {
+    $invoice_id = $_POST['delete_invoice_id'];
+    $delete_sql = "DELETE FROM MaterialInvoices WHERE invoice_id = ?";
+    $stmt = $conn->prepare($delete_sql);
+    $stmt->bind_param("i", $invoice_id);
+    
     if ($stmt->execute()) {
-        echo "تم حذف الدفعة بنجاح.";
+        echo "<script>alert('تم حذف الفاتورة بنجاح.'); window.location.href='MaterialInvoices.php';</script>";
     } else {
-        echo "حدث خطأ أثناء حذف الدفعة: " . $stmt->error;
+        echo "<script>alert('فشل في حذف الفاتورة.'); window.location.href='MaterialInvoices.php';</script>";
     }
-
+    
     $stmt->close();
 }
 
-// إغلاق الاتصال بقاعدة البيانات
-$conn->close();
 
-// إعادة توجيه المستخدم إلى صفحة جدول المشاريع بعد الحذف
-header("Location: Customers_Payment_Table.php");
-exit();
 ?>

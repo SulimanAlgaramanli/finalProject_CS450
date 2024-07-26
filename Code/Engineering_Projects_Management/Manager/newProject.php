@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $HasBuildingPermit = isset($_POST['HasBuildingPermit']) ? $_POST['HasBuildingPermit'] : 0; 
     $projectStartDate = isset($_POST['ProjectStartDate']) ? $_POST['ProjectStartDate'] : null;
     $rateOfCostPlus = isset($_POST['rate_Of_CostPlus']) ? $_POST['rate_Of_CostPlus'] : null;
-    $projectStatus = 1;
+    $projectStatus = isset($_POST['ProjectStatus']) ? $_POST['ProjectStatus'] : 1;
     $PropertyDescription =  null;
     $ProgressPercentage = 0;
 
@@ -40,9 +40,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // تنفيذ جملة SQL
     if ($stmt->execute()) {
         // echo "Project added successfully";
-        // header("refresh:2; url=projects_Table.php");
+
         header("Location: projects_Table.php");
-        exit(); // تأكد من استخدام exit بعد header
+        exit(); 
     } else {
         echo "Error: " . $stmt->error;
     }
@@ -209,7 +209,7 @@ $result_4 = $conn->query($sql_4);
                     ?>
                 </select><br />
 
-                <label for="IsInPlan">في مخطط:</label>
+                <label for="IsInPlan">داخل المخطط:</label>
                 <input type="checkbox" id="IsInPlan" name="IsInPlan" value="1"><br />
 
                 <label for="HasBuildingPermit">تصريح البناء:</label>
@@ -218,9 +218,9 @@ $result_4 = $conn->query($sql_4);
                 <label for="ProjectStartDate">تاريخ بداية المشروع:</label>
                 <input type="date" id="ProjectStartDate" name="ProjectStartDate" required><br />
 
-                <label for="projectStatus">حالة المشروع:</label>
-                <select id="projectStatus" name="project_Status" required>
-                    <option value="1" disabled selected>اختر حالة المشروع</option>
+                <label for="ProjectStatus">حالة المشروع:</label>
+                <select id="ProjectStatus" name="ProjectStatus" required>
+                    <option disabled selected>اختر حالة المشروع</option>
                     <?php
                     if ($result_2->num_rows > 0) {
                         while($row = $result_2->fetch_assoc()) {

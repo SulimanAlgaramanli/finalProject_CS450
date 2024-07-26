@@ -13,6 +13,9 @@ function toggleSidebar() {
     document.body.style.marginRight = "0";
   }
 }
+
+
+
 function printTable() {
   // إنشاء نسخة جديدة من جدول المشاريع بدون العمود الأخير
   var tableClone = document.getElementById("table_projects").cloneNode(true);
@@ -47,6 +50,9 @@ function printTable() {
                   padding: 12px; /* زيادة التباعد لجعل الجدول أكبر وأوضح */
                   text-align: center;
               }
+              .date-cell {
+                white-space: nowrap; /* منع النص من الانتقال إلى سطر جديد */
+              }
               table td a {
                   display: block;
                   width: 100%;
@@ -62,51 +68,3 @@ function printTable() {
   printWindow.document.close();
   printWindow.print();
 }
-
-
-// document.addEventListener('DOMContentLoaded', function() {
-//   var cancelButton = document.querySelector('.button_cancel');
-
-//   if (cancelButton) {
-//       cancelButton.addEventListener('click', function() {
-//           window.location.href = 'projects_Table.php';
-//       });
-//   }
-// });
-
-
-// function printTable() {
-//   var printWindow = window.open("", "_blank", "width=600,height=600");
-//   printWindow.document.open();
-//   printWindow.document.write(`
-//         <html>
-//         <head>
-//             <title>Print Table</title>
-//             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-//             <style>
-//                 body {
-//                     font-family: Arial, sans-serif;
-//                     direction: rtl;
-//                 }
-//                 table {
-//                     width: 100%;
-//                     border-collapse: collapse;
-//                     margin-bottom: 20px;
-//                 }
-//                 table, th, td {
-//                     border: 1px solid #ccc;
-//                     padding: 12px; /* زيادة التباعد لجعل الجدول أكبر وأوضح */
-//                     text-align: center;
-//                 }
-//                 th, td {
-//                     border: 1px solid #ccc;
-//                     padding: 12px; /* زيادة التباعد لجعل الجدول أكبر وأوضح */
-//                     text-align: center;
-//                 }
-//             </style>
-//         </head>
-//         <body>${document.getElementById("table_projects").outerHTML}</body>
-//         </html>`);
-//   printWindow.document.close();
-//   printWindow.print();
-// }

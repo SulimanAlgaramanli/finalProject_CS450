@@ -26,7 +26,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 VALUES ('$projectID', '$accountantID', '$paymentNumber', '$amount', '$PaymentMethodID', '$paymentDate')";
         
         if ($conn->query($sql) === TRUE) {
-            // echo "تم إضافة الدفعة بنجاح";
             echo "<script>alert('تمت إضافة الدفعة بنجاح!');</script>";
             header("Location: Customers_Payment_Table.php");
             exit(); // تأكد من استخدام exit بعد header
@@ -42,14 +41,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $sql_accountants = "SELECT employeeId, employeeName FROM employees WHERE userType = 4 ORDER BY employeeName";
 $result_accountants = $conn->query($sql_accountants);
 
-// استعلام SQL لاسترجاع أرقام المشاريع
-$sql_1 = "SELECT ProjectID FROM projects ORDER BY ProjectID";
-$result_1 = $conn->query($sql_1);
+// استعلام SQL لاسترجاع أسماء الزبائن
+$sql_cus = "SELECT CustomerId , CustomerName FROM Customers WHERE userType = 2 ORDER BY CustomerName";
+$result_cus = $conn->query($sql_cus);
 
 // استعلام SQL لاسترجاع طرق الدفع
 $sql_2 = "SELECT PaymentMethodID, PaymentMethodName FROM PaymentMethods ORDER BY PaymentMethodID";
 $result_2 = $conn->query($sql_2);
 ?>
+
 <!DOCTYPE html>
 <html lang="ar">
 <head>
@@ -78,7 +78,7 @@ $result_2 = $conn->query($sql_2);
             border: 1px solid #ddd;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center; /* توسيط المحتوى */
+            text-align: center; 
         }
         .form-container .form-group {
             margin-bottom: 20px;
@@ -117,25 +117,30 @@ $result_2 = $conn->query($sql_2);
             font-size: 18px;
             margin: 10px 10px;
         }
-
     </style>
 
     <div class="form-container">
         <h1> دفعة جديدة</h1>
         <form action="new_payment.php" method="post">
+
+            <label for="CustomerId">اسم الزبون:</label>
+            <select id="CustomerId" name="CustomerId" required>
+                <option value="" disabled selected>اختر الزبون</option>
+                <?php
+                if ($result_cus->num_rows > 0) {
+                    while ($row = $result_cus->fetch_assoc()) {
+                        echo "<option value='" . $row['CustomerId'] . "'>" . $row['CustomerName'] . "</option>";
+                    }
+                } else {
+                    echo "<option value=''>لا يوجد زبائن متاحين</option>";
+                }
+                ?>
+            </select>
+
             <label for="projectID">رقم المشروع:</label>
             <select id="projectID" name="projectID" required>
                 <option value="" disabled selected>اختر المشروع</option>
-                <?php
-                // عرض خيارات المشاريع من قاعدة البيانات
-                if ($result_1->num_rows > 0) {
-                    while ($row = $result_1->fetch_assoc()) {
-                        echo "<option value='" . $row['ProjectID'] . "'>" . $row['ProjectID'] . "</option>";
-                    }
-                } else {
-                    echo "<option value=''>لا توجد مشاريع متاحة</option>";
-                }
-                ?>
+                <!-- سيتم تحديث هذه الخيارات باستخدام AJAX -->
             </select>
 
             <label for="paymentNumber">رقم الدفعة:</label>
@@ -145,7 +150,6 @@ $result_2 = $conn->query($sql_2);
             <select id="accountantID" name="accountantID" required>
                 <option value="" disabled selected>اختر المحاسب</option>
                 <?php
-                // عرض خيارات المحاسبين من قاعدة البيانات
                 if ($result_accountants->num_rows > 0) {
                     while ($row = $result_accountants->fetch_assoc()) {
                         echo "<option value='" . $row['employeeId'] . "'>" . $row['employeeName'] . "</option>";
@@ -163,13 +167,12 @@ $result_2 = $conn->query($sql_2);
             <select id="PaymentMethodID" name="PaymentMethodID" required>
                 <option value="" disabled selected>اختر طريقة الدفع</option>
                 <?php
-                // عرض خيارات طرق الدفع من قاعدة البيانات
                 if ($result_2->num_rows > 0) {
                     while ($row = $result_2->fetch_assoc()) {
                         echo "<option value='" . $row['PaymentMethodID'] . "'>" . $row['PaymentMethodName'] . "</option>";
                     }
                 } else {
-                    echo "<option value=''>لا توجد  </option>";
+                    echo "<option value=''>لا توجد </option>";
                 }
                 ?>
             </select>
@@ -177,18 +180,38 @@ $result_2 = $conn->query($sql_2);
             <label for="paymentDate">تاريخ الدفع:</label>
             <input type="date" id="paymentDate" name="paymentDate" required>
             <div class="button-container">
-                    <button type="submit" class="button_save"><i class="fas fa-save"></i> حفظ </button>
-                    <button type="button" class="button_cancel" onclick="window.location.href='Customers_Payment_Table.php';"><i class="fas fa-close"></i> إلغاء </button>
-                </div>
-                    
+                <button type="submit" class="button_save"><i class="fas fa-save"></i> حفظ </button>
+                <button type="button" class="button_cancel" onclick="window.location.href='Customers_Payment_Table.php';"><i class="fas fa-close"></i> إلغاء </button>
+            </div>
         </form>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-
     <script>
-    $(document).ready(function(){
+        $(document).ready(function(){
+            // عند تغيير اختيار الزبون
+            $('#CustomerId').change(function(){
+                var customerId = $(this).val();
+                if (customerId) {
+                    $.ajax({
+                        url: 'get_projects.php',
+                        type: 'POST',
+                        data: {CustomerId: customerId},
+                        success: function(data) {
+                            $('#projectID').html(data);
+                        },
+                        error: function() {
+                            alert('حدث خطأ أثناء استرداد المشاريع.');
+                        }
+                    });
+                } else {
+                    $('#projectID').html('<option value="">اختر الزبون أولاً</option>');
+                }
+            });
+        });
+
+
+        $(document).ready(function(){
         // عند تغيير اختيار رقم المشروع
         $('#projectID').change(function(){
             var projectID = $(this).val();
@@ -207,11 +230,11 @@ $result_2 = $conn->query($sql_2);
             });
         });
     });
-</script>
 
-
-
-    <script src="script.js"></script>
+    </script>
 </body>
 </html>
 
+<?php
+$conn->close();
+?>

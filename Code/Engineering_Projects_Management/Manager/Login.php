@@ -17,10 +17,10 @@
 
         .container {
             background-color: #fff;
-            padding: 20px;
+            padding: 30px; /* زيادة padding */
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            width: 400px; /* زيادة عرض الفورم */
         }
 
         h2 {
@@ -40,18 +40,20 @@
 
         input, select {
             margin-bottom: 15px;
-            padding: 10px;
+            padding: 15px; /* زيادة padding */
             border: 1px solid #ddd;
             border-radius: 4px;
+            font-size: 16px; /* تكبير حجم الخط */
         }
 
         button {
-            padding: 10px;
+            padding: 15px; /* زيادة padding */
             background-color: #5cb85c;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            font-size: 16px; /* تكبير حجم الخط */
         }
 
         button:hover {
@@ -83,7 +85,8 @@
     session_start(); // تفعيل الجلسات
 
     // الكود PHP للتحقق من بيانات تسجيل الدخول والتحقق منها
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER["REQUEST_METHOD"] == "POST"   &&     isset($_POST['email']) )
+    {
         $servername = "localhost";
         $username = "root";
         $password = "";
@@ -124,6 +127,8 @@
                 echo "<script>alert('تم تسجيل الدخول بنجاح');</script>";
                 $_SESSION['user_id'] = $row[$id_field]; // تخزين معرف المستخدم في الجلسة
                 $_SESSION['user_name'] = $row[$name_field]; // تخزين اسم المستخدم في الجلسة
+                $_SESSION['user_type'] = $row['userType']; // تخزين اسم المستخدم في الجلسة
+                
                 header("Location: index.php");
                 exit(); // تأكد من استخدام exit بعد header
             } else {
